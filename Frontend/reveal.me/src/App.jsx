@@ -1,10 +1,11 @@
 import { BrowserRouter } from "react-router-dom";
+import Homepage from "./pages/Homepage";
 
 const App = () => {
   return (
     <BrowserRouter>
-      <div className="App">
-        <h1 className=" font-bold underline">Hello world!</h1>
+      <div>
+        <Homepage></Homepage>
       </div>
     </BrowserRouter>
   );
