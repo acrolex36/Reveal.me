@@ -3,7 +3,7 @@ import Profile from "../Components/Profile";
 
 const Homepage = () => {
   return (
-    <div class="grid grid-cols-7">
+    <div class="bg-pink grid grid-cols-7">
       <Sidebar></Sidebar>
 
       <main class="col-span-6">

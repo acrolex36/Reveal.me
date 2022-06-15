@@ -2,9 +2,9 @@ import React from 'react'
 import LogoLogin from '../images/login.png'
 const LoginPage = () => {
   return (
-    <div className='flex flex-col justify-center min-h-screen py-2'>
-    <main className=' flex flex-col items-center justify-center w-full flex-1 px-20'>
-    <div className='rounded-2xl shadow-2xl flex w-5/6 max-w-4xl'>
+    // <div className='bg-pink flex flex-col justify-center min-h-screen py-2'>
+    <div className='flex flex-col items-center justify-center min-h-screen w-full px-20 bg-pink-100'>
+    <div className='w-full bg-pink-50 rounded-2xl shadow-2xl flex w-5/6 max-w-4xl'>
       <div className='w-2/5' >{/*Sign in Logo */}
         <div className='p-12 mb-10'>
           <p>reveal.me</p>
@@ -90,7 +90,6 @@ const LoginPage = () => {
         </form>
       </div> 
     </div>
-    </main>
     </div>
   )
 }
