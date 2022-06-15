@@ -15,7 +15,7 @@ const RegisterPage = () => {
       <div className='w-3/5 mx-5 p-14 mb-5'>{/*Sign in Field */}
         <h2 className="mt-6 text-2xl text-gray-900">Sign up to Reveal.me</h2>
         <p className="mt-2 text-sm text-gray-600">Already have an account?{' '}
-          <a href="http://localhost:3000/login" className="font-medium text-indigo-600 hover:text-indigo-500">
+          <a href="http://localhost:3000/login" className="font-medium text-darker-pink hover:text-indigo-500">
             Login
           </a>
         </p>
@@ -85,7 +85,7 @@ const RegisterPage = () => {
           <div className='flex justify-center'>
             <button
               type="submit"
-              className="group relative w-fit flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="group relative w-fit flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-darker-pink hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               Create an Account
             </button>

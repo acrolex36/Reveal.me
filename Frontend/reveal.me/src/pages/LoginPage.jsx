@@ -3,8 +3,8 @@ import LogoLogin from '../images/login.png'
 const LoginPage = () => {
   return (
     <div className='flex flex-col justify-center min-h-screen py-2'>
-    <main className='flex flex-col items-center justify-center w-full flex-1 px-20'>
-    <div className=' rounded-2xl shadow-2xl flex w-5/6 max-w-4xl'>
+    <main className=' flex flex-col items-center justify-center w-full flex-1 px-20'>
+    <div className='rounded-2xl shadow-2xl flex w-5/6 max-w-4xl'>
       <div className='w-2/5' >{/*Sign in Logo */}
         <div className='p-12 mb-10'>
           <p>reveal.me</p>
@@ -15,7 +15,7 @@ const LoginPage = () => {
       <div className='w-3/5 p-14 mx-5 mb-5'>{/*Sign in Field */}
         <h2 className="mt-6 text-2xl text-gray-900">Log in to Reveal.me</h2>
         <p className="mt-2 text-sm text-gray-600">No Account yet?{' '}
-          <a href="http://localhost:3000/register" className="font-medium text-indigo-600 hover:text-indigo-500">
+          <a href="http://localhost:3000/register" className="font-medium text-darker-pink hover:text-indigo-500">
             Register
           </a>
         </p>
@@ -69,7 +69,7 @@ const LoginPage = () => {
           <div className='flex justify-center'>
             <button
               type="submit"
-              className="group relative w-40 flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="group relative w-40 flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-darker-pink hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               Sign in
             </button>
@@ -77,7 +77,7 @@ const LoginPage = () => {
           <div className='flex justify-center'>
           <button
               type="submit"
-              className="group relative w-40 flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="group relative w-40 flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-darker-pink hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               Create an Account
             </button>
