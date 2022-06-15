@@ -3,7 +3,9 @@ module.exports = {
   theme: {
     colors:{
       current: 'currentColor',
-      'pink': '#FFE2E2',
+      pink: {
+        50: '#FFF5F5', 
+        100: '#FFE2E2'},
       'darker-pink': '#CA5E5E',
     },
     extend: {},
