@@ -1,15 +1,20 @@
+import Logo from "../images/login.png";
+
 const Profile = () => {
   return (
-    <div
-      href="#"
-      class=" flex flex-col items-center bg-gray-100 rounded-2xl border shadow-md md:flex-row md:max-w-xl dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
-    >
+    <div class="m-auto card lg:card-side bg-base-100 shadow-xl">
+      <figure>
+        <img
+          src="https://api.lorem.space/image/album?w=400&h=400"
+          alt="Album"
+        />
+      </figure>
       <div class=" flex flex-col justify-between p-4 leading-normal">
         <div>
-          <h1 clasFs="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+          <h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
             Bob Man
           </h1>
-          <h2 class=" text-l font-bold tracking-tight text-gray-900 dark:text-white">
+          <h2 class="text-2xl tracking-tight text-gray-900 dark:text-white">
             Student at Hochschule Darmstadt
           </h2>
           <h3>
@@ -95,11 +100,13 @@ const Profile = () => {
           Here are the biggest enterprise technology acquisitions of 2021 so
           far, in reverse chronological order. Here are the biggest enterprise
           technology acquisitions of 2021 so far, in reverse chronological
-          order. Here are the biggest enterprise technology acquisitions of 2021
-          so far, in reverse chronological order.
+          order. Here are the biggest enterprise
+          tsdfgsdfgsdfggasdfasdfasdfasdfasdfechnology acquisitions of 2021 so
+          far, in reverse chronological order.
         </p>
       </div>
     </div>
   );
 };
+
 export default Profile;

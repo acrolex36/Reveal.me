@@ -1,7 +1,7 @@
 const Sidebar = () => {
   return (
-    <aside class="w-64" aria-label="Sidebar">
-      <div class="hidden sm:block ml-3 h-screen py-3 px-3 bg-neutral-50 rounded-2xl dark:bg-gray-800">
+    <aside class="w-64 bg-white h-full ml-3 rounded-2xl bg-neutral-100" aria-label="Sidebar">
+      <div class="hidden sm:block p-4 dark:bg-gray-800">
         <ul class="space-y-2">
           <li class="mt-7 mb-3">
             <div class="flex items-center space-x-4">

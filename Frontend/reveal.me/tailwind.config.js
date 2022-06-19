@@ -9,5 +9,5 @@ module.exports = {
       'darker-pink': '#CA5E5E',
     },
   },
-  plugins: [],
+  plugins: [require("daisyui")],
 };
