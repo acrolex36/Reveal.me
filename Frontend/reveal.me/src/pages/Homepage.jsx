@@ -1,15 +1,19 @@
-import Sidebar from "../Components/Sidebar"
+import Sidebar from "../Components/Sidebar";
 import Profile from "../Components/Profile";
-
-const Homepage = () => {
+import SwipeButtons from "../Components/SwipeButtons";
+const HomePage = () => {
   return (
     <div class="bg-pink grid grid-cols-7">
       <Sidebar></Sidebar>
-
-      <main class="col-span-6">
-        <div class="flex h-screen">
-          <div class="m-auto">
-            <Profile></Profile>
+      <main class="col-span-3 ">
+        <div class="flex flex-col h-screen  ">
+          <div class="my-auto">
+            <div class="flex items-center justify-center">
+              <Profile></Profile>{" "}
+            </div>
+            <div class="flex items-center justify-center" F>
+              <SwipeButtons></SwipeButtons>
+            </div>
           </div>
         </div>
       </main>
@@ -17,4 +21,4 @@ const Homepage = () => {
   );
 };
 
-export default Homepage;
+export default HomePage;

@@ -2,11 +2,11 @@ const Profile = () => {
   return (
     <div
       href="#"
-      class="screen border-black flex flex-col items-center bg-white rounded-lg border shadow-md md:flex-row md:max-w-xl dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+      class=" flex flex-col items-center bg-gray-100 rounded-2xl border shadow-md md:flex-row md:max-w-xl dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
     >
       <div class=" flex flex-col justify-between p-4 leading-normal">
         <div>
-          <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+          <h1 clasFs="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
             Bob Man
           </h1>
           <h2 class=" text-l font-bold tracking-tight text-gray-900 dark:text-white">
@@ -85,7 +85,7 @@ const Profile = () => {
                 ></path>
               </svg>
               <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400">
-                20GB Cloud storage
+                German, English
               </span>
             </li>
           </ul>

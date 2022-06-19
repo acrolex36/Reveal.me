@@ -8,8 +8,6 @@ module.exports = {
         100: '#FFE2E2'},
       'darker-pink': '#CA5E5E',
     },
-    extend: {},
   },
-  plugins: [
-  ],
-}
+  plugins: [],
+};
