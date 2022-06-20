@@ -1,6 +1,40 @@
-import React from 'react'
+import React, {useState} from 'react'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 import LogoRegister from "../images/register.png"
+
 const RegisterPage = () => {
+  const [first_name, setfirstname] = useState(null);
+  const [last_name, setlastname] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [plainTextPassword, setPassword] = useState(null);
+  const [confirmPassword, setConfirmPassword] = useState(null)
+  const [error, setError] = useState(null)
+
+  let navigate = useNavigate()
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    try {
+
+      if (plainTextPassword !== confirmPassword) {
+        setError('Passwords need to match!')
+        return
+    }
+        const response = await axios.post(`http://localhost:5000/api/auth/register`, { first_name, last_name, email, plainTextPassword, confirmPassword })
+
+        const success = response.status === 201
+        if (success) navigate ('/')
+        if (!success) navigate ('/register')
+
+        window.location.reload()
+
+    } catch (error) {
+        console.log(error)
+    }
+  }
+
   return (
     <div className='bg-pink-100 flex flex-col justify-center min-h-screen py-2'>
     <main className='flex flex-col items-center justify-center w-full flex-1 px-20'>
@@ -19,7 +53,7 @@ const RegisterPage = () => {
             Login
           </a>
         </p>
-        <form className="mt-8 space-y-6" action="#" method="POST">
+        <form className="mt-8 space-y-6" action="#" method="POST" onSubmit={handleSubmit}>
           <input type="hidden" name="remember" defaultValue="true" />
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
@@ -33,6 +67,7 @@ const RegisterPage = () => {
                 autoComplete="fName"
                 required
                 className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                onChange={(e) => setfirstname(e.target.value)}
               />
             </div>
           </div>
@@ -42,12 +77,13 @@ const RegisterPage = () => {
                 Last Name
               </label>
               <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
+                id="last-name"
+                name="lName"
+                type="lName"
+                autoComplete="lName"
                 required
                 className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                onChange={(e) => setlastname(e.target.value)}
               />
             </div>
           </div>
@@ -63,6 +99,7 @@ const RegisterPage = () => {
                 autoComplete="email"
                 required
                 className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
           </div>
@@ -78,10 +115,26 @@ const RegisterPage = () => {
                 autoComplete="current-password"
                 required
                 className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
           </div>
-
+          <div className="rounded-2xl shadow-sm -space-y-px">
+            <div>
+              <label htmlFor="confirmPassword">
+                Confirm Password
+              </label>
+              <input
+                id="confirm-password"
+                name="confirmPassword"
+                type="password"
+                autoComplete="current-password"
+                required
+                className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+            </div>
+          </div>
           <div className='flex justify-center'>
             <button
               type="submit"
@@ -89,6 +142,7 @@ const RegisterPage = () => {
             >
               Create an Account
             </button>
+            <p>{error}</p>
           </div>
         </form>
       </div> 
