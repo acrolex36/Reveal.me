@@ -69,7 +69,7 @@ const LoginPage = () => {
           <div className='flex justify-center'>
             <button
               type="submit"
-              className="group relative w-40 flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-darker-pink hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="group relative w-40 flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-darker-pink hover:bg-pink-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               Sign in
             </button>
@@ -77,13 +77,13 @@ const LoginPage = () => {
           <div className='flex justify-center'>
           <button
               type="submit"
-              className="group relative w-40 flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-darker-pink hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="group relative w-40 flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-darker-pink hover:bg-pink-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               Create an Account
             </button>
           </div>
             <div className="text-center text-sm">
-              <a href="http://localhost:3000/login/forgot_password" className="font-medium text-indigo-600 hover:text-indigo-500">
+              <a href="http://localhost:3000/login/forgot_password" className="font-medium text-indigo-600 hover:text-darker-pink">
                 Forgot your password?
               </a>
             </div>

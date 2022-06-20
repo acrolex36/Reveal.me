@@ -14,6 +14,8 @@ const ForgotPasswordPage = () => {
       </div>
       <div className='w-3/5 mx-5 p-14 mb-5'>{/*Forgot Password Field */}
         <h2 className="mt-6 text-2xl text-gray-900">Forgot Password?</h2>
+        <p className="mt-2 text-sm text-gray-600">Set a new password for your reveal.me account
+        </p>
         <form className="mt-8 space-y-6" action="#" method="POST">
           <input type="hidden" name="remember" defaultValue="true" />
           <div className="rounded-2xl shadow-sm -space-y-px">
@@ -68,6 +70,11 @@ const ForgotPasswordPage = () => {
             >
               Reset Password
             </button>
+          </div>
+          <div className="text-center text-sm">
+            <a href="http://localhost:3000/login" className="font-medium text-indigo-600 hover:text-darker-pink">
+              Back to Sign in
+            </a>
           </div>
         </form>
       </div> 
