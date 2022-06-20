@@ -22,13 +22,25 @@ const RegisterPage = () => {
         setError('Passwords need to match!')
         return
     }
-        const response = await axios.post(`http://localhost:5000/api/auth/register`, { first_name, last_name, email, plainTextPassword, confirmPassword })
+        await axios.post(`http://localhost:5000/api/auth/register`, { first_name, last_name, email, plainTextPassword, confirmPassword })
+        .then(function(response){
+          if(response.status == 201){
+            navigate ('/');
+          }
+        }).catch(function(res){
+          navigate ('/register');
+          if(res.response.status == 400){
+            setError('invalid email or password');
+          }
+          if(res.response.status == 405){
+            setError('Email already used');
+          }
+          if(res.response.status == 409){
+            setError('Password too short min 6 char');
+          }
+        });
 
-        const success = response.status === 201
-        if (success) navigate ('/')
-        if (!success) navigate ('/register')
-
-        window.location.reload()
+        // window.location.reload()
 
     } catch (error) {
         console.log(error)
@@ -138,7 +150,7 @@ const RegisterPage = () => {
           <div className='flex justify-center'>
             <button
               type="submit"
-              className="group relative w-fit flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-darker-pink hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="group relative w-fit flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-darker-pink hover:bg-pink-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               Create an Account
             </button>
