@@ -22,13 +22,25 @@ const RegisterPage = () => {
         setError('Passwords need to match!')
         return
     }
-        const response = await axios.post(`http://localhost:5000/api/auth/register`, { first_name, last_name, email, plainTextPassword, confirmPassword })
+        await axios.post(`http://localhost:5000/api/auth/register`, { first_name, last_name, email, plainTextPassword, confirmPassword })
+        .then(function(response){
+          if(response.status == 201){
+            navigate ('/');
+          }
+        }).catch(function(res){
+          navigate ('/register');
+          if(res.response.status == 400){
+            setError('invalid email or password');
+          }
+          if(res.response.status == 405){
+            setError('Email already used');
+          }
+          if(res.response.status == 409){
+            setError('Password too short min 6 char');
+          }
+        });
 
-        const success = response.status === 201
-        if (success) navigate ('/')
-        if (!success) navigate ('/register')
-
-        window.location.reload()
+        // window.location.reload()
 
     } catch (error) {
         console.log(error)

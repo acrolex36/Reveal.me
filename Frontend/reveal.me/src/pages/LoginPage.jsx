@@ -6,6 +6,7 @@ const LoginPage = () => {
 
   const [email, setEmail] = useState(null);
   const [plainTextPassword, setPassword] = useState(null);
+  const [error, setError] = useState(null);
 
   let navigate = useNavigate()
 
@@ -13,16 +14,22 @@ const LoginPage = () => {
     e.preventDefault()
 
     try {
-        const response = await axios.post(`http://localhost:5000/api/auth/login`, { email, plainTextPassword })
+      
+      await axios
+      .post(`http://localhost:5000/api/auth/login`, { email, plainTextPassword })
+      .then(function(response){
+        if(response.status == 201){
+          navigate ('/');
+        }
+      })
+      .catch(function(res){
+        if(res.response.status == 400){
+          navigate ('/login');
+          setError('Invalid username or password"');
+        }
+      });
 
-        // setCookie('AuthToken', response.data.token)
-        // setCookie('UserId', response.data.userId)
-
-        const success = response.status === 201
-        if (success) navigate ('/')
-        if (!success) navigate ('/login')
-
-        window.location.reload()
+        // window.location.reload()
 
     } catch (error) {
         console.log(error)
@@ -117,6 +124,7 @@ const LoginPage = () => {
               <a href="http://localhost:3000/login/forgot_password" className="font-medium text-indigo-600 hover:text-darker-pink">
                 Forgot your password?
               </a>
+              <p>{error}</p>
             </div>
         </form>
       </div> 
