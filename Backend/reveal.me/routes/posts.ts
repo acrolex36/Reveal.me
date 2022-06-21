@@ -3,8 +3,9 @@ import {
   register,
   login,
   changePassword,
+  updateOneUserProfile,
   getAllUser,
-  getOneUser,
+  getOneUserDetail,
 
 } from "../controllers/posts";
 
@@ -12,9 +13,11 @@ const router = express.Router();
 
 router.post("/auth/register", register);
 router.post("/auth/login", login);
-router.post("/auth/login/forgetpassword", changePassword);
+router.post("//login/forgetpasswordauth", changePassword);
+
+router.put("/user/profile/:email", updateOneUserProfile);
 
 router.get("/test/alluser", getAllUser);
-router.get("/test/singleuser/:id", getOneUser);
+router.get("/test/singleuser/:email", getOneUserDetail);
 
 export default router;

@@ -14,6 +14,10 @@ const profileSchema = new mongoose.Schema({
     type: String,
     enum: ['male', 'female', 'diverse'],
   },
+  gender_interest: {
+    type: String,
+    enum: ['male', 'female', 'diverse'],
+  },
   age: {
     type: Number,
     required: true

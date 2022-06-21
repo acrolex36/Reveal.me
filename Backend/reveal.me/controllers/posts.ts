@@ -12,6 +12,37 @@ const router = express.Router();
 
 const JWT_SECRET = "asdfhasdfwqber12312sa";
 
+const checkToken = (req: Request, res: Response, next: any) => {
+  var TOKEN = req.headers['x-access-token'] || req.headers['authorization'];
+  TOKEN = TOKEN?.toString();
+
+  if(TOKEN === undefined){
+    return res.status(401).send({error: "Token is not present"});
+  }
+
+  if(TOKEN.startsWith('Bearer ')){
+    TOKEN = TOKEN.slice(7, TOKEN.length);
+  }
+
+  if(TOKEN){
+    jwt.verify(TOKEN, JWT_SECRET, (err, decoded) => {
+      if(err){
+        return res.json({
+          message: "Token is not right..."
+        });
+      }
+      else{
+        next();
+      }
+    });
+  }
+  else{
+    return res.json({
+      message: "Token is not right..."
+    })
+  }
+}
+
 //POST - /auth/register # insert a new User
 export const register = async (req: Request, res: Response) => {
   const { first_name, last_name, email, plainTextPassword } =
@@ -74,7 +105,7 @@ export const login = async (req: Request, res: Response) => {
         _id: user._id
       },{$set : { lastLogin: Date.now()} });
 
-      const token = jwt.sign({ id: user._id, email: user.email}, JWT_SECRET);
+      var token = jwt.sign({ id: user._id, email: user.email}, JWT_SECRET);
       return res.status(201).json({user,"token": token});
     }
     else{
@@ -84,14 +115,8 @@ export const login = async (req: Request, res: Response) => {
 
 };
 
-interface JwtPayload {
-  _id: string
-}
-
 //POST - /auth/change-password # change password with email..
 export const changePassword = async (req: Request, res: Response) => {
-  // const { token , newPlainPassword} =
-  //   req.body;
 
   const { email, newPlainPassword, confirmNewPlainPassword } =
   req.body;
@@ -99,7 +124,6 @@ export const changePassword = async (req: Request, res: Response) => {
   const user = await User.findOne({email}).lean()
 
   try{
-  // const user = jwt.verify(token, JWT_SECRET) as JwtPayload;
 
   if(!user){
     return res.status(400).json({status: "error", error: "user is not exist"})
@@ -130,28 +154,79 @@ catch(error){
 }
 };
 
+var authSuccess: boolean;
 
-//GET - /test/alluser # return all User
-export const getAllUser = async (req: Request, res: Response) => {
-  try {
-    const postMessages = await User.find();
+//POST - /user/profile # update User profile
+export const updateOneUserProfile = async (req: Request, res: Response) => {
+  checkToken(req,res, () => {
+    authSuccess = true;
+  })
 
-    res.status(200).json(postMessages);
-  } catch (error) {
-    res.status(404).json({ message: error });
+  if(authSuccess){
+    const { email } = req.params;
+    
+    const { gender, gender_interest, age, profile_picture, dob_date, dob_month, dob_year, height, nationality, education, interest, language} = req.body;
+
+    try {
+      const user = await User.findOne({email})
+
+      if(user === null){
+        return res.status(404).send(`No User with ${email}`);
+      }
+
+      const updateUserDetail = {
+        _id:user.id, userDetail: {gender, gender_interest, age, profile_picture, dob_date, dob_month, dob_year, height, nationality, education, interest, language}
+      };
+      
+      await User.findByIdAndUpdate(user._id, updateUserDetail, {new: true});
+
+      res.status(200).json(user);
+      //62b05ccfcf0b9dfae8772c6f
+    } catch (error) {
+      res.status(404).json({ message: error });
+    }
+    authSuccess = false;
   }
 };
 
-//GET - /test/singleuser/:id # return User with {id nr}
-export const getOneUser = async (req: Request, res: Response) => {
-  const { id } = req.params;
+//GET - /test/alluser # return all User
+export const getAllUser = async (req: Request, res: Response) => {
+  checkToken(req,res, () => {
+    authSuccess = true;
+  })
 
-  try {
-    const post = await User.findById(id);
+  if(authSuccess){
+    try {
+      const postMessages = await User.find();
+      res.status(200).json(postMessages);
+    } catch (error) {
+      res.status(404).json({ message: error });
+    }
+    authSuccess = false;
+  }
+};
 
-    res.status(200).json(post);
-  } catch (error) {
-    res.status(404).json({ message: error });
+//GET - /test/singleuser/:email # return User with {email}
+export const getOneUserDetail = async (req: Request, res: Response) => {
+  checkToken(req,res, () => {
+    authSuccess = true;
+  })
+
+  if(authSuccess){
+    const { email } = req.params;
+    try {
+      const user = await User.findOne({email})
+      // const user = await User.findOne({email}).lean() //without userDetail
+
+    //  if(user === null){
+    //   res.status(410).json("lol");
+    //   }
+
+      res.status(200).json(user);
+    } catch (error) {
+      res.status(404).json({ message: error });
+    }
+    authSuccess = false;
   }
 };
 
