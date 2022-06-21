@@ -1,6 +1,48 @@
-import React from 'react'
+import React, {useState} from 'react'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 import LogoForgotPassword from '../images/forgot_password.png'
 const ForgotPasswordPage = () => {
+
+  const [email, setEmail] = useState(null);
+  const [newPlainPassword, setPassword] = useState(null);
+  const [confirmNewPlainPassword, setConfirmPassword] = useState(null)
+  const [error, setError] = useState(null)
+
+  let navigate = useNavigate()
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    try {
+
+      if (newPlainPassword !== confirmNewPlainPassword) {
+        setError('Passwords need to match!')
+        return
+      }
+
+      await axios
+      .post(`http://localhost:5000/api/auth/login/forgetpassword`, { email, newPlainPassword, confirmNewPlainPassword })
+      .then(function(response){
+        if(response.status == 201){
+          navigate ('/login');
+        }
+      }).catch(function(res){
+        navigate ('/login/forgot_password');
+        if(res.response.status == 400){
+          setError('Email is not exist');
+        }
+        if(res.response.status == 409){
+          setError('Password too short min 6 char');
+        }
+      });
+
+      // window.location.reload()
+    } catch (error) {
+        console.log(error)
+    }
+  }
+
   return (
     <div className='bg-pink-100 flex flex-col justify-center min-h-screen py-2'>
     <main className='flex flex-col items-center justify-center w-full flex-1 px-20'>
@@ -16,7 +58,7 @@ const ForgotPasswordPage = () => {
         <h2 className="mt-6 text-2xl text-gray-900">Forgot Password?</h2>
         <p className="mt-2 text-sm text-gray-600">Set a new password for your reveal.me account
         </p>
-        <form className="mt-8 space-y-6" action="#" method="POST">
+        <form className="mt-8 space-y-6" action="#" method="POST" onSubmit={handleSubmit}>
           <input type="hidden" name="remember" defaultValue="true" />
           <div className="rounded-2xl shadow-sm -space-y-px">
             <div>
@@ -30,6 +72,7 @@ const ForgotPasswordPage = () => {
                 autoComplete="email"
                 required
                 className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
           </div>
@@ -45,6 +88,7 @@ const ForgotPasswordPage = () => {
                 autoComplete="new-password"
                 required
                 className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
           </div>
@@ -60,6 +104,7 @@ const ForgotPasswordPage = () => {
                 autoComplete="confirm-new-password"
                 required
                 className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                onChange={(e) => setConfirmPassword(e.target.value)}
               />
             </div>
           </div>
@@ -75,6 +120,7 @@ const ForgotPasswordPage = () => {
             <a href="http://localhost:3000/login" className="font-medium text-indigo-600 hover:text-darker-pink">
               Back to Sign in
             </a>
+            <p>{error}</p>
           </div>
         </form>
       </div> 

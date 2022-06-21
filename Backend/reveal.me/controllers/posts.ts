@@ -48,7 +48,7 @@ export const register = async (req: Request, res: Response) => {
     return res.status(201).json(response);
   } catch (error: any) {
     if(error.code === 11000){
-      return res.status(409).json({status: "error", error: "Email already exist"})
+      return res.status(405).json({status: "error", error: "Email already exist"})
     }else{
       // res.status(409).json({ message: error });
       throw error;
