@@ -3,6 +3,7 @@ import LoginPage from "./pages/LoginPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import RegisterPage from "./pages/RegisterPage";
 import Homepage from "./pages/Homepage";
+import ProfilePage from "./pages/ProfilePage";
 const App = () => {
   return (
     <BrowserRouter>
@@ -11,6 +12,9 @@ const App = () => {
         <Route path="/login" element={<LoginPage />}></Route>
         <Route path="/login/forgot_password" element={<ForgotPasswordPage />}></Route>
         <Route path="/register" element={<RegisterPage />}></Route>
+        <Route path="/profile" element={<ProfilePage />}>
+
+        </Route>
       </Routes>
       <div className="App">
         {/* <h1 className=" font-bold underline">Hello world!</h1> */}

@@ -12,6 +12,7 @@
     "daisyui": "^2.15.4",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
+    "react-languages-select": "^1.0.20",
     "react-router-dom": "^6.3.0"
   },
   "devDependencies": {
