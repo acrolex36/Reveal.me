@@ -1,9 +1,21 @@
-import React from 'react'
+import React, {useState} from 'react'
 import Nationality from "./Nationality"
 import Language from "./Language"
-import ReactLanguageSelect from 'react-languages-select';
-import 'react-languages-select/css/react-languages-select.css';
+import Hobbies from "./Hobbies"
+
 const ProfileFields = () => {
+  const [selectedFile, setSelectedFile] = useState("");
+
+  const changePicture = (e) =>{
+    const reader = new FileReader();
+    reader.onload = () => {
+      if(reader.readyState === 2){
+        setSelectedFile(reader.result)
+      }
+    }
+    reader.readAsDataURL(e.target.files[0])
+  };
+
   return (
     <div className='shadow sm:rounded-md sm:overflow-hidden px-4 py-5 bg-gray-50 space-y-6 sm:p-6 my-5'>
           <div>
@@ -18,20 +30,17 @@ const ProfileFields = () => {
           </div>
           <div className="mt-5 md:mt-0 md:col-span-2">
             <form action="#" method="POST">
-              <div className="shadow sm:rounded-md sm:overflow-hidden">
-                <div className="px-4 py-5 bg-gray-0 space-y-6 sm:p-6">
-                  <div>
-                    <label className="block text-sm font-medium text-darker-pink">Photo</label>
-                    <div className="mt-1 flex items-center">
-                      <span className="inline-block h-12 w-12 rounded-full overflow-hidden bg-gray-100">
-                        <svg className="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                        </svg>
-                      </span>
+                <div className="py-3 center mx-auto">
+                  <div class="bg-white px-4 py-5 rounded-lg shadow-lg text-center w-48">
+                    <div className='mb-4'>
+                      <img src={selectedFile}/>
                     </div>
+                    <label class="cursor-pointer mt-6">
+                      <span class="mt-2 text-base leading-normal px-4 py-2 bg-pink-100 text-white text-sm rounded-full" htmlFor="image-upload" >Select Profile Picture</span>
+                      <input type='file' multiple={false} accept="image/*" name='image-upload' id='image-upload' onChange={changePicture} class="hidden"/>
+                    </label>
                   </div>
                 </div>
-              </div>
             </form>
           </div>
         </div>
@@ -176,7 +185,7 @@ const ProfileFields = () => {
 
                     <div className="col-span-6 sm:col-span-3">
                       <label htmlFor="height" className="block text-sm font-medium text-darker-pink">
-                        Height
+                        Height (in cm)
                       </label>
                       <input
                         type="text"
@@ -213,6 +222,12 @@ const ProfileFields = () => {
                         className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block w-full shadow-sm sm:text-sm border border-pink-100 rounded-md"
                       />
                     </div>
+                      <div className="col-span-6 checkbox-hobby">
+                      <label htmlFor="language" className="block text-sm font-medium text-darker-pink">
+                        Hobby
+                      </label>
+                      <Hobbies></Hobbies>
+                    </div>                    
 
                     <div className="col-span-6">
                       <label htmlFor="description" className="block text-sm font-medium text-darker-pink">
