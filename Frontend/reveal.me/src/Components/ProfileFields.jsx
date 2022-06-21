@@ -21,7 +21,7 @@ const ProfileFields = () => {
               <div className="shadow sm:rounded-md sm:overflow-hidden">
                 <div className="px-4 py-5 bg-gray-0 space-y-6 sm:p-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Photo</label>
+                    <label className="block text-sm font-medium text-darker-pink">Photo</label>
                     <div className="mt-1 flex items-center">
                       <span className="inline-block h-12 w-12 rounded-full overflow-hidden bg-gray-100">
                         <svg className="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
@@ -57,7 +57,7 @@ const ProfileFields = () => {
                 <div className="px-4 py-5 bg-gray-0 sm:p-6">
                   <div className="grid grid-cols-6 gap-6">
                     <div className="col-span-6 sm:col-span-3">
-                      <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
+                      <label htmlFor="first-name" className="block text-sm font-medium text-darker-pink">
                         First name
                       </label>
                       <input
@@ -70,7 +70,7 @@ const ProfileFields = () => {
                     </div>
 
                     <div className="col-span-6 sm:col-span-3">
-                      <label htmlFor="last-name" className="block text-sm font-medium text-gray-700">
+                      <label htmlFor="last-name" className="block text-sm font-medium text-darker-pink">
                         Last name
                       </label>
                       <input
@@ -83,7 +83,7 @@ const ProfileFields = () => {
                     </div>
 
                     <div className="col-span-6 sm:col-span-4">
-                      <label htmlFor="email-address" className="block text-sm font-medium text-gray-700">
+                      <label htmlFor="email-address" className="block text-sm font-medium text-darker-pink">
                         Email address
                       </label>
                       <input
@@ -96,7 +96,7 @@ const ProfileFields = () => {
                     </div>
 
                     <div className="col-span-6">
-                      <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                      <label htmlFor="password" className="block text-sm font-medium text-darker-pink">
                         Password
                       </label>
                       <input
@@ -109,7 +109,7 @@ const ProfileFields = () => {
                     </div>
 
                     <div className="col-span-6">
-                      <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700">
+                      <label htmlFor="confirm-password" className="block text-sm font-medium text-darker-pink">
                         Confirm Password
                       </label>
                       <input
@@ -122,7 +122,7 @@ const ProfileFields = () => {
                     </div>
 
                     <div className="col-span-6 sm:col-span-6 lg:col-span-2">
-                      <label htmlFor="location" className="block text-sm font-medium text-gray-700">
+                      <label htmlFor="location" className="block text-sm font-medium text-darker-pink">
                         Location
                       </label>
                       <button
@@ -159,14 +159,14 @@ const ProfileFields = () => {
                 <div className="px-4 py-5 bg-gray-0 sm:p-6">
                   <div className="grid grid-cols-6 gap-6">
                     <div className="col-span-6 sm:col-span-3">
-                      <label htmlFor="gender" className="block text-sm font-medium text-gray-700">
+                      <label htmlFor="gender" className="block text-sm font-medium text-darker-pink">
                         Gender
                       </label>
                       <select
                         id="gender"
                         name="gender"
                         autoComplete="gender"
-                        className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        className="mt-1 block w-full py-2 px-3 border border-pink-100 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                       >
                         <option>Male</option>
                         <option>Female</option>
@@ -175,7 +175,7 @@ const ProfileFields = () => {
                     </div>
 
                     <div className="col-span-6 sm:col-span-3">
-                      <label htmlFor="height" className="block text-sm font-medium text-gray-700">
+                      <label htmlFor="height" className="block text-sm font-medium text-darker-pink">
                         Height
                       </label>
                       <input
@@ -188,21 +188,21 @@ const ProfileFields = () => {
                     </div>
 
                      <div className="col-span-6 sm:col-span-3">
-                      <label htmlFor="nationality" className="block text-sm font-medium text-gray-700">
+                      <label htmlFor="nationality" className="block text-sm font-medium text-darker-pink">
                         Nationality
                       </label>
                       <Nationality></Nationality>
                     </div>
 
                     <div className="col-span-6 sm:col-span-3 menu-languages">
-                      <label htmlFor="language" className="block text-sm font-medium text-gray-700">
+                      <label htmlFor="language" className="block text-sm font-medium text-darker-pink">
                         Language
                       </label>
                       <Language></Language>
                     </div>
 
                     <div className="col-span-6">
-                      <label htmlFor="education" className="block text-sm font-medium text-gray-700">
+                      <label htmlFor="education" className="block text-sm font-medium text-darker-pink">
                         Education
                       </label>
                       <input
@@ -215,7 +215,7 @@ const ProfileFields = () => {
                     </div>
 
                     <div className="col-span-6">
-                      <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+                      <label htmlFor="description" className="block text-sm font-medium text-darker-pink">
                         Description
                       </label>
                       <textarea

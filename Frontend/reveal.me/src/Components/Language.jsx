@@ -5,7 +5,7 @@ const Language = () => {
     <select 
     id="languages" 
     name="languages"
-    className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+    className="mt-1 block w-full py-2 px-3 border border-pink-100 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
     <option>Select Language</option>
     <option value="af">Afrikaans</option>
     <option value="sq">Albanian - shqip</option>
