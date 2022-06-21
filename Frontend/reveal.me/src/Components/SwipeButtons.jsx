@@ -5,10 +5,8 @@ import back_button from "../images/back_button.png";
 const SwipeButtons = () => {
   return (
     <div>
-      <div class="w-auto m-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
-        <h2 class="sr-only">Products</h2>
-
-        <div class="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+      <div class="w-max fixed bottom-1/3 sm:py-24 sm:px-6 lg:max-w-5xl  ">
+        <div class="flex justify-evenly ">
           <a href="#" class="group">
             <div class="w-full aspect-w-1 aspect-h-1  overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
               <img

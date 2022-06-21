@@ -2,14 +2,15 @@ import Logo from "../images/login.png";
 
 const Profile = () => {
   return (
-    <div class="m-auto card lg:card-side bg-base-100 shadow-xl">
-      <figure>
+    <div class="w-max max-w-3xl card lg:card-side  bg-base-100 shadow-xl">
+      <figure className="m-auto rounded-lg">
         <img
+          className="rounded-lg"
           src="https://api.lorem.space/image/album?w=400&h=400"
           alt="Album"
         />
       </figure>
-      <div class=" flex flex-col justify-between p-4 leading-normal">
+      <div class="justify-between p-4 leading-normal">
         <div>
           <h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
             Bob Man
@@ -98,11 +99,6 @@ const Profile = () => {
 
         <p class="my-5 text-gray-700 dark:text-gray-400">
           Here are the biggest enterprise technology acquisitions of 2021 so
-          far, in reverse chronological order. Here are the biggest enterprise
-          technology acquisitions of 2021 so far, in reverse chronological
-          order. Here are the biggest enterprise
-          tsdfgsdfgsdfggasdfasdfasdfasdfasdfechnology acquisitions of 2021 so
-          far, in reverse chronological order.
         </p>
       </div>
     </div>
