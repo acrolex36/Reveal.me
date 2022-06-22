@@ -17,10 +17,10 @@ const HomePage = () => {
   }
   return (
     <>
-      <div className="h-screen bg-pink">
+      <div className="flex flex-col h-screen bg-pink-50">
         <Header></Header>
         <div className="flex flex-1">
-          <aside className=" hidden sm:block">
+          <aside className="hidden sm:block">
             <Sidebar></Sidebar>
           </aside>
           <main class="">

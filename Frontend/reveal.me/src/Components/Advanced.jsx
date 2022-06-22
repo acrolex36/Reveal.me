@@ -9,24 +9,26 @@ import back_button from "../images/back_button.png";
 const db = [
   {
     name: "Richard Hendricks",
-    url: "./img/richard.jpg",
+    age: 19,
+    profile_picture: "https://api.lorem.space/image/album?w=400&h=400",
+    height: 177,
+    education: "Student at Hochschule Darmstadt",
+    language: ["English", "German"]
   },
   {
     name: "Erlich Bachman",
-    url: "./img/erlich.jpg",
-  },
+    age: 20,
+    profile_picture: "https://api.lorem.space/image/album?w=400&h=400",
+    height: 164,
+    education: "Student at TU Darmstadt",
+    language: ["English"]  },
   {
     name: "Monica Hall",
-    url: "./img/monica.jpg",
-  },
-  {
-    name: "Jared Dunn",
-    url: "./img/jared.jpg",
-  },
-  {
-    name: "Dinesh Chugtai",
-    url: "./img/dinesh.jpg",
-  },
+    age: 23,
+    profile_picture: "https://api.lorem.space/image/album?w=400&h=400",
+    height: 187,
+    education: "Student at Hochschule Darmstadt",
+    language: ["Chinese", "English"]  },
 ];
 
 function Advanced() {
@@ -80,17 +82,16 @@ function Advanced() {
 
   return (
     <div>
-      <div className="absolute top-1/4 left-3/5">
-        {db.map((character, index) => (
+      <div className="inset-center">
+        {db.map((person, index) => (
           <TinderCard
             ref={childRefs[index]}
-            key={character.name}
-            class=""
-            onSwipe={(dir) => swiped(dir, character.name, index)}
-            onCardLeftScreen={() => outOfFrame(character.name, index)}
+            key={person.name}
+            onSwipe={(dir) => swiped(dir, person.name, index)}
+            onCardLeftScreen={() => outOfFrame(person.name, index)}
           >
             <div className="absolute">
-              <Profile></Profile>
+              <Profile person={person}></Profile>
             </div>
           </TinderCard>
         ))}
