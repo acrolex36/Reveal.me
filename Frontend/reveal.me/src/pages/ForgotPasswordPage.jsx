@@ -63,18 +63,20 @@ const ForgotPasswordPage = () => {
               />
             </div>
           </div>
-          <div className='flex justify-center'>
-            <button
-              type="submit"
-              className="group relative w-fit flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-darker-pink hover:bg-pink-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              Reset Password
-            </button>
-          </div>
-          <div className="text-center text-sm">
+          <div className='flex flex-col justify-center'>
+            <div className='flex justify-center mt-4 mb-2'>
+              <button
+                type="submit"
+                className="group relative w-fit flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-darker-pink hover:bg-pink-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                Reset Password
+              </button>
+            </div>
+            <div className="text-center text-sm">
             <a href="http://localhost:3000/login" className="font-medium text-indigo-600 hover:text-darker-pink">
               Back to Sign in
             </a>
+          </div>
           </div>
         </form>
       </div> 
