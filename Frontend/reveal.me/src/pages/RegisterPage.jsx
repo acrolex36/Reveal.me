@@ -51,14 +51,14 @@ const RegisterPage = () => {
     <div className='bg-pink-100 flex flex-col justify-center min-h-screen py-2'>
     <main className='flex flex-col items-center justify-center w-full flex-1 px-20'>
     <div className='bg-pink-50 rounded-2xl shadow-2xl flex w-5/6 max-w-4xl'>
-      <div className='w-2/5' >{/*Sign in Logo */}
+      <div className='w-2/5' >{/*Sign up Logo */}
         <div className='p-12'>
           <p>reveal.me</p>
           <p>reveal you, reveal us!</p>
         </div>
         <img src={LogoRegister} alt="" className='w-50'/>
       </div>
-      <div className='w-3/5 mx-5 p-14 mb-5'>{/*Sign in Field */}
+      <div className='w-3/5 mx-5 p-14 mb-5'>{/*Sign up Field */}
         <h2 className="mt-6 text-2xl text-gray-900">Sign up to Reveal.me</h2>
         <p className="mt-2 text-sm text-gray-600">Already have an account?{' '}
           <a href="http://localhost:3000/login" className="font-medium text-darker-pink hover:text-indigo-500">
