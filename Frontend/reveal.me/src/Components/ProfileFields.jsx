@@ -186,7 +186,7 @@ const ProfileFields = () => {
 
                     <div className="col-span-6 sm:col-span-3">
                       <label htmlFor="height" className="block text-sm font-medium text-darker-pink">
-                        Height (in cm)
+                        Height
                       </label>
                       <input
                         type="text"
@@ -194,6 +194,7 @@ const ProfileFields = () => {
                         id="height"
                         autoComplete="height"
                         className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block w-28 h-8 shadow-sm sm:text-sm border border-pink-100 rounded-md"
+                        placeholder='in cm'
                       />
                     </div>
 
@@ -213,7 +214,7 @@ const ProfileFields = () => {
 
                     <div className="col-span-6">
                       <label htmlFor="education" className="block text-sm font-medium text-darker-pink">
-                        Education
+                        Occupation
                       </label>
                       <input
                         type="text"
@@ -221,6 +222,7 @@ const ProfileFields = () => {
                         id="education"
                         autoComplete="education"
                         className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block w-full xl:w-96 shadow-sm sm:text-sm border border-pink-100 rounded-md"
+                        placeholder='What have you been busy with?'
                       />
                     </div>
 
@@ -229,6 +231,22 @@ const ProfileFields = () => {
                         Date of Birth
                       </label>
                       <input type="date" onChange={e=>setSelectedDate(date)} className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block h-8 w-32 px-1 shadow-sm sm:text-sm border border-pink-100 rounded-md"/>
+                    </div>
+
+                    <div className="col-span-6 sm:col-span-3">
+                      <label htmlFor="gender" className="block text-sm font-medium text-darker-pink">
+                        Gender Interest
+                      </label>
+                      <select
+                        id="gender"
+                        name="gender"
+                        autoComplete="gender"
+                        className="mt-1 block w-full py-2 px-3 border border-pink-100 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      >
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>Diverse</option>
+                      </select>
                     </div>
 
                     <div className="col-span-6 checkbox-hobby">
