@@ -80,6 +80,7 @@ function Advanced() {
 
   return (
     <div>
+      <div className="absolute top-1/4 left-3/5">
         {db.map((character, index) => (
           <TinderCard
             ref={childRefs[index]}
@@ -88,11 +89,12 @@ function Advanced() {
             onSwipe={(dir) => swiped(dir, character.name, index)}
             onCardLeftScreen={() => outOfFrame(character.name, index)}
           >
-            <div className="absolute m-auto top-1/4 left-1/3">
+            <div className="absolute">
               <Profile></Profile>
             </div>
           </TinderCard>
         ))}
+      </div>
 
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 flex flex-row justify-evenly w-1/2 ">
         <button

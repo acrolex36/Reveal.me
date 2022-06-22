@@ -2,7 +2,7 @@ import Logo from "../images/login.png";
 
 const Profile = () => {
   return (
-    <div class="w-max max-w-3xl card lg:card-side  bg-base-100 shadow-xl">
+    <div class="w-max max-w-4xl card lg:card-side  bg-base-100 shadow-xl">
       <figure className="m-auto rounded-lg">
         <img
           className="rounded-lg"
@@ -98,7 +98,7 @@ const Profile = () => {
         </section>
 
         <p class="my-5 text-gray-700 dark:text-gray-400">
-          Here are the biggest enterprise technology acquisitions of 2021 so
+          Here are the biggest enterprise technology acquisitions of 2021 sodddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
         </p>
       </div>
     </div>
