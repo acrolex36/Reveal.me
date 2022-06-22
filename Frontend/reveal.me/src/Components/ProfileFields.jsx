@@ -1,10 +1,19 @@
 import React, {useState} from 'react'
+import { useNavigate } from "react-router-dom";
 import Nationality from "./Nationality"
 import Language from "./Language"
 import Hobbies from "./Hobbies"
 
 const ProfileFields = () => {
   const [selectedFile, setSelectedFile] = useState("");
+  const [selectedDate, setSelectedDate] = useState(null);
+
+  let navigate = useNavigate(); 
+  const routeChange = (newPath) =>{ 
+    let path = newPath; 
+    navigate(path);
+  }
+  
 
   const changePicture = (e) =>{
     const reader = new FileReader();
@@ -65,31 +74,6 @@ const ProfileFields = () => {
               <div className="shadow overflow-hidden sm:rounded-md">
                 <div className="px-4 py-5 bg-gray-0 sm:p-6">
                   <div className="grid grid-cols-6 gap-6">
-                    <div className="col-span-6 sm:col-span-3">
-                      <label htmlFor="first-name" className="block text-sm font-medium text-darker-pink">
-                        First name
-                      </label>
-                      <input
-                        type="text"
-                        name="first-name"
-                        id="first-name"
-                        autoComplete="given-name"
-                        className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block w-full shadow-sm sm:text-sm border border-pink-100 rounded-md"
-                      />
-                    </div>
-
-                    <div className="col-span-6 sm:col-span-3">
-                      <label htmlFor="last-name" className="block text-sm font-medium text-darker-pink">
-                        Last name
-                      </label>
-                      <input
-                        type="text"
-                        name="last-name"
-                        id="last-name"
-                        autoComplete="family-name"
-                        className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block w-full shadow-sm sm:text-sm border border-pink-100 rounded-md"
-                      />
-                    </div>
 
                     <div className="col-span-6 sm:col-span-4">
                       <label htmlFor="email-address" className="block text-sm font-medium text-darker-pink">
@@ -100,7 +84,7 @@ const ProfileFields = () => {
                         name="email-address"
                         id="email-address"
                         autoComplete="email"
-                        className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block w-full shadow-sm sm:text-sm border border-pink-100 rounded-md"
+                        className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block xl:w-96 w-full shadow-sm sm:text-sm border border-pink-100 rounded-md"
                       />
                     </div>
 
@@ -113,7 +97,8 @@ const ProfileFields = () => {
                         name="password"
                         id="password"
                         autoComplete="password"
-                        className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block w-full shadow-sm sm:text-sm border border-pink-100 rounded-md"
+                        className="mt-1 focus:outline-none bg-gray-100 focus:ring focus:ring-darker-pink block w-full xl:w-96 shadow-sm sm:text-sm border border-pink-100 rounded-md"
+                        disabled="true"
                       />
                     </div>
 
@@ -126,19 +111,9 @@ const ProfileFields = () => {
                         name="confirm-password"
                         id="confirm-password"
                         autoComplete="confirm-password"
-                        className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block w-full shadow-sm sm:text-sm border border-pink-100 rounded-md"
+                        className="mt-1 focus:outline-none bg-gray-100 focus:ring focus:ring-darker-pink block w-full xl:w-96 shadow-sm sm:text-sm border border-pink-100 rounded-md"
+                        disabled="true"
                       />
-                    </div>
-
-                    <div className="col-span-6 sm:col-span-6 lg:col-span-2">
-                      <label htmlFor="location" className="block text-sm font-medium text-darker-pink">
-                        Location
-                      </label>
-                      <button
-                      type='button'
-                      className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-pink-100 hover:bg-darker-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        Set Location
-                      </button>
                     </div>
                   </div>
                 </div>
@@ -167,6 +142,50 @@ const ProfileFields = () => {
               <div className="shadow overflow-hidden sm:rounded-md">
                 <div className="px-4 py-5 bg-gray-0 sm:p-6">
                   <div className="grid grid-cols-6 gap-6">
+                    <div className="col-span-6 sm:col-span-3">
+                      <label htmlFor="first-name" className="block text-sm font-medium text-darker-pink">
+                        First name
+                      </label>
+                      <input
+                        type="text"
+                        name="first-name"
+                        id="first-name"
+                        autoComplete="given-name"
+                        className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block w-full shadow-sm sm:text-sm border border-pink-100 rounded-md"
+                      />
+                    </div>
+
+                    <div className="col-span-6 sm:col-span-3">
+                      <label htmlFor="last-name" className="block text-sm font-medium text-darker-pink">
+                        Last name
+                      </label>
+                      <input
+                        type="text"
+                        name="last-name"
+                        id="last-name"
+                        autoComplete="family-name"
+                        className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block w-full shadow-sm sm:text-sm border border-pink-100 rounded-md"
+                      />
+                    </div>
+
+                    <div className="col-span-6 sm:col-span-6 lg:col-span-2">
+                      <label htmlFor="location" className="block text-sm font-medium text-darker-pink">
+                        Location
+                      </label>
+                      <button
+                      type='button'
+                      className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-pink-100 hover:bg-darker-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Set Location
+                      </button>
+                    </div>
+
+                    <div className="col-span-6 sm:col-span-6 lg:col-span-2">
+                      <label htmlFor="" className="block text-sm font-medium text-darker-pink">
+                        Date of Birth
+                      </label>
+                      <input type="date" onChange={e=>setSelectedDate(date)} className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block h-8 w-32 px-1 shadow-sm sm:text-sm border border-pink-100 rounded-md"/>
+                    </div>
+
                     <div className="col-span-6 sm:col-span-3">
                       <label htmlFor="gender" className="block text-sm font-medium text-darker-pink">
                         Gender
@@ -219,7 +238,7 @@ const ProfileFields = () => {
                         name="education"
                         id="education"
                         autoComplete="education"
-                        className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block w-full shadow-sm sm:text-sm border border-pink-100 rounded-md"
+                        className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block w-full xl:w-96 shadow-sm sm:text-sm border border-pink-100 rounded-md"
                       />
                     </div>
                       <div className="col-span-6 checkbox-hobby">
@@ -246,7 +265,7 @@ const ProfileFields = () => {
               <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
                   <button /**still need onclick to redirect to another page */
                     className="inline-flex justify-center py-2 px-4 mr-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-pink-100 hover:bg-pink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  >
+                  onClick={routeChange("/register")}>
                     Cancel
                   </button>
                   <button 
