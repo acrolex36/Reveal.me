@@ -169,17 +169,6 @@ const ProfileFields = () => {
                     </div>
 
                     <div className="col-span-6 sm:col-span-6 lg:col-span-2">
-                      <label htmlFor="location" className="block text-sm font-medium text-darker-pink">
-                        Location
-                      </label>
-                      <button
-                      type='button'
-                      className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-pink-100 hover:bg-darker-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        Set Location
-                      </button>
-                    </div>
-
-                    <div className="col-span-6 sm:col-span-6 lg:col-span-2">
                       <label htmlFor="" className="block text-sm font-medium text-darker-pink">
                         Date of Birth
                       </label>
@@ -241,7 +230,19 @@ const ProfileFields = () => {
                         className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block w-full xl:w-96 shadow-sm sm:text-sm border border-pink-100 rounded-md"
                       />
                     </div>
-                      <div className="col-span-6 checkbox-hobby">
+
+                    <div className="col-span-6 sm:col-span-6 lg:col-span-2">
+                      <label htmlFor="location" className="block text-sm font-medium text-darker-pink">
+                        Location
+                      </label>
+                      <button
+                      type='button'
+                      className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-pink-100 hover:bg-darker-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Set Location
+                      </button>
+                    </div>
+
+                    <div className="col-span-6 checkbox-hobby">
                       <label htmlFor="language" className="block text-sm font-medium text-darker-pink">
                         Hobby
                       </label>
