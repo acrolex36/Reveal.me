@@ -6,7 +6,7 @@ const Nationality = () => {
     id="nationality"
     name="nationality"
     autoComplete="nationality"
-    className="mt-1 block w-full py-2 px-3 border border-pink-100 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+    className="mt-1 block w-full py-2 px-3 border border-pink-100 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm h-10">
     <option value="">-- select one --</option>
     <option value="afghan">Afghan</option>
     <option value="albanian">Albanian</option>

@@ -2,8 +2,7 @@ import React, {useState} from 'react'
 import { useNavigate } from "react-router-dom";
 import Nationality from "./Nationality"
 import Language from "./Language"
-import Hobbies from "./Hobbies"
-
+import Interest from './Interest';
 const ProfileFields = () => {
   const [selectedFile, setSelectedFile] = useState("");
   const [selectedDate, setSelectedDate] = useState(null);
@@ -26,7 +25,10 @@ const ProfileFields = () => {
   };
 
   return (
+    <div>
+      <form action="#" method="POST">
     <div className='shadow sm:rounded-md sm:overflow-hidden px-4 py-5 bg-gray-50 space-y-6 sm:p-6 my-5'>
+      
           <div>
         <div className="md:grid md:grid-cols-3 md:gap-6">
           <div className="md:col-span-1">
@@ -38,7 +40,6 @@ const ProfileFields = () => {
             </div>
           </div>
           <div className="mt-5 md:mt-0 md:col-span-2">
-            <form action="#" method="POST">
                 <div className="py-3 center mx-auto">
                   <div class="bg-white px-4 py-5 rounded-lg shadow-lg text-center w-48">
                     <div className='mb-4'>
@@ -50,7 +51,6 @@ const ProfileFields = () => {
                     </label>
                   </div>
                 </div>
-            </form>
           </div>
         </div>
       </div>
@@ -66,7 +66,7 @@ const ProfileFields = () => {
           <div className="md:col-span-1">
             <div className="px-4 sm:px-0">
               <h3 className="text-lg font-medium leading-6 text-gray-900">Account Information</h3>
-              <p className="mt-1 text-sm text-gray-600"></p>
+              <p className="mt-1 text-sm text-gray-600">Details to your registered account</p>
             </div>
           </div>
           <div className="mt-5 md:mt-0 md:col-span-2">
@@ -138,7 +138,6 @@ const ProfileFields = () => {
             </div>
           </div>
           <div className="mt-5 md:mt-0 md:col-span-2">
-            <form action="#" method="POST">
               <div className="shadow overflow-hidden sm:rounded-md">
                 <div className="px-4 py-5 bg-gray-0 sm:p-6">
                   <div className="grid grid-cols-6 gap-6">
@@ -176,7 +175,7 @@ const ProfileFields = () => {
                         id="gender"
                         name="gender"
                         autoComplete="gender"
-                        className="mt-1 block w-full py-2 px-3 border border-pink-100 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        className="mt-1 block w-full py-2 px-3 border border-pink-100 bg-white h-10 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                       >
                         <option>Male</option>
                         <option>Female</option>
@@ -193,7 +192,7 @@ const ProfileFields = () => {
                         name="height"
                         id="height"
                         autoComplete="height"
-                        className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block w-28 h-8 shadow-sm sm:text-sm border border-pink-100 rounded-md"
+                        className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block w-28 h-10 px-1 shadow-sm sm:text-sm border border-pink-100 rounded-md"
                         placeholder='in cm'
                       />
                     </div>
@@ -221,7 +220,7 @@ const ProfileFields = () => {
                         name="education"
                         id="education"
                         autoComplete="education"
-                        className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block w-full xl:w-96 shadow-sm sm:text-sm border border-pink-100 rounded-md"
+                        className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block w-full xl:w-96 px-2 shadow-sm sm:text-sm border border-pink-100 rounded-md"
                         placeholder='What have you been busy with?'
                       />
                     </div>
@@ -233,29 +232,6 @@ const ProfileFields = () => {
                       <input type="date" onChange={e=>setSelectedDate(date)} className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block h-8 w-32 px-1 shadow-sm sm:text-sm border border-pink-100 rounded-md"/>
                     </div>
 
-                    <div className="col-span-6 sm:col-span-3">
-                      <label htmlFor="gender" className="block text-sm font-medium text-darker-pink">
-                        Gender Interest
-                      </label>
-                      <select
-                        id="gender"
-                        name="gender"
-                        autoComplete="gender"
-                        className="mt-1 block w-full py-2 px-3 border border-pink-100 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                      >
-                        <option>Male</option>
-                        <option>Female</option>
-                        <option>Diverse</option>
-                      </select>
-                    </div>
-
-                    <div className="col-span-6 checkbox-hobby">
-                      <label htmlFor="language" className="block text-sm font-medium text-darker-pink">
-                        Hobby
-                      </label>
-                      <Hobbies></Hobbies>
-                    </div>                    
-
                     <div className="col-span-6">
                       <label htmlFor="description" className="block text-sm font-medium text-darker-pink">
                         Description
@@ -264,7 +240,8 @@ const ProfileFields = () => {
                         name="description"
                         id="description"
                         autoComplete="description"
-                        className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block w-full h-28 shadow-sm sm:text-sm border border-pink-100 rounded-md"
+                        className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block w-full h-28 px-2 shadow-sm sm:text-sm border border-pink-100 rounded-md"
+                        placeholder='Describe yourself...'
                       />
                     </div>
                     <div className="col-span-6 sm:col-span-6 lg:col-span-2">
@@ -279,24 +256,26 @@ const ProfileFields = () => {
                     </div>
                   </div>
                 </div>
-              </div> 
-              <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                  <button
-                    className="inline-flex justify-center py-2 px-4 mr-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-pink-100 hover:bg-pink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  onClick={()=>routeChange("/register")}>
-                    Cancel
-                  </button>
-                  <button 
-                    type="submit"
-                    className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-darker-pink hover:bg-pink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  >
-                    Submit
-                  </button>
-                </div>       
-              </form>
+              </div>
           </div>
         </div>
       </div>
+    </div>
+    <div><Interest></Interest></div>     
+    <div className="px-4 py-3 text-right sm:px-6">
+    <button
+      className="inline-flex justify-center py-2 px-4 mr-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-pink-100 hover:bg-pink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+    onClick={()=>routeChange("/register")}>
+      Cancel
+    </button>
+    <button 
+      type="submit"
+      className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-darker-pink hover:bg-pink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+    >
+      Submit
+    </button>
+</div>
+</form>
     </div>
   )
 }
