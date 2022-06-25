@@ -1,5 +1,11 @@
 import mongoose from "mongoose";
 
+export enum GenderTypes { 
+  MALE = "male",
+  FEMALE = "female",
+  DIVERSE = "diverse",
+}
+
 //model User
 const userSchema = new mongoose.Schema({
   first_name: {
@@ -27,6 +33,10 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: new Date(),
   },
+  oneSideMatch: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user' 
+  }],
   userDetail: {
     is_online: {
       type: Boolean,
@@ -34,12 +44,14 @@ const userSchema = new mongoose.Schema({
     },
     gender: {
       type: String,
-      enum: ['male', 'female', 'diverse'],
+      enum: GenderTypes,
+      // default: GenderTypes.MALE
+      // enum: ['male', 'female', 'diverse'],
     },
-    gender_interest: {
+    gender_interest: [{
       type: String,
-      enum: ['male', 'female', 'diverse'],
-    },
+      enum: GenderTypes,
+    }],
     age: {
       type: Number,
     },
@@ -69,10 +81,6 @@ const userSchema = new mongoose.Schema({
     }],
     language: [{
       type: String,
-    }],
-    matches_contact: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'user' 
     }]
   }
 });

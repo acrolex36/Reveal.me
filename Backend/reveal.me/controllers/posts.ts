@@ -3,8 +3,7 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-import User from "../models/postUser";
-import UserDetail from "../models/postUserDetail";
+import User, { GenderTypes } from "../models/postUser";
 import Message from "../models/postMessages";
 
 const router = express.Router();
@@ -32,6 +31,7 @@ const checkToken = (req: Request, res: Response, next: any) => {
         });
       }
       else{
+        // console.log(decoded);
         next();
       }
     });
@@ -103,10 +103,12 @@ export const login = async (req: Request, res: Response) => {
       
       await User.updateOne({
         _id: user._id
-      },{$set : { lastLogin: Date.now()} });
+      },{$set : { lastLogin: Date.now(), userDetail:{ is_online: true }} });
 
-      var token = jwt.sign({ id: user._id, email: user.email}, JWT_SECRET);
-      return res.status(201).json({user,"token": token});
+      var token = jwt.sign({ id: user._id, email: user.email}, JWT_SECRET, { expiresIn: "24h"});
+      return res.status(201).json({
+        // user,
+        "token": token});
     }
     else{
       return res.status(400).json({status: "error", error: "Invalid username/password"})
@@ -174,6 +176,15 @@ export const updateOneUserProfile = async (req: Request, res: Response) => {
         return res.status(404).send(`No User with ${email}`);
       }
 
+      if(gender.valueOf() !== GenderTypes.MALE || gender.valueOf() !== GenderTypes.FEMALE || gender.valueOf() !== GenderTypes.DIVERSE){        
+        return res.status(403).send(`Gender Type is not valid`+ gender);
+      }
+
+      // var parsedGenderInterest
+      // for(var i = 0 ; i < gender_interest.length ; i++){
+
+      // }
+
       const updateUserDetail = {
         _id:user.id, userDetail: {gender, gender_interest, age, profile_picture, dob_date, dob_month, dob_year, height, nationality, education, interest, language}
       };
@@ -181,7 +192,7 @@ export const updateOneUserProfile = async (req: Request, res: Response) => {
       await User.findByIdAndUpdate(user._id, updateUserDetail, {new: true});
 
       res.status(200).json(user);
-      //62b05ccfcf0b9dfae8772c6f
+ 
     } catch (error) {
       res.status(404).json({ message: error });
     }
@@ -193,6 +204,7 @@ export const updateOneUserProfile = async (req: Request, res: Response) => {
 export const getAllUser = async (req: Request, res: Response) => {
   checkToken(req,res, () => {
     authSuccess = true;
+    // return res.status(200).send({data: "success"});
   })
 
   if(authSuccess){
