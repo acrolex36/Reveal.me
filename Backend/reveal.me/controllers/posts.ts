@@ -176,8 +176,16 @@ export const updateOneUserProfile = async (req: Request, res: Response) => {
         return res.status(404).send(`No User with ${email}`);
       }
 
-      if(gender.valueOf() !== GenderTypes.MALE || gender.valueOf() !== GenderTypes.FEMALE || gender.valueOf() !== GenderTypes.DIVERSE){        
-        return res.status(403).send(`Gender Type is not valid`+ gender);
+      var valid = false;
+
+      if(gender.valueOf() === GenderTypes.MALE
+      || gender.valueOf() === GenderTypes.FEMALE 
+      || gender.valueOf() === GenderTypes.DIVERSE
+      ){  
+        valid = true;
+      }
+      if(valid === false){
+      return res.status(403).send(`Gender Type ${gender} is not valid`);
       }
 
       // var parsedGenderInterest
@@ -186,7 +194,7 @@ export const updateOneUserProfile = async (req: Request, res: Response) => {
       // }
 
       const updateUserDetail = {
-        _id:user.id, userDetail: {gender, gender_interest, age, profile_picture, dob_date, dob_month, dob_year, height, nationality, education, interest, language}
+        _id:user.id, userDetail: {is_online: true ,gender, gender_interest, age, profile_picture, dob_date, dob_month, dob_year, height, nationality, education, interest, language}
       };
       
       await User.findByIdAndUpdate(user._id, updateUserDetail, {new: true});
