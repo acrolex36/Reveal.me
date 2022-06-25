@@ -51,7 +51,7 @@ const LoginPage = () => {
       <div className='w-3/5 p-14 mx-5 mb-5'>{/*Sign in Field */}
         <h2 className="mt-6 text-2xl text-gray-900">Log in to Reveal.me</h2>
         <p className="mt-2 text-sm text-gray-600">No Account yet?{' '}
-          <a href="http://localhost:3000/register" className="font-medium text-darker-pink hover:text-indigo-500">
+          <a href="http://localhost:3000/register" className="font-medium text-darker-pink hover:text-pink-100">
             Register
           </a>
         </p>
@@ -104,28 +104,22 @@ const LoginPage = () => {
             </div>
           </div>
 
-          <div className='flex justify-center'>
+          <div className='flex flex-col justify-center'>
+            <div className='flex justify-center mb-2'>
             <button
               type="submit"
               className="group relative w-40 flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-darker-pink hover:bg-pink-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               Sign in
             </button>
-          </div>
-          <div className='flex justify-center'>
-          <button
-              type="submit"
-              className="group relative w-40 flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-darker-pink hover:bg-pink-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              Create an Account
-            </button>
-          </div>
+            </div>
             <div className="text-center text-sm">
               <a href="http://localhost:3000/login/forgot_password" className="font-medium text-indigo-600 hover:text-darker-pink">
                 Forgot your password?
               </a>
               <p>{error}</p>
             </div>
+          </div>
         </form>
       </div> 
     </div>
