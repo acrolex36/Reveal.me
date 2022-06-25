@@ -13,6 +13,12 @@ import { Cookies, useCookies } from 'react-cookie'
 //Token = cookies.Token
 
 const ProfileFields = () => {
+      useEffect(() => {
+        console.log("i fire once");
+      if(cookies){
+        getAccount(cookies);
+      }
+    }, []);
   const [selectedFile, setSelectedFile] = useState("");
 
   const [gender, setGender] = useState("");
@@ -51,7 +57,7 @@ const ProfileFields = () => {
     // getAccount(cookies);
 
 
-
+  const [firstName, setFirstName] = useState("");
   const [ cookies, setCookie, removeCookie] = useCookies(null);
   const [accountData, setAccountData] = useState({
       // user_id: cookies.UserId,
@@ -73,12 +79,6 @@ const ProfileFields = () => {
         description: ""
       }
     });
-
-    // useEffect(() => {
-    //   if(cookies){
-        getAccount(cookies);
-    //   }
-    // }, []);
   
     const navigate = useNavigate();
 
@@ -235,7 +235,7 @@ const ProfileFields = () => {
                             autoComplete="email"
                             className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block xl:w-96 w-full shadow-sm sm:text-sm border border-pink-100 rounded-md"
                             value={accountData.email}
-                            onChange={(e) => setOccupation(e.target.value)}
+                            onChange={(e) => setAccountData({...accountData, email:e.target.value})}
                           />
                         </div>
 
@@ -319,9 +319,7 @@ const ProfileFields = () => {
                           label="first_name"
                           className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block w-full shadow-sm sm:text-sm border border-pink-100 rounded-md"
                           value={accountData.first_name}
-                          onChange={(e) =>
-                            // console.log(e.target.value)
-                            (e) => setAccountData({ ...accountData, first_name: e.target.value })
+                          onChange={(e) => setAccountData({...accountData, first_name: e.target.value })
                           }
                         />
                       </div>
@@ -340,6 +338,7 @@ const ProfileFields = () => {
                           autoComplete="family-name"
                           className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block w-full shadow-sm sm:text-sm border border-pink-100 rounded-md"
                           value={accountData.last_name}
+                          onChange={(e)=>setAccountData({...accountData, last_name: e.target.value})}
                         />
                       </div>
 

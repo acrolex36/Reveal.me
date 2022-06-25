@@ -28,7 +28,7 @@ const RegisterPage = () => {
         setError('Passwords need to match!')
         return
     }
-        await axios.post(`http://localhost:5000/api/auth/register`, { first_name, last_name, email, plainTextPassword, confirmPassword })
+        const response = await axios.post(`http://localhost:5000/api/auth/register`, { first_name, last_name, email, plainTextPassword, confirmPassword })
         .then(function(response){
           if(response.status == 201){
             // saveTokenInLocalStorage(response.data.token)
