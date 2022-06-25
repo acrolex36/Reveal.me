@@ -2,6 +2,11 @@ import React, {useState} from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import LogoRegister from "../images/register.png"
+import { useCookies } from 'react-cookie'
+
+// export function saveTokenInLocalStorage(token) {
+//   localStorage.setItem("Token", JSON.stringify(token));
+// }
 
 const RegisterPage = () => {
   const [first_name, setfirstname] = useState(null);
@@ -10,6 +15,7 @@ const RegisterPage = () => {
   const [plainTextPassword, setPassword] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState(null)
   const [error, setError] = useState(null)
+  const [ cookies, setCookie, removeCookie] = useCookies(null);
 
   let navigate = useNavigate()
 
@@ -25,7 +31,13 @@ const RegisterPage = () => {
         await axios.post(`http://localhost:5000/api/auth/register`, { first_name, last_name, email, plainTextPassword, confirmPassword })
         .then(function(response){
           if(response.status == 201){
-            navigate ('/');
+            // saveTokenInLocalStorage(response.data.token)
+
+            setCookie("UserId", response.data.userId);
+            setCookie("Email", response.data.email);
+            setCookie("Token", response.data.token);
+
+            navigate ('/create_profile');
           }
         }).catch(function(res){
           navigate ('/register');
@@ -105,7 +117,7 @@ const RegisterPage = () => {
                 Email
               </label>
               <input
-                id="email-address"
+                id="email-address1"
                 name="email"
                 type="email"
                 autoComplete="email"

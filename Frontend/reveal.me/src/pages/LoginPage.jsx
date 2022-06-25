@@ -2,11 +2,23 @@ import React, {useState} from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import LogoLogin from '../images/login.png'
+import { useCookies } from 'react-cookie'
+
+// export function saveTokenInLocalStorage(token) {
+//   localStorage.setItem("Token", JSON.stringify(token));
+// }
+
+//function logout(){
+//   localStorage.removeItem("Token")
+//  return ......
+// }
+
 const LoginPage = () => {
 
   const [email, setEmail] = useState(null);
   const [plainTextPassword, setPassword] = useState(null);
   const [error, setError] = useState(null);
+  const [ cookies, setCookie, removeCookie] = useCookies(null);
 
   let navigate = useNavigate()
 
@@ -14,12 +26,19 @@ const LoginPage = () => {
     e.preventDefault()
 
     try {
-      
+
       await axios
       .post(`http://localhost:5000/api/auth/login`, { email, plainTextPassword })
       .then(function(response){
         if(response.status == 201){
+          // saveTokenInLocalStorage(response.data.token);
+
+          setCookie("UserId", response.data.userId);
+          setCookie("Email", response.data.email);
+          setCookie("Token", response.data.token);
+
           navigate ('/');
+          // navigate ('/create_profile');
         }
       })
       .catch(function(res){

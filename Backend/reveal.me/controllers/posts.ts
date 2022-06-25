@@ -73,10 +73,20 @@ export const register = async (req: Request, res: Response) => {
   try {
 
     await response.save();
+    var token = jwt.sign({ id: response._id, email: response.email}, JWT_SECRET, { expiresIn: "24h"});
+
+    const user = await User.findOne({email}).lean()
+    await User.updateOne({
+      _id: user._id
+    },{$set : { user_id: user._id} });
 
     // console.log("User created successfully", response)
 
-    return res.status(201).json(response);
+    return res.status(201).json({
+        "userId": response._id,
+        "email": response.email,
+        "token": token});
+
   } catch (error: any) {
     if(error.code === 11000){
       return res.status(405).json({status: "error", error: "Email already exist"})
@@ -107,7 +117,8 @@ export const login = async (req: Request, res: Response) => {
 
       var token = jwt.sign({ id: user._id, email: user.email}, JWT_SECRET, { expiresIn: "24h"});
       return res.status(201).json({
-        // user,
+        "userId": user._id,
+        "email": user.email,
         "token": token});
     }
     else{
@@ -167,7 +178,9 @@ export const updateOneUserProfile = async (req: Request, res: Response) => {
   if(authSuccess){
     const { email } = req.params;
     
-    const { gender, gender_interest, age, profile_picture, dob_date, dob_month, dob_year, height, nationality, education, interest, language} = req.body;
+    const {
+      first_name, last_name,
+       gender, gender_interest, age, profile_picture, dob_date, dob_month, dob_year, height, nationality, education, interest, language} = req.body;
 
     try {
       const user = await User.findOne({email})
@@ -194,7 +207,7 @@ export const updateOneUserProfile = async (req: Request, res: Response) => {
       // }
 
       const updateUserDetail = {
-        _id:user.id, userDetail: {is_online: true ,gender, gender_interest, age, profile_picture, dob_date, dob_month, dob_year, height, nationality, education, interest, language}
+        _id:user.id, first_name, last_name, userDetail: {is_online: true ,gender, gender_interest, age, profile_picture, dob_date, dob_month, dob_year, height, nationality, education, interest, language}
       };
       
       await User.findByIdAndUpdate(user._id, updateUserDetail, {new: true});
@@ -219,6 +232,30 @@ export const getAllUser = async (req: Request, res: Response) => {
     try {
       const postMessages = await User.find();
       res.status(200).json(postMessages);
+    } catch (error) {
+      res.status(404).json({ message: error });
+    }
+    authSuccess = false;
+  }
+};
+
+//GET - /test/singleuser/:id # return User with {id}
+export const getOneUserDetailwithId = async (req: Request, res: Response) => {
+  checkToken(req,res, () => {
+    authSuccess = true;
+  })
+
+  if(authSuccess){
+    const { id } = req.params;
+    try {
+      const user = await User.findOne({id})
+      // const user = await User.findOne({email}).lean() //without userDetail
+
+    //  if(user === null){
+    //   res.status(410).json("lol");
+    //   }
+
+      res.status(200).json(user);
     } catch (error) {
       res.status(404).json({ message: error });
     }
