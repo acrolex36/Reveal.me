@@ -118,7 +118,7 @@ export const login = async (req: Request, res: Response) => {
 };
 
 //POST - /auth/change-password # change password with email..
-export const changePassword = async (req: Request, res: Response) => {
+export const forgetpassword = async (req: Request, res: Response) => {
 
   const { email, newPlainPassword, confirmNewPlainPassword } =
   req.body;
