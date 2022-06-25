@@ -1,6 +1,8 @@
 import React from 'react'
 
 const Hobbies = () => {
+  const [hobbyList, setHobbies] = useState([]);
+
   return (
 <div class="flex flex-wrap">
   <div class="form-check w-full sm:w-1/1.5 md:w-1/3 lg:w-1/4 xl:w-1/6 mb-4 bg-gray-500">
