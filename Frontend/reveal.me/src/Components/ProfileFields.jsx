@@ -6,6 +6,7 @@ import Language from "./Language"
 import Interest from './Interest';
 import {hobbies} from "../utils/Hobbies"
 import {Genders} from "../utils/Gender"
+import {languages} from "../utils/Language"
 
 const ProfileFields = () => {
   const [selectedFile, setSelectedFile] = useState("");
@@ -15,7 +16,7 @@ const ProfileFields = () => {
   const [gender, setGender] = useState("");
   const [height, setHeight] = useState("");
   const [nationality, setNationality] = useState("");
-  const [language, setLanguage] = useState([]);
+  const [language, setLanguage] = useState(new Array(languages.length).fill(false));
   const [occupation, setOccupation] = useState("");
   const [birthDate, setBirthDate] = useState(null);
   const [description, setDescription] = useState("");
@@ -43,17 +44,51 @@ const ProfileFields = () => {
     let path = newPath; 
     navigate(path);
   }
-  
 
   const changePicture = (e) =>{
     const reader = new FileReader();
-    reader.onloaendd = () => {
+    reader.onload = () => {
       if(reader.readyState === 2){
         setSelectedFile(reader.result)
       }
     }
     reader.readAsDataURL(e.target.files[0])
   };
+
+  const handleOnChangeLanguage = (position) => {
+    const updatedState = language.map((value, index)=>
+            index === position ? !value : value
+        );
+        setLanguage(updatedState);
+        console.log(updatedState);
+  }
+
+  const resetLanguage = () => {
+    const updatedState = language.map((value, index)=>
+            value === true ? !value : value
+        );
+        setLanguage(updatedState);
+        console.log(updatedState);
+  }
+
+  const handleNationality = nat => {
+    setNationality(nat);
+  }
+
+  const handleOnChangeHobby = (position) => {
+    const updatedState = hobbyList.map((hobby, index)=>
+        index === position ? !hobby : hobby
+    );
+    setHobbies(updatedState); 
+    console.log(updatedState);
+  }
+  const handleOnChangeGender = (position) =>{
+    const updatedState = genderInterests.map((gender, index)=>
+        index === position ? !gender : gender
+    );
+    setGenderInterests(updatedState);
+    console.log(updatedState);
+  }
 
   useEffect(()=>{
     getAccount();
@@ -76,8 +111,8 @@ const ProfileFields = () => {
           </div>
           <div className="mt-5 md:mt-0 md:col-span-2">
                 <div className="py-3 center mx-auto">
-                  <div class="bg-white px-4 py-5 rounded-lg shadow-lg text-center w-48">
-                    <div className='mb-4'>
+                  <div class="bg-white px-4 py-5 rounded-lg shadow-lg text-center w-fit">
+                    <div className='mb-4 w-48'>
                       <img src={selectedFile}/>
                     </div>
                     <label class="cursor-pointer mt-6">
@@ -246,17 +281,44 @@ const ProfileFields = () => {
                       <label htmlFor="nationality" className="block text-sm font-medium text-darker-pink">
                         Nationality
                       </label>
-                      <Nationality onChange={e=>setNationality(e.target.value)}></Nationality>
+                      <Nationality handleNationality={handleNationality}></Nationality>
                     </div>
 
                     <div className="col-span-6 sm:col-span-3 menu-languages">
                       <label htmlFor="language" className="block text-sm font-medium text-darker-pink">
                         Language
                       </label>
-                      <button class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button" data-modal-toggle="defaultModal">
-                      Toggle modal
-                      </button>
-                      <Language onChange={e=>setLanguage(e.target.value)}></Language>
+                      <label for="my-modal" class="btn bg-darker-pink">Select Language</label>
+                      <input type="checkbox" id="my-modal" class="modal-toggle" />
+                      <div class="modal">
+                        <div class="modal-box">
+                          <h1 className='mb-4 text-lg font-normal text-darker-pink'>Select the Languages that you're good at!</h1>
+                          <div class="flex flex-wrap">
+                        {languages.map(({value, label}, index)=>{
+                            return(
+                                <div key={index} className="form-check w-full sm:w-1/2 md:w-1/2 lg:w-1/2 xl:w-1/2 mb-4 bg-gray-500">
+                                    <input type="checkbox" className=" checkbox form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-pink-0 checked:bg-pink-100 checked:border-darker-pink focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"  
+                                    value={value} 
+                                    id={`language-${index}`}
+                                    name={value}
+                                    checked={language[index]}
+                                    onChange={()=>handleOnChangeLanguage(index)}/>
+                                    <label class="form-check-label inline-block text-gray-800">{label}</label>
+                                </div>
+                            );
+                        })}
+                        
+                      </div>
+                      <div className='flex flex-row justify-end'>
+                        <div class="modal-action">
+                            <label for="my-modal" class="btn inline-flex justify-center py-2 px-4 mr-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-darker-pink bg-gray-100 hover:bg-pink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" onClick={resetLanguage}>Close</label>
+                          </div>
+                          <div class="modal-action">
+                            <label for="my-modal" class="btn inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-pink-100 bg-darker-pink hover:bg-pink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">OK</label>
+                          </div>
+                      </div>
+                        </div>
+                      </div>
                     </div>
 
                     <div className="col-span-6">
@@ -313,7 +375,7 @@ const ProfileFields = () => {
         </div>
       </div>
     </div>
-    <div><Interest hobbyList={hobbyList} genderInterests={genderInterests}></Interest></div>     
+    {/* <div><Interest handleOnChangeHobby={handleOnChangeHobby} handleOnChangeGender={handleOnChangeGender}></Interest></div>      */}
     <div className="px-4 py-3 text-right sm:px-6">
     <button
       className="inline-flex justify-center py-2 px-4 mr-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-pink-100 hover:bg-pink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"

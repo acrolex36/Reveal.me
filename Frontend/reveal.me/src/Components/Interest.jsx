@@ -1,22 +1,13 @@
 import React, {useState} from 'react'
 import {hobbies} from "../utils/Hobbies"
 import {Genders} from "../utils/Gender"
-const Interest = ({hobbyList, genderInterests}) => {
-    const [hobbyLists, setHobbies] = useState(hobbyList);
-    const [genderInterest, setGenderInterests] = useState(genderInterests);
-    const handleOnChangeHobby = (position) => {
-        const updatedState = hobbyList.map((hobby, index)=>
-            index === position ? !hobby : hobby
-        );
-        setHobbies(updatedState); 
-        console.log(updatedState);
+const Interest = (hobbiesList, gendersList) => {
+    
+    const handleHobby = (position) => {
+        hobbiesList.handleOnChangeHobby(position)
     }
-    const handleOnChangeGender = (position) =>{
-        const updatedState = genderInterest.map((gender, index)=>
-            index === position ? !gender : gender
-        );
-        setGenderInterests(updatedState);
-        console.log(updatedState);
+    const handleGender = (position) =>{
+        gendersList.handleOnChangeGender(position)
     }
   return (
     <div className='shadow sm:rounded-md sm:overflow-hidden px-4 py-5 bg-gray-50 space-y-6 sm:p-6 my-5'>
@@ -45,8 +36,8 @@ const Interest = ({hobbyList, genderInterests}) => {
                                     value={hobby} 
                                     id={`hobby-${index}`}
                                     name={hobby}
-                                    checked={hobbyLists[index]}
-                                    onChange={()=>handleOnChangeHobby(index)}/>
+                                    checked={hobby[index]}
+                                    onChange={handleHobby(index)}/>
                                     <label class="form-check-label inline-block text-gray-800">{hobby}</label>
                                 </div>
                             );
@@ -55,7 +46,7 @@ const Interest = ({hobbyList, genderInterests}) => {
                       </div>
                     </div>   
 
-                    <div className="col-span-6 checkbox-hobby">
+                    <div className="col-span-6 checkbox-gender-interest">
                         <label htmlFor="language" className="block text-sm font-medium text-darker-pink">
                             Gender Interest
                         </label>
@@ -67,8 +58,8 @@ const Interest = ({hobbyList, genderInterests}) => {
                                     value={gender} 
                                     id={`gender-${index}`}
                                     name={gender}
-                                    checked={genderInterest[index]}
-                                    onChange={()=>handleOnChangeGender(index)}
+                                    checked={gender[index]}
+                                    onChange={handleGender(index)}
                                     />
                                     <label class="form-check-label inline-block text-gray-800">{gender}
                                     </label>
