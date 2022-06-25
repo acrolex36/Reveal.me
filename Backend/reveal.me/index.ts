@@ -5,7 +5,7 @@ import cors from "cors";
 import postRoutes from "./routes/posts";
 
 const CONNECTION_URL =
-  "mongodb+srv://guest:test123@mydb.gvafj.mongodb.net/RevealMe?retryWrites=true&w=majority";
+  "mongodb+srv://guest:test123@mydatabase.w9v8kfk.mongodb.net/RevealMe?retryWrites=true&w=majority";
 const PORT = 5000;
 
 const app = express();
