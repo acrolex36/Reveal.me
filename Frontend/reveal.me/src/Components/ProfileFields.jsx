@@ -16,12 +16,12 @@ const ProfileFields = () => {
   const [gender, setGender] = useState("");
   const [height, setHeight] = useState("");
   const [nationality, setNationality] = useState("");
-  const [language, setLanguage] = useState(new Array(languages.length).fill(false));
+  const [language, setLanguage] = useState([]);
   const [occupation, setOccupation] = useState("");
   const [birthDate, setBirthDate] = useState(null);
   const [description, setDescription] = useState("");
-  const [hobbyList, setHobbies] = useState(new Array(hobbies.length).fill(false));
-  const [genderInterests, setGenderInterests] = useState(new Array(Genders.length).fill(false));
+  const [hobbyList, setHobbies] = useState([]);
+  const [genderInterests, setGenderInterests] = useState([]);
 
   const getAccount = async () =>{
     try{
@@ -55,39 +55,62 @@ const ProfileFields = () => {
     reader.readAsDataURL(e.target.files[0])
   };
 
-  const handleOnChangeLanguage = (position) => {
-    const updatedState = language.map((value, index)=>
-            index === position ? !value : value
-        );
-        setLanguage(updatedState);
-        console.log(updatedState);
+  const handleOnChangeLanguage = (lang, language) => {
+    if(language.includes(lang))
+        removeLanguage(lang)
+    else{
+      const updatedState = [...language];
+      updatedState.push(lang);
+      setLanguage(updatedState);
+      console.log(updatedState);
+    }
+  }
+
+  const removeLanguage = (id) => {
+    const updatedState = language.filter(
+      (lang) => lang!==id
+    );
+    setLanguage(updatedState);
+    console.log(updatedState);
   }
 
   const resetLanguage = () => {
-    const updatedState = language.map((value, index)=>
-            value === true ? !value : value
-        );
-        setLanguage(updatedState);
-        console.log(updatedState);
+    setLanguage([]);
+    console.log(language);
   }
 
   const handleNationality = nat => {
     setNationality(nat);
   }
 
-  const handleOnChangeHobby = (position) => {
-    const updatedState = hobbyList.map((hobby, index)=>
-        index === position ? !hobby : hobby
+  const handleOnChangeHobby = (hobby) => {
+    const updatedChecked = [...hobbyList];
+    updatedChecked.push(hobby);
+    setHobbies(updatedChecked); 
+    console.log(updatedChecked);
+    }
+
+  const removeHobby = (id)=>{
+    const updatedState = hobbyList.filter(
+      (hobby) => hobby!==id
     );
-    setHobbies(updatedState); 
-    console.log(updatedState);
+    setHobbies(updatedState)
+    console.log(updatedState)
+  } 
+
+  const removeGender = (id) =>{
+    const updatedState = genderInterests.filter(
+      (gender) => gender!==id
+    );
+    setGenderInterests(updatedState)
+    console.log(updatedState)
   }
-  const handleOnChangeGender = (position) =>{
-    const updatedState = genderInterests.map((gender, index)=>
-        index === position ? !gender : gender
-    );
-    setGenderInterests(updatedState);
-    console.log(updatedState);
+
+  const handleOnChangeGender = (gender) =>{
+    const updatedChecked = [...genderInterests];
+    updatedChecked.push(gender);
+    setGenderInterests(updatedChecked); 
+    console.log(updatedChecked);
   }
 
   useEffect(()=>{
@@ -95,9 +118,9 @@ const ProfileFields = () => {
   })
 
   return (
-    <div>
+    <div className='flex flex-col justify-center'>
       <form action="#" method="POST">
-    <div className='shadow sm:rounded-md sm:overflow-hidden px-4 py-5 bg-gray-50 space-y-6 sm:p-6 my-5'>
+    <div className='shadow sm:rounded-md sm:overflow-hidden px-4 py-5 bg-gray-50 space-y-6 sm:p-6 max-w-5xl my-5'>
       
           <div>
         <div className="md:grid md:grid-cols-3 md:gap-6">
@@ -294,15 +317,15 @@ const ProfileFields = () => {
                         <div class="modal-box">
                           <h1 className='mb-4 text-lg font-normal text-darker-pink'>Select the Languages that you're good at!</h1>
                           <div class="flex flex-wrap">
-                        {languages.map(({value, label}, index)=>{
+                        {languages.map(({value, label})=>{
                             return(
-                                <div key={index} className="form-check w-full sm:w-1/2 md:w-1/2 lg:w-1/2 xl:w-1/2 mb-4 bg-gray-500">
+                                <div key={value} className="form-check w-full sm:w-1/2 md:w-1/2 lg:w-1/2 xl:w-1/2 mb-4 bg-gray-500">
                                     <input type="checkbox" className=" checkbox form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-pink-0 checked:bg-pink-100 checked:border-darker-pink focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"  
                                     value={value} 
-                                    id={`language-${index}`}
+                                    id={value}
                                     name={value}
-                                    checked={language[index]}
-                                    onChange={()=>handleOnChangeLanguage(index)}/>
+                                    checked={language.includes(value)}
+                                    onChange={()=>handleOnChangeLanguage(value, language)}/>
                                     <label class="form-check-label inline-block text-gray-800">{label}</label>
                                 </div>
                             );
@@ -375,7 +398,16 @@ const ProfileFields = () => {
         </div>
       </div>
     </div>
-    {/* <div><Interest handleOnChangeHobby={handleOnChangeHobby} handleOnChangeGender={handleOnChangeGender}></Interest></div>      */}
+    <div>
+      <Interest 
+      hobbyList={hobbyList}
+      genderInterests={genderInterests}
+      handleOnChangeHobby={handleOnChangeHobby}
+      removeHobby={removeHobby} 
+      handleOnChangeGender={handleOnChangeGender}
+      removeGender={removeGender}>
+      </Interest>
+      </div>     
     <div className="px-4 py-3 text-right sm:px-6">
     <button
       className="inline-flex justify-center py-2 px-4 mr-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-pink-100 hover:bg-pink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
