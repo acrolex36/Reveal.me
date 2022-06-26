@@ -158,7 +158,7 @@ catch(error){
 
 var authSuccess: boolean;
 
-//POST - /user/profile # update User profile
+//PUT - /user/profile # update User profile
 export const updateOneUserProfile = async (req: Request, res: Response) => {
   checkToken(req,res, () => {
     authSuccess = true;
@@ -199,8 +199,36 @@ export const updateOneUserProfile = async (req: Request, res: Response) => {
       
       await User.findByIdAndUpdate(user._id, updateUserDetail, {new: true});
 
+      //Bug result
       res.status(200).json(user);
  
+    } catch (error) {
+      res.status(404).json({ message: error });
+    }
+    authSuccess = false;
+  }
+};
+
+//PUT - update oneSideMatch when swiped right
+export const updateMatchedUser = async (req: Request, res: Response) => {
+  checkToken(req,res, () => {
+    authSuccess = true;
+  })
+
+  if(authSuccess){
+    const { email, matchedUserEmail } = req.params;
+
+    try {
+      const user = await User.findOne({email})
+      const matchedUser = await User.findOne({email :matchedUserEmail})
+
+      const updateMatch = {
+        $push: { oneSideMatch: user._id }
+      }
+      
+      await User.findByIdAndUpdate(matchedUser._id, updateMatch)
+
+      res.status(200).json(matchedUser); 
     } catch (error) {
       res.status(404).json({ message: error });
     }
@@ -226,6 +254,123 @@ export const getAllUser = async (req: Request, res: Response) => {
   }
 };
 
+//GET - /test/filtereduser # return all User from gender interest
+export const getAllFilteredUser = async (req: Request, res: Response) => {
+  checkToken(req,res, () => {
+    authSuccess = true;
+    // return res.status(200).send({data: "success"});
+  })
+
+  if(authSuccess){
+    const { email } = req.params
+    
+    try {
+      const user = await User.findOne({ email })
+      
+      const gender = user.userDetail.gender
+      const gender_interest = user.userDetail.gender_interest
+      const interest = user.userDetail.interest
+
+      const other_users = await User.find({email: { $ne: email }})
+      
+      var gendered_users = []
+
+      for (var interested_gender of gender_interest) {
+        for (var temp_user of other_users) {
+          if(temp_user.userDetail.gender === interested_gender 
+            && temp_user.userDetail.gender_interest.includes(gender)) {
+            gendered_users.push(temp_user)  
+          }
+        }
+      }
+
+      var returnedUsers = []
+
+      for(let filter of gendered_users){
+        for(let user_interest of interest){
+            if(filter.userDetail.interest.includes(user_interest)){
+              returnedUsers.push(filter)
+              break
+            }
+        }
+      }
+      res.status(200).json(returnedUsers);
+    } catch (error) {
+      res.status(404).json({ message: error });
+    }
+    authSuccess = false;
+  }
+};
+
+//GET - /test/filtereduser # return all User from gender interest
+export const getAllFilteredUserById = async (req: Request, res: Response) => {
+  checkToken(req,res, () => {
+    authSuccess = true;
+  })
+
+  if(authSuccess){
+    const { id } = req.params;
+    try {
+      const user = await User.findById(id)
+      // const user = await User.findOne({email}).lean() //without userDetail
+
+    //  if(user === null){
+    //   res.status(410).json("lol");
+    //   }
+
+      res.status(200).json(user);
+    } catch (error) {
+      res.status(404).json({ message: error });
+    }
+    authSuccess = false;
+  }
+  // checkToken(req,res, () => {
+  //   authSuccess = true;
+  //   // return res.status(200).send({data: "success"});
+  // })
+
+  // if(authSuccess){
+  //   const { email } = req.params
+    
+  //   try {
+  //     const user = await User.findOne( {email} )
+      
+  //     const gender = user.userDetail.gender
+  //     const gender_interest = user.userDetail.gender_interest
+  //     const interest = user.userDetail.interest
+
+  //     const other_users = await User.find({email: { $ne: email }})
+      
+  //     var gendered_users = []
+
+  //     for (var interested_gender of gender_interest) {
+  //       for (var temp_user of other_users) {
+  //         if(temp_user.userDetail.gender == interested_gender 
+  //           && temp_user.userDetail.gender_interest.includes(gender)) {
+  //           gendered_users.push(temp_user)  
+  //         }
+  //       }
+  //     }
+
+  //     var returnedUsers = []
+
+  //     for(let filter of gendered_users){
+  //       for(let user_interest of interest){
+  //           if(filter.userDetail.interest.includes(user_interest)){
+  //             returnedUsers.push(filter)
+  //             break
+  //           }
+  //       }
+  //     }
+
+  //     res.status(200).json(user);
+  //   } catch (error) {
+  //     res.status(404).json({ message: error });
+  //   }
+  //   authSuccess = false;
+  // }
+};
+
 //GET - /test/singleuser/:email # return User with {email}
 export const getOneUserDetail = async (req: Request, res: Response) => {
   checkToken(req,res, () => {
@@ -233,7 +378,7 @@ export const getOneUserDetail = async (req: Request, res: Response) => {
   })
 
   if(authSuccess){
-    const { email } = req.params;
+    const { email, matchedUserEmail } = req.params;
     try {
       const user = await User.findOne({email})
       // const user = await User.findOne({email}).lean() //without userDetail
@@ -249,6 +394,8 @@ export const getOneUserDetail = async (req: Request, res: Response) => {
     authSuccess = false;
   }
 };
+
+
 
 
 // //POST - /recipe # insert a new Recipe
