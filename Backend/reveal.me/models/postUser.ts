@@ -8,9 +8,9 @@ export enum GenderTypes {
 
 //model User
 const userSchema = new mongoose.Schema({
-  user_id: {
-    type: String
-  },
+  // user_id: {
+  //   type: String
+  // },
   first_name: {
     type: String,
     required: true,

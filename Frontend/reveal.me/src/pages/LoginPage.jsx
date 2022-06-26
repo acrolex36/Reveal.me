@@ -31,10 +31,8 @@ const LoginPage = () => {
       .post(`http://localhost:5000/api/auth/login`, { email, plainTextPassword })
       .then(function(response){
         if(response.status == 201){
-          // saveTokenInLocalStorage(response.data.token);
 
           setCookie("UserId", response.data.userId);
-          setCookie("Email", response.data.email);
           setCookie("Token", response.data.token);
 
           navigate ('/');

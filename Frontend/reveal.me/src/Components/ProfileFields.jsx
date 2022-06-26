@@ -32,8 +32,9 @@ const ProfileFields = () => {
   // const [genderInterests, setGenderInterests] = useState(
   //   new Array(Genders.length).fill(false)
   // );
-   const [firstName, setFirstName] = useState("");
-  const [ cookies, setCookie, removeCookie] = useCookies(['user']);
+  const [firstName, setFirstName] = useState("");
+  const [error, setError] = useState(null);
+  const [ cookies, setCookie, removeCookie] = useCookies(null);
   const [accountData, setAccountData] = useState({
       // user_id: cookies.UserId,
       email: "",
@@ -58,49 +59,30 @@ const ProfileFields = () => {
   const getAccount = async (cookies) =>
   {
     try{  
-      const email = cookies.Email;
-      const response = await axios.get(`http://localhost:5000/api/test/singleuser/${email}`,{
+      // const email = cookies.Email;
+      const id = cookies.UserId
+      const token = cookies.Token
+      const response = await axios.get(`http://localhost:5000/api/test/singleuser/${id}`,{
         headers: {
           "Content-Type": "application/json; charset=UTF-8",
-          Authorization: `Bearer ${cookies.Token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
-      // console.log("response");
       console.log(response)
       setAccountData(response.data);
     } catch (err){
       console.error(err.message);
     }
   };
-    // getAccount(cookies);
 
     useEffect(() => {
-        console.log("i fire once");
+        // console.log("i fire once");
       if(cookies){
         getAccount(cookies);
       }
-    }, []);
+    }, [cookies]);
   
     const navigate = useNavigate();
-
-    const handleChange = (e) => {
-  
-      // const value = 
-      // e.target.type === "checkbox" ?
-      //  e.target.checked : e.target.value;
-  
-      const name = e.target.name;
-  
-      const value = e.target.value;
-
-      // setAccountData((prevState) => ({
-      //     ...prevState,
-      //     [name]: value
-      // }))
-      setAccountData({
-        ...accountData, [name]: value
-      })
-  }
 
   // const routeChange = (newPath) => {
   //   let path = newPath;
@@ -116,7 +98,7 @@ const ProfileFields = () => {
     };
     reader.readAsDataURL(e.target.files[0]);
   };
-
+  
   const handleOnChangeLanguage = (position) => {
     const updatedState = language.map((value, index) =>
       index === position ? !value : value
@@ -152,9 +134,60 @@ const ProfileFields = () => {
   //   console.log(updatedState);
   // };
 
+  const parseDOB = (eventData) => {
+    const parsed = eventData.split("-")
+    var date = parsed[2];
+    var month = parsed[1];
+    var year = parsed[0];
+    // console.log(date)
+    // console.log(month)
+    // console.log(year)
+
+    setAccountData({...accountData, userDetail:{dob_date: date, dob_month: month, dob_year: year}})
+    // setAccountData({...accountData, userDetail:{dob_month: month}})
+    // setAccountData({...accountData, userDetail:{dob_year: year}})
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    try {
+      // console.log(accountData);
+      console.log(accountData.userDetail.height);
+      console.log(accountData.userDetail.occupation);
+
+
+      // await axios
+      // .put(`http://localhost:5000/api/user/profile/${accountData.email}`, { accountData })
+      // .then(function(response){
+      //   if(response.status == 201){
+
+      //     setCookie("UserId", response.data.userId);
+      //     // setCookie("Email", response.data.email);
+      //     setCookie("Token", response.data.token);
+
+      //     navigate ('/');
+      //     // navigate ('/create_profile');
+      //   }
+      // })
+      // .catch(function(res){
+      //   if(res.response.status == 404){
+      //     navigate ('/create_profile');
+      //     setError('failed to update Profile, please try again');
+      //   }
+      // });
+
+        // window.location.reload()
+
+    } catch (error) {
+        console.log(error)
+    }
+
+}
+
   return (
     <div>
-      <form action="#" method="POST">
+      <form action="#" method="POST" onSubmit={handleSubmit}>
         <div className="shadow sm:rounded-md sm:overflow-hidden px-4 py-5 bg-gray-50 space-y-6 sm:p-6 my-5">
           <div>
             <div className="md:grid md:grid-cols-3 md:gap-6">
@@ -380,7 +413,7 @@ const ProfileFields = () => {
                           className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block w-28 h-10 px-1 shadow-sm sm:text-sm border border-pink-100 rounded-md"
                           placeholder="in cm"
                           value={accountData.userDetail.height}
-                          onChange={(e) => setAccountData({...accountData, userDetail:{height:e.target.value}})}
+                          onChange={(e) => setAccountData({...accountData, userDetail:({height: e.target.value})})}
                         />
                       </div>
 
@@ -466,7 +499,7 @@ const ProfileFields = () => {
 
                       <div className="col-span-6">
                         <label
-                          htmlFor="education"
+                          htmlFor="occupation"
                           className="block text-sm font-medium text-darker-pink"
                         >
                           Occupation
@@ -479,7 +512,7 @@ const ProfileFields = () => {
                           className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block w-full xl:w-96 px-2 shadow-sm sm:text-sm border border-pink-100 rounded-md"
                           placeholder="What have you been busy with?"
                           value={accountData.userDetail.occupation}
-                          onChange={(e) => setOccupation(e.target.value)}
+                          onChange={(e) => setAccountData({...accountData, userDetail:{occupation:e.target.value}})}
                         />
                       </div>
 
@@ -492,7 +525,10 @@ const ProfileFields = () => {
                         </label>
                         <input
                           type="date"
-                          onChange={(e) => setBirthDate(e.target.value)}
+                          onChange={(e) => 
+                            parseDOB(e.target.value)
+                            // setBirthDate(e.target.value)
+                          }
                           className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block h-8 w-32 px-1 shadow-sm sm:text-sm border border-pink-100 rounded-md"
                         />
                       </div>
@@ -511,7 +547,7 @@ const ProfileFields = () => {
                           className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block w-full h-28 px-2 shadow-sm sm:text-sm border border-pink-100 rounded-md"
                           placeholder="Describe yourself..."
                           value={accountData.userDetail.description}
-                          onChange={(e) => setDescription(e.target.value)}
+                          onChange={(e) => setAccountData({...accountData, userDetail:{description:e.target.value}})}
                         />
                       </div>
                       <div className="col-span-6 sm:col-span-6 lg:col-span-2">
@@ -549,6 +585,7 @@ const ProfileFields = () => {
           >
             Submit
           </button>
+          <p>{error}</p>
         </div>
       </form>
     </div>

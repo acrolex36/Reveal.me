@@ -34,7 +34,7 @@ const RegisterPage = () => {
             // saveTokenInLocalStorage(response.data.token)
 
             setCookie("UserId", response.data.userId);
-            setCookie("Email", response.data.email);
+            // setCookie("Email", response.data.email);
             setCookie("Token", response.data.token);
 
             navigate ('/create_profile');

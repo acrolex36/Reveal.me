@@ -84,7 +84,7 @@ export const register = async (req: Request, res: Response) => {
 
     return res.status(201).json({
         "userId": response._id,
-        "email": response.email,
+        // "email": response.email,
         "token": token});
 
   } catch (error: any) {
@@ -118,7 +118,7 @@ export const login = async (req: Request, res: Response) => {
       var token = jwt.sign({ id: user._id, email: user.email}, JWT_SECRET, { expiresIn: "24h"});
       return res.status(201).json({
         "userId": user._id,
-        "email": user.email,
+        // "email": user.email,
         "token": token});
     }
     else{
@@ -230,8 +230,8 @@ export const getAllUser = async (req: Request, res: Response) => {
 
   if(authSuccess){
     try {
-      const postMessages = await User.find();
-      res.status(200).json(postMessages);
+      const allUser = await User.find();
+      res.status(200).json(allUser);
     } catch (error) {
       res.status(404).json({ message: error });
     }
@@ -248,12 +248,7 @@ export const getOneUserDetailwithId = async (req: Request, res: Response) => {
   if(authSuccess){
     const { id } = req.params;
     try {
-      const user = await User.findOne({id})
-      // const user = await User.findOne({email}).lean() //without userDetail
-
-    //  if(user === null){
-    //   res.status(410).json("lol");
-    //   }
+      const user = await User.findById(id)
 
       res.status(200).json(user);
     } catch (error) {
