@@ -143,39 +143,53 @@ const ProfileFields = () => {
     // console.log(month)
     // console.log(year)
 
-    setAccountData({...accountData, userDetail:{dob_date: date, dob_month: month, dob_year: year}})
-    // setAccountData({...accountData, userDetail:{dob_month: month}})
-    // setAccountData({...accountData, userDetail:{dob_year: year}})
+    setAccountData(accountData => ({...accountData, userDetail: {...accountData.userDetail, dob_date: date}}))
+    setAccountData(accountData => ({...accountData, userDetail: {...accountData.userDetail, dob_month: month}}))
+    setAccountData(accountData => ({...accountData, userDetail: {...accountData.userDetail, dob_year: year}}))
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
 
     try {
-      // console.log(accountData);
-      console.log(accountData.userDetail.height);
-      console.log(accountData.userDetail.occupation);
+      console.log(accountData);
+      // console.log(accountData.userDetail.height);
 
+      await axios
+      .put(`http://localhost:5000/api/user/profile/head/${accountData.email}`, {
+        first_name: accountData.first_name,
+        last_name: accountData.last_name
+      }, {
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+          Authorization: `Bearer ${cookies.Token}`,
+        },
+      })
+      .catch(function(res){
+        if(res.response.status == 404){
+          navigate ('/create_profile');
+          setError('failed to update Profile, please try again');
+        }
+      });
 
-      // await axios
-      // .put(`http://localhost:5000/api/user/profile/${accountData.email}`, { accountData })
-      // .then(function(response){
-      //   if(response.status == 201){
-
-      //     setCookie("UserId", response.data.userId);
-      //     // setCookie("Email", response.data.email);
-      //     setCookie("Token", response.data.token);
-
-      //     navigate ('/');
-      //     // navigate ('/create_profile');
-      //   }
-      // })
-      // .catch(function(res){
-      //   if(res.response.status == 404){
-      //     navigate ('/create_profile');
-      //     setError('failed to update Profile, please try again');
-      //   }
-      // });
+      await axios
+      .put(`http://localhost:5000/api/user/profile/body/${accountData.email}`, accountData.userDetail, {
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+          Authorization: `Bearer ${cookies.Token}`,
+        },
+      })
+      .then(function(response){
+        if(response.status == 201){
+          navigate ('/');
+        }
+      })
+      .catch(function(res){
+        if(res.response.status == 404){
+          navigate ('/create_profile');
+          setError('failed to update Profile, please try again');
+        }
+      });
 
         // window.location.reload()
 
@@ -413,7 +427,8 @@ const ProfileFields = () => {
                           className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block w-28 h-10 px-1 shadow-sm sm:text-sm border border-pink-100 rounded-md"
                           placeholder="in cm"
                           value={accountData.userDetail.height}
-                          onChange={(e) => setAccountData({...accountData, userDetail:({height: e.target.value})})}
+                          onChange={(e) => setAccountData(accountData => ({...accountData, userDetail: {...accountData.userDetail, height: e.target.value}
+                          }))}
                         />
                       </div>
 
@@ -512,7 +527,7 @@ const ProfileFields = () => {
                           className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block w-full xl:w-96 px-2 shadow-sm sm:text-sm border border-pink-100 rounded-md"
                           placeholder="What have you been busy with?"
                           value={accountData.userDetail.occupation}
-                          onChange={(e) => setAccountData({...accountData, userDetail:{occupation:e.target.value}})}
+                          onChange={(e) => setAccountData(accountData => ({...accountData, userDetail: {...accountData.userDetail, occupation:e.target.value}}))}
                         />
                       </div>
 
@@ -547,7 +562,7 @@ const ProfileFields = () => {
                           className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block w-full h-28 px-2 shadow-sm sm:text-sm border border-pink-100 rounded-md"
                           placeholder="Describe yourself..."
                           value={accountData.userDetail.description}
-                          onChange={(e) => setAccountData({...accountData, userDetail:{description:e.target.value}})}
+                          onChange={(e) => setAccountData(accountData => ({...accountData, userDetail: {...accountData.userDetail, description:e.target.value}}))}
                         />
                       </div>
                       <div className="col-span-6 sm:col-span-6 lg:col-span-2">

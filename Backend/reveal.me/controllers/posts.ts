@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { Request, response, Response } from "express";
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -169,7 +169,41 @@ catch(error){
 
 var authSuccess: boolean;
 
-//POST - /user/profile # update User profile
+//PUT - /user/profile # update User profile
+export const updateOneUser = async (req: Request, res: Response) => {
+  checkToken(req,res, () => {
+    authSuccess = true;
+  })
+
+  if(authSuccess){
+    const { email } = req.params;
+    
+    const {first_name, last_name} = req.body;
+
+    try {
+      const user = await User.findOne({email})
+
+      if(user === null){
+        return res.status(404).send(`No User with ${email}`);
+      }
+
+      const updateUserDetail = {
+        _id:user.id, 
+         first_name, last_name
+      };
+      
+      const response = await User.findByIdAndUpdate(user._id, updateUserDetail, {new: true});
+
+      res.status(200).json(response);
+ 
+    } catch (error) {
+      res.status(404).json({ message: error });
+    }
+    authSuccess = false;
+  }
+};
+
+//PUT - /user/profile # update User profile
 export const updateOneUserProfile = async (req: Request, res: Response) => {
   checkToken(req,res, () => {
     authSuccess = true;
@@ -180,7 +214,7 @@ export const updateOneUserProfile = async (req: Request, res: Response) => {
     
     const {
       first_name, last_name,
-       gender, gender_interest, age, profile_picture, dob_date, dob_month, dob_year, height, nationality, education, interest, language} = req.body;
+       gender, gender_interest, age, profile_picture, dob_date, dob_month, dob_year, height, nationality, occupation, interest, language} = req.body;
 
     try {
       const user = await User.findOne({email})
@@ -207,12 +241,14 @@ export const updateOneUserProfile = async (req: Request, res: Response) => {
       // }
 
       const updateUserDetail = {
-        _id:user.id, first_name, last_name, userDetail: {is_online: true ,gender, gender_interest, age, profile_picture, dob_date, dob_month, dob_year, height, nationality, education, interest, language}
+        _id:user.id, 
+         first_name, last_name, 
+        userDetail: {is_online: true ,gender, gender_interest, age, profile_picture, dob_date, dob_month, dob_year, height, nationality, occupation, interest, language}
       };
       
-      await User.findByIdAndUpdate(user._id, updateUserDetail, {new: true});
+      const response = await User.findByIdAndUpdate(user._id, updateUserDetail, {new: true});
 
-      res.status(200).json(user);
+      res.status(200).json(response);
  
     } catch (error) {
       res.status(404).json({ message: error });
