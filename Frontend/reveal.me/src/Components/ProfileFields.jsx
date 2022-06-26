@@ -13,17 +13,12 @@ import { Cookies, useCookies } from 'react-cookie'
 //Token = cookies.Token
 
 const ProfileFields = () => {
-      useEffect(() => {
-        console.log("i fire once");
-      if(cookies){
-        getAccount(cookies);
-      }
-    }, []);
+
   const [selectedFile, setSelectedFile] = useState("");
 
   const [gender, setGender] = useState("");
 
-  const [height, setHeight] = useState("");
+  // const [height, setHeight] = useState("");
   const [nationality, setNationality] = useState("");
   const [language, setLanguage] = useState(
     new Array(languages.length).fill(false)
@@ -37,28 +32,8 @@ const ProfileFields = () => {
   // const [genderInterests, setGenderInterests] = useState(
   //   new Array(Genders.length).fill(false)
   // );
-
-  const getAccount = async (cookies) =>
-  {
-    try{  
-      const response = await axios.get(`http://localhost:5000/api/test/singleuser/${cookies.UserId}`,{
-        headers: {
-          "Content-Type": "application/json; charset=UTF-8",
-          Authorization: `Bearer ${cookies.Token}`,
-        },
-      });
-      // console.log("response");
-      console.log(response)
-      setAccountData(response.data);
-    } catch (err){
-      console.error(err.message);
-    }
-  };
-    // getAccount(cookies);
-
-
-  const [firstName, setFirstName] = useState("");
-  const [ cookies, setCookie, removeCookie] = useCookies(null);
+   const [firstName, setFirstName] = useState("");
+  const [ cookies, setCookie, removeCookie] = useCookies(['user']);
   const [accountData, setAccountData] = useState({
       // user_id: cookies.UserId,
       email: "",
@@ -79,6 +54,32 @@ const ProfileFields = () => {
         description: ""
       }
     });
+
+  const getAccount = async (cookies) =>
+  {
+    try{  
+      const email = cookies.Email;
+      const response = await axios.get(`http://localhost:5000/api/test/singleuser/${email}`,{
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+          Authorization: `Bearer ${cookies.Token}`,
+        },
+      });
+      // console.log("response");
+      console.log(response)
+      setAccountData(response.data);
+    } catch (err){
+      console.error(err.message);
+    }
+  };
+    // getAccount(cookies);
+
+    useEffect(() => {
+        console.log("i fire once");
+      if(cookies){
+        getAccount(cookies);
+      }
+    }, []);
   
     const navigate = useNavigate();
 
@@ -379,7 +380,7 @@ const ProfileFields = () => {
                           className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block w-28 h-10 px-1 shadow-sm sm:text-sm border border-pink-100 rounded-md"
                           placeholder="in cm"
                           value={accountData.userDetail.height}
-                          onChange={(e) => setHeight(e.target.value)}
+                          onChange={(e) => setAccountData({...accountData, userDetail:{height:e.target.value}})}
                         />
                       </div>
 

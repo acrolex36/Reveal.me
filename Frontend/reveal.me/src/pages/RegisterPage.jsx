@@ -15,7 +15,7 @@ const RegisterPage = () => {
   const [plainTextPassword, setPassword] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState(null)
   const [error, setError] = useState(null)
-  const [ cookies, setCookie, removeCookie] = useCookies(null);
+  const [ cookies, setCookie, removeCookie] = useCookies(['user']);
 
   let navigate = useNavigate()
 
