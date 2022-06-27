@@ -8,24 +8,17 @@ import { hobbies } from "../utils/Hobbies";
 import { Genders } from "../utils/Gender";
 import { languages } from "../utils/Language";
 import axios from "axios";
-import { Cookies, useCookies } from 'react-cookie'
+import { Cookies, useCookies } from "react-cookie";
 
 //Token = cookies.Token
 
 const ProfileFields = () => {
-
   const [selectedFile, setSelectedFile] = useState("");
 
-  const [gender, setGender] = useState("");
-
-  // const [height, setHeight] = useState("");
-  const [nationality, setNationality] = useState("");
   const [language, setLanguage] = useState(
     new Array(languages.length).fill(false)
   );
-  const [occupation, setOccupation] = useState("");
-  const [birthDate, setBirthDate] = useState(null);
-  const [description, setDescription] = useState("");
+
   const [hobbyList, setHobbies] = useState(
     new Array(hobbies.length).fill(false)
   );
@@ -34,55 +27,57 @@ const ProfileFields = () => {
   // );
   const [firstName, setFirstName] = useState("");
   const [error, setError] = useState(null);
-  const [ cookies, setCookie, removeCookie] = useCookies(null);
+  const [cookies, setCookie, removeCookie] = useCookies(null);
   const [accountData, setAccountData] = useState({
-      // user_id: cookies.UserId,
-      email: "",
-      password: "",
-      first_name: "",
-      last_name: "",
-      userDetail: {
-        gender: "",
-        dob_date: "",
-        dob_month:"",
-        dob_year: "",
-        occupation: "",
-        gender_interest: [],
-        height: "",
-        interest: [],
-        language: [],
-        nationality: "",
-        description: ""
-      }
-    });
+    // user_id: cookies.UserId,
+    email: "",
+    password: "",
+    first_name: "",
+    last_name: "",
+    userDetail: {
+      gender: "",
+      dob_date: "",
+      dob_month: "",
+      dob_year: "",
+      occupation: "",
+      gender_interest: [],
+      height: "",
+      interest: [],
+      language: [],
+      nationality: "",
+      description: "",
+    },
+  });
 
-  const getAccount = async (cookies) =>
-  {
-    try{  
+  const getAccount = async (cookies) => {
+    try {
       // const email = cookies.Email;
-      const id = cookies.UserId
-      const token = cookies.Token
-      const response = await axios.get(`http://localhost:5000/api/test/singleuser/${id}`,{
-        headers: {
-          "Content-Type": "application/json; charset=UTF-8",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log(response)
+      const id = cookies.UserId;
+      const token = cookies.Token;
+      const response = await axios.get(
+        `http://localhost:5000/api/test/singleuser/${id}`,
+        {
+          headers: {
+            "Content-Type": "application/json; charset=UTF-8",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response);
       setAccountData(response.data);
-    } catch (err){
+    } catch (err) {
       console.error(err.message);
     }
   };
 
-    useEffect(() => {
-        // console.log("i fire once");
-      if(cookies){
-        getAccount(cookies);
-      }
-    }, [cookies]);
-  
-    const navigate = useNavigate();
+  useEffect(() => {
+    // console.log("i fire once");
+    if (cookies) {
+      getAccount(cookies);
+    }
+  }, [cookies]);
+
+  const navigate = useNavigate();
 
   // const routeChange = (newPath) => {
   //   let path = newPath;
@@ -98,7 +93,7 @@ const ProfileFields = () => {
     };
     reader.readAsDataURL(e.target.files[0]);
   };
-  
+
   const handleOnChangeLanguage = (position) => {
     const updatedState = language.map((value, index) =>
       index === position ? !value : value
@@ -113,10 +108,6 @@ const ProfileFields = () => {
     );
     setLanguage(updatedState);
     console.log(updatedState);
-  };
-
-  const handleNationality = (nat) => {
-    setNationality(nat);
   };
 
   // const handleOnChangeHobby = (position) => {
@@ -134,70 +125,101 @@ const ProfileFields = () => {
   //   console.log(updatedState);
   // };
 
-  const parseDOB = (eventData) => {
-    const parsed = eventData.split("-")
+  const parseDOBandCalculateAge = (eventData) => {
+    const parsed = eventData.split("-");
     var date = parsed[2];
     var month = parsed[1];
     var year = parsed[0];
-    // console.log(date)
-    // console.log(month)
-    // console.log(year)
 
-    setAccountData(accountData => ({...accountData, userDetail: {...accountData.userDetail, dob_date: date}}))
-    setAccountData(accountData => ({...accountData, userDetail: {...accountData.userDetail, dob_month: month}}))
-    setAccountData(accountData => ({...accountData, userDetail: {...accountData.userDetail, dob_year: year}}))
-  }
+    var today = new Date().toISOString().slice(0, 10);
+    const parsedToday = today.split("-");
+    var dateToday = parsedToday[2];
+    var monthToday = parsedToday[1];
+    var yearToday = parsedToday[0];
+    var age = yearToday - year;
+    var m = monthToday - month;
+    if (m < 0 || (m === 0 && dateToday < date)) {
+      age--;
+    }
+
+    setAccountData((accountData) => ({
+      ...accountData,
+      userDetail: { ...accountData.userDetail, dob_date: date },
+    }));
+    setAccountData((accountData) => ({
+      ...accountData,
+      userDetail: { ...accountData.userDetail, dob_month: month },
+    }));
+    setAccountData((accountData) => ({
+      ...accountData,
+      userDetail: { ...accountData.userDetail, dob_year: year },
+    }));
+    setAccountData((accountData) => ({
+      ...accountData,
+      userDetail: { ...accountData.userDetail, age: age },
+    }));
+  };
+
+  const setNationality = (nat) => {
+    setAccountData((accountData) => ({
+      ...accountData,
+      userDetail: { ...accountData.userDetail, nationality: nat },
+    }));
+
+    // console.log("test")
+
+  };
+
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     try {
       console.log(accountData);
+      console.log(accountData.userDetail.nationality);
       // console.log(accountData.userDetail.height);
 
-      await axios
-      .put(`http://localhost:5000/api/user/profile/head/${accountData.email}`, {
-        first_name: accountData.first_name,
-        last_name: accountData.last_name
-      }, {
-        headers: {
-          "Content-Type": "application/json; charset=UTF-8",
-          Authorization: `Bearer ${cookies.Token}`,
-        },
-      })
-      .catch(function(res){
-        if(res.response.status == 404){
-          navigate ('/create_profile');
-          setError('failed to update Profile, please try again');
-        }
-      });
+      // await axios
+      // .put(`http://localhost:5000/api/user/profile/head/${accountData.email}`, {
+      //   first_name: accountData.first_name,
+      //   last_name: accountData.last_name
+      // }, {
+      //   headers: {
+      //     "Content-Type": "application/json; charset=UTF-8",
+      //     Authorization: `Bearer ${cookies.Token}`,
+      //   },
+      // })
+      // .catch(function(res){
+      //   if(res.response.status == 404){
+      //     navigate ('/create_profile');
+      //     setError('failed to update Profile, please try again');
+      //   }
+      // });
 
-      await axios
-      .put(`http://localhost:5000/api/user/profile/body/${accountData.email}`, accountData.userDetail, {
-        headers: {
-          "Content-Type": "application/json; charset=UTF-8",
-          Authorization: `Bearer ${cookies.Token}`,
-        },
-      })
-      .then(function(response){
-        if(response.status == 201){
-          navigate ('/');
-        }
-      })
-      .catch(function(res){
-        if(res.response.status == 404){
-          navigate ('/create_profile');
-          setError('failed to update Profile, please try again');
-        }
-      });
+      // await axios
+      // .put(`http://localhost:5000/api/user/profile/body/${accountData.email}`, accountData.userDetail, {
+      //   headers: {
+      //     "Content-Type": "application/json; charset=UTF-8",
+      //     Authorization: `Bearer ${cookies.Token}`,
+      //   },
+      // })
+      // .then(function(response){
+      //   if(response.status == 201){
+      //     navigate ('/');
+      //   }
+      // })
+      // .catch(function(res){
+      //   if(res.response.status == 404){
+      //     navigate ('/create_profile');
+      //     setError('failed to update Profile, please try again');
+      //   }
+      // });
 
-        // window.location.reload()
-
+      // window.location.reload()
     } catch (error) {
-        console.log(error)
+      console.log(error);
     }
-
-}
+  };
 
   return (
     <div>
@@ -283,7 +305,12 @@ const ProfileFields = () => {
                             autoComplete="email"
                             className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block xl:w-96 w-full shadow-sm sm:text-sm border border-pink-100 rounded-md"
                             value={accountData.email}
-                            onChange={(e) => setAccountData({...accountData, email:e.target.value})}
+                            onChange={(e) =>
+                              setAccountData({
+                                ...accountData,
+                                email: e.target.value,
+                              })
+                            }
                           />
                         </div>
 
@@ -367,7 +394,11 @@ const ProfileFields = () => {
                           label="first_name"
                           className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block w-full shadow-sm sm:text-sm border border-pink-100 rounded-md"
                           value={accountData.first_name}
-                          onChange={(e) => setAccountData({...accountData, first_name: e.target.value })
+                          onChange={(e) =>
+                            setAccountData({
+                              ...accountData,
+                              first_name: e.target.value,
+                            })
                           }
                         />
                       </div>
@@ -386,7 +417,12 @@ const ProfileFields = () => {
                           autoComplete="family-name"
                           className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block w-full shadow-sm sm:text-sm border border-pink-100 rounded-md"
                           value={accountData.last_name}
-                          onChange={(e)=>setAccountData({...accountData, last_name: e.target.value})}
+                          onChange={(e) =>
+                            setAccountData({
+                              ...accountData,
+                              last_name: e.target.value,
+                            })
+                          }
                         />
                       </div>
 
@@ -402,13 +438,21 @@ const ProfileFields = () => {
                           name="gender"
                           autoComplete="gender"
                           className="mt-1 block w-full py-2 px-3 border border-pink-100 bg-white h-10 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                          value={gender}
-                          onChange={(e) => setGender(e.target.value)}
+                          value={accountData.userDetail.gender}
+                          onChange={(e) =>
+                            setAccountData((accountData) => ({
+                              ...accountData,
+                              userDetail: {
+                                ...accountData.userDetail,
+                                gender: e.target.value,
+                              },
+                            }))
+                          }
                         >
                           <option value="">Select</option>
                           <option value="male">Male</option>
                           <option value="female">Female</option>
-                          <option value="diver">Diverse</option>
+                          <option value="diverse">Diverse</option>
                         </select>
                       </div>
 
@@ -427,8 +471,15 @@ const ProfileFields = () => {
                           className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block w-28 h-10 px-1 shadow-sm sm:text-sm border border-pink-100 rounded-md"
                           placeholder="in cm"
                           value={accountData.userDetail.height}
-                          onChange={(e) => setAccountData(accountData => ({...accountData, userDetail: {...accountData.userDetail, height: e.target.value}
-                          }))}
+                          onChange={(e) =>
+                            setAccountData((accountData) => ({
+                              ...accountData,
+                              userDetail: {
+                                ...accountData.userDetail,
+                                height: e.target.value,
+                              },
+                            }))
+                          }
                         />
                       </div>
 
@@ -440,8 +491,9 @@ const ProfileFields = () => {
                           Nationality
                         </label>
                         <Nationality
-                          handleNationality={handleNationality}
-                        ></Nationality>
+                          inputValue = {accountData.userDetail.nationality}
+                          passData = {setNationality}
+                        />
                       </div>
 
                       <div className="col-span-6 sm:col-span-3 menu-languages">
@@ -527,7 +579,15 @@ const ProfileFields = () => {
                           className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block w-full xl:w-96 px-2 shadow-sm sm:text-sm border border-pink-100 rounded-md"
                           placeholder="What have you been busy with?"
                           value={accountData.userDetail.occupation}
-                          onChange={(e) => setAccountData(accountData => ({...accountData, userDetail: {...accountData.userDetail, occupation:e.target.value}}))}
+                          onChange={(e) =>
+                            setAccountData((accountData) => ({
+                              ...accountData,
+                              userDetail: {
+                                ...accountData.userDetail,
+                                occupation: e.target.value,
+                              },
+                            }))
+                          }
                         />
                       </div>
 
@@ -540,9 +600,8 @@ const ProfileFields = () => {
                         </label>
                         <input
                           type="date"
-                          onChange={(e) => 
-                            parseDOB(e.target.value)
-                            // setBirthDate(e.target.value)
+                          onChange={(e) =>
+                            parseDOBandCalculateAge(e.target.value)
                           }
                           className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block h-8 w-32 px-1 shadow-sm sm:text-sm border border-pink-100 rounded-md"
                         />
@@ -562,7 +621,15 @@ const ProfileFields = () => {
                           className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block w-full h-28 px-2 shadow-sm sm:text-sm border border-pink-100 rounded-md"
                           placeholder="Describe yourself..."
                           value={accountData.userDetail.description}
-                          onChange={(e) => setAccountData(accountData => ({...accountData, userDetail: {...accountData.userDetail, description:e.target.value}}))}
+                          onChange={(e) =>
+                            setAccountData((accountData) => ({
+                              ...accountData,
+                              userDetail: {
+                                ...accountData.userDetail,
+                                description: e.target.value,
+                              },
+                            }))
+                          }
                         />
                       </div>
                       <div className="col-span-6 sm:col-span-6 lg:col-span-2">
