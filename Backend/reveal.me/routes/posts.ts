@@ -3,9 +3,11 @@ import {
   register,
   login,
   forgetpassword,
+
   updateOneUser,
   updateOneUserProfile,
-  updateMatch,
+  updateMatchedUser,
+  
   getAllUser,
   getOneUserDetailwithId,
   getOneUserDetail,
@@ -22,7 +24,7 @@ router.post("/auth/login/forgetpassword", forgetpassword);
 
 router.put("/user/profile/head/:email", updateOneUser);
 router.put("/user/profile/body/:email", updateOneUserProfile);
-router.put("/user/profile/:email/:matchedUserEmail", updateMatch);
+router.put("/user/profile/:email/:matchedUserEmail", updateMatchedUser);
 
 router.get("/test/alluser", getAllUser);
 router.get("/test/singleuser/:id", getOneUserDetailwithId);
