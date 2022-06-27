@@ -1,16 +1,31 @@
 import React, {useState} from 'react'
 import {hobbies} from "../utils/Hobbies"
 import {Genders} from "../utils/Gender"
-const Interest = (hobbiesList, gendersList) => {
-    
-    const handleHobby = (position) => {
-        hobbiesList.handleOnChangeHobby(position)
+const Interest = ({
+  hobbyList,
+  genderInterests,
+  handleOnChangeHobby,
+  removeHobby,
+  handleOnChangeGender,
+  removeGender
+}) => {
+  
+    const handleHobby = (hobby, hobbyList) => {
+      if(hobbyList.includes(hobby))
+        removeHobby(hobby)
+      else{
+        handleOnChangeHobby(hobby)
+      }
     }
-    const handleGender = (position) =>{
-        gendersList.handleOnChangeGender(position)
+    const handleGender = (gender, genderInterests) =>{
+      if(genderInterests.includes(gender))
+        removeGender(gender)
+      else{
+        handleOnChangeGender(gender)
+      }
     }
   return (
-    <div className='shadow sm:rounded-md sm:overflow-hidden px-4 py-5 bg-gray-50 space-y-6 sm:p-6 my-5'>
+    <div className='shadow sm:rounded-md sm:overflow-hidden px-4 py-5 bg-gray-50 space-y-6 sm:p-6 max-w-5xl my-5'>
         <div>
       <div className="mt-10 sm:mt-0">
         <div className="md:grid md:grid-cols-3 md:gap-6">
@@ -29,20 +44,20 @@ const Interest = (hobbiesList, gendersList) => {
                         Hobby
                       </label>
                       <div class="flex flex-wrap">
-                        {hobbies.map(({hobby}, index)=>{
+                        {hobbies.map(({hobby})=>{
                             return(
-                                <div key={index} className="form-check w-full sm:w-1/1.5 md:w-1/3 lg:w-1/4 xl:w-1/6 mb-4 bg-gray-500">
+                                <div key={hobby} className="form-check w-full sm:w-1/1.5 md:w-1/3 lg:w-1/4 xl:w-1/6 mb-4 bg-gray-500">
                                     <input type="checkbox" className=" checkbox form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-pink-0 checked:bg-pink-100 checked:border-darker-pink focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"  
                                     value={hobby} 
-                                    id={`hobby-${index}`}
+                                    id={hobby}
                                     name={hobby}
-                                    checked={hobby[index]}
-                                    onChange={handleHobby(index)}/>
+                                    checked={hobbyList.includes(hobby)}
+                                    onChange={()=>handleHobby(hobby, hobbyList)}
+                                    />
                                     <label class="form-check-label inline-block text-gray-800">{hobby}</label>
                                 </div>
                             );
                         })}
-                        
                       </div>
                     </div>   
 
@@ -51,15 +66,15 @@ const Interest = (hobbiesList, gendersList) => {
                             Gender Interest
                         </label>
                         <div class="flex flex-wrap">
-                            {Genders.map(({gender}, index)=>{
+                            {Genders.map(({gender})=>{
                                 return(
-                                    <div key={index} class="form-check w-full sm:w-1/1.5 md:w-1/3 lg:w-1/4 xl:w-1/6 mb-4 bg-gray-500">
+                                    <div key={gender} class="form-check w-full sm:w-1/1.5 md:w-1/3 lg:w-1/4 xl:w-1/6 mb-4 bg-gray-500">
                                     <input type="checkbox" className=" checkbox form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-pink-0 checked:bg-pink-100 checked:border-darker-pink focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"  
                                     value={gender} 
-                                    id={`gender-${index}`}
+                                    id={gender}
                                     name={gender}
-                                    checked={gender[index]}
-                                    onChange={handleGender(index)}
+                                    checked={genderInterests.includes(gender)}
+                                    onChange={()=>handleGender(gender, genderInterests)}
                                     />
                                     <label class="form-check-label inline-block text-gray-800">{gender}
                                     </label>
