@@ -1,4 +1,4 @@
-export const hobbies = [
+export const Hobbies = [
     {
         hobby: "Reading"
     },

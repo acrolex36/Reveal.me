@@ -27,9 +27,9 @@ router.put("/user/profile/body/:email", updateOneUserProfile);
 router.put("/user/profile/:email/:matchedUserEmail", updateMatchedUser);
 
 router.get("/test/alluser", getAllUser);
-router.get("/test/singleuser/:id", getOneUserDetailwithId);
-router.get("/test/singleuser/:email", getOneUserDetail);
-router.get("/test/filtereduser/:email", getAllFilteredUser)
-router.get("/test/filtereduser/:id", getAllFilteredUserById)
+router.get("/test/singleuser/id/:id", getOneUserDetailwithId);
+router.get("/test/singleuser/email/:email", getOneUserDetail);
+router.get("/test/filtereduser/id/:id", getAllFilteredUserById);
+router.get("/test/filtereduser/email/:email", getAllFilteredUser);
 
 export default router;

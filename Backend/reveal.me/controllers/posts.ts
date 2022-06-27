@@ -257,9 +257,10 @@ export const updateOneUserProfile = async (req: Request, res: Response) => {
       dob_year,
       height,
       nationality,
-      education,
-      interest,
-      language,
+      occupation,
+      hobbies,
+      languages,
+      description,
     } = req.body;
 
     try {
@@ -300,9 +301,10 @@ export const updateOneUserProfile = async (req: Request, res: Response) => {
           dob_year,
           height,
           nationality,
-          education,
-          interest,
-          language,
+          occupation,
+          hobbies,
+          languages,
+          description,
         },
       };
 
@@ -399,7 +401,7 @@ export const getAllFilteredUser = async (req: Request, res: Response) => {
 
       const gender = user.userDetail.gender;
       const gender_interest = user.userDetail.gender_interest;
-      const interest = user.userDetail.interest;
+      const hobbies = user.userDetail.hobbies;
 
       const other_users = await User.find({ email: { $ne: email } });
 
@@ -419,8 +421,8 @@ export const getAllFilteredUser = async (req: Request, res: Response) => {
       var returnedUsers = [];
 
       for (let filter of gendered_users) {
-        for (let user_interest of interest) {
-          if (filter.userDetail.interest.includes(user_interest)) {
+        for (let user_interest of hobbies) {
+          if (filter.userDetail.hobbies.includes(user_interest)) {
             returnedUsers.push(filter);
             break;
           }

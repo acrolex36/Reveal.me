@@ -79,10 +79,10 @@ const userSchema = new mongoose.Schema({
     occupation: {
       type: String,
     },
-    interest: [{
+    hobbies: [{
       type: String,
     }],
-    language: [{
+    languages: [{
       type: String,
     }],
     description: {
