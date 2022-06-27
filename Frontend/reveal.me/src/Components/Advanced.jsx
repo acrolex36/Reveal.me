@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef } from "react";
+import React, { useState, useMemo, useRef, useEffect } from "react";
 // import TinderCard from '../react-tinder-card/index'
 import TinderCard from "react-tinder-card";
 import Profile from "./Profile";
@@ -13,7 +13,7 @@ const db = [
     profile_picture: "https://api.lorem.space/image/album?w=400&h=400",
     height: 177,
     education: "Student at Hochschule Darmstadt",
-    language: ["English", "German"]
+    language: ["English", "German"],
   },
   {
     name: "Erlich Bachman",
@@ -21,14 +21,16 @@ const db = [
     profile_picture: "https://api.lorem.space/image/album?w=400&h=400",
     height: 164,
     education: "Student at TU Darmstadt",
-    language: ["English"]  },
+    language: ["English"],
+  },
   {
     name: "Monica Hall",
     age: 23,
     profile_picture: "https://api.lorem.space/image/album?w=400&h=400",
     height: 187,
     education: "Student at Hochschule Darmstadt",
-    language: ["Chinese", "English"]  },
+    language: ["Chinese", "English"],
+  },
 ];
 
 function Advanced() {
@@ -80,6 +82,25 @@ function Advanced() {
     await childRefs[newIndex].current.restoreCard();
   };
 
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (e.keyCode === 37) {
+        console.log("back");
+        swipe("left");
+      } else if (e.keyCode === 39) {
+        console.log("back");
+        swipe("right");
+      } else if (e.keyCode === 40) {
+        console.log("back");
+        goBack();
+      }
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => {
+      window.removeEventListener("keydown", handleKey);
+    };
+  }, []);
+
   return (
     <div>
       <div className="inset-center">
@@ -96,7 +117,6 @@ function Advanced() {
           </TinderCard>
         ))}
       </div>
-
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 flex flex-row justify-evenly w-1/2 ">
         <button
           className="sm:py-24 sm:px-6 lg:max-w-5xl "
