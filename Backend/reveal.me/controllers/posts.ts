@@ -177,7 +177,7 @@ export const updateOneUser = async (req: Request, res: Response) => {
 
   if(authSuccess){
     const { email } = req.params;
-    
+
     const {first_name, last_name} = req.body;
 
     try {
@@ -188,14 +188,14 @@ export const updateOneUser = async (req: Request, res: Response) => {
       }
 
       const updateUserDetail = {
-        _id:user.id, 
+        _id:user.id,
          first_name, last_name
       };
-      
+
       const response = await User.findByIdAndUpdate(user._id, updateUserDetail, {new: true});
 
       res.status(200).json(response);
- 
+
     } catch (error) {
       res.status(404).json({ message: error });
     }
@@ -212,9 +212,7 @@ export const updateOneUserProfile = async (req: Request, res: Response) => {
   if(authSuccess){
     const { email } = req.params;
     
-    const {
-      first_name, last_name,
-       gender, gender_interest, age, profile_picture, dob_date, dob_month, dob_year, height, nationality, occupation, interest, language} = req.body;
+    const { gender, gender_interest, age, profile_picture, dob_date, dob_month, dob_year, height, nationality, education, interest, language} = req.body;
 
     try {
       const user = await User.findOne({email})
@@ -241,15 +239,40 @@ export const updateOneUserProfile = async (req: Request, res: Response) => {
       // }
 
       const updateUserDetail = {
-        _id:user.id, 
-         first_name, last_name, 
-        userDetail: {is_online: true ,gender, gender_interest, age, profile_picture, dob_date, dob_month, dob_year, height, nationality, occupation, interest, language}
+        _id:user.id, userDetail: {is_online: true ,gender, gender_interest, age, profile_picture, dob_date, dob_month, dob_year, height, nationality, education, interest, language}
       };
       
       const response = await User.findByIdAndUpdate(user._id, updateUserDetail, {new: true});
 
       res.status(200).json(response);
  
+    } catch (error) {
+      res.status(404).json({ message: error });
+    }
+    authSuccess = false;
+  }
+};
+
+//PUT - update oneSideMatch when swiped right
+export const updateMatchedUser = async (req: Request, res: Response) => {
+  checkToken(req,res, () => {
+    authSuccess = true;
+  })
+
+  if(authSuccess){
+    const { email, matchedUserEmail } = req.params;
+
+    try {
+      const user = await User.findOne({email})
+      const matchedUser = await User.findOne({email :matchedUserEmail})
+
+      const updateMatch = {
+        $push: { oneSideMatch: user._id }
+      }
+
+      await User.findByIdAndUpdate(matchedUser._id, updateMatch)
+
+      res.status(200).json(matchedUser);
     } catch (error) {
       res.status(404).json({ message: error });
     }
@@ -292,6 +315,123 @@ export const getOneUserDetailwithId = async (req: Request, res: Response) => {
     }
     authSuccess = false;
   }
+};
+
+//GET - /test/filtereduser # return all User from gender interest
+export const getAllFilteredUser = async (req: Request, res: Response) => {
+  checkToken(req,res, () => {
+    authSuccess = true;
+    // return res.status(200).send({data: "success"});
+  })
+
+  if(authSuccess){
+    const { email } = req.params
+
+    try {
+      const user = await User.findOne({ email })
+
+      const gender = user.userDetail.gender
+      const gender_interest = user.userDetail.gender_interest
+      const interest = user.userDetail.interest
+
+      const other_users = await User.find({email: { $ne: email }})
+
+      var gendered_users = []
+
+      for (var interested_gender of gender_interest) {
+        for (var temp_user of other_users) {
+          if(temp_user.userDetail.gender === interested_gender
+            && temp_user.userDetail.gender_interest.includes(gender)) {
+            gendered_users.push(temp_user)
+          }
+        }
+      }
+
+      var returnedUsers = []
+
+      for(let filter of gendered_users){
+        for(let user_interest of interest){
+            if(filter.userDetail.interest.includes(user_interest)){
+              returnedUsers.push(filter)
+              break
+            }
+        }
+      }
+      res.status(200).json(returnedUsers);
+    } catch (error) {
+      res.status(404).json({ message: error });
+    }
+    authSuccess = false;
+  }
+};
+
+//GET - /test/filtereduser # return all User from gender interest
+export const getAllFilteredUserById = async (req: Request, res: Response) => {
+  checkToken(req,res, () => {
+    authSuccess = true;
+  })
+
+  if(authSuccess){
+    const { id } = req.params;
+    try {
+      const user = await User.findById(id)
+      // const user = await User.findOne({email}).lean() //without userDetail
+
+    //  if(user === null){
+    //   res.status(410).json("lol");
+    //   }
+
+      res.status(200).json(user);
+    } catch (error) {
+      res.status(404).json({ message: error });
+    }
+    authSuccess = false;
+  }
+  // checkToken(req,res, () => {
+  //   authSuccess = true;
+  //   // return res.status(200).send({data: "success"});
+  // })
+
+  // if(authSuccess){
+  //   const { email } = req.params
+
+  //   try {
+  //     const user = await User.findOne( {email} )
+
+  //     const gender = user.userDetail.gender
+  //     const gender_interest = user.userDetail.gender_interest
+  //     const interest = user.userDetail.interest
+
+  //     const other_users = await User.find({email: { $ne: email }})
+
+  //     var gendered_users = []
+
+  //     for (var interested_gender of gender_interest) {
+  //       for (var temp_user of other_users) {
+  //         if(temp_user.userDetail.gender == interested_gender
+  //           && temp_user.userDetail.gender_interest.includes(gender)) {
+  //           gendered_users.push(temp_user)
+  //         }
+  //       }
+  //     }
+
+  //     var returnedUsers = []
+
+  //     for(let filter of gendered_users){
+  //       for(let user_interest of interest){
+  //           if(filter.userDetail.interest.includes(user_interest)){
+  //             returnedUsers.push(filter)
+  //             break
+  //           }
+  //       }
+  //     }
+
+  //     res.status(200).json(user);
+  //   } catch (error) {
+  //     res.status(404).json({ message: error });
+  //   }
+  //   authSuccess = false;
+  // }
 };
 
 //GET - /test/singleuser/:email # return User with {email}
