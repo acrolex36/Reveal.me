@@ -8,13 +8,14 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Homepage/>}></Route>
+        <Route path="/" element={<Homepage />}></Route>
         <Route path="/login" element={<LoginPage />}></Route>
-        <Route path="/login/forgot_password" element={<ForgotPasswordPage />}></Route>
+        <Route
+          path="/login/forgot_password"
+          element={<ForgotPasswordPage />}
+        ></Route>
         <Route path="/register" element={<RegisterPage />}></Route>
-        <Route path="/create_profile" element={<CreateProfilePage />}>
-
-        </Route>
+        <Route path="/create_profile" element={<CreateProfilePage />}></Route>
       </Routes>
       <div className="App">
         {/* <h1 className=" font-bold underline">Hello world!</h1> */}

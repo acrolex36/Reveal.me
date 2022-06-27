@@ -1,10 +1,10 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
-// import TinderCard from '../react-tinder-card/index'
 import TinderCard from "react-tinder-card";
-import Profile from "./Profile";
+import ProfileCard from "./ProfileCard";
 import love_button from "../images/love_button.png";
 import reject_button from "../images/reject_button.png";
 import back_button from "../images/back_button.png";
+import axios from "axios";
 
 const db = [
   {
@@ -33,12 +33,30 @@ const db = [
   },
 ];
 
+ const getUser = async () => {
+  const token = cookies.Token;
+  // const userList = await axios.get(
+  //   `http://localhost:5000/api/test/alluser/`,
+  //   {
+  //     headers: {
+  //       "Content-Type": "application/json; charset=UTF-8",
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //   }
+  // );
+  return userList;
+}
+
 function Advanced() {
   const [currentIndex, setCurrentIndex] = useState(db.length - 1);
   const [lastDirection, setLastDirection] = useState();
   // used for outOfFrame closure
   const currentIndexRef = useRef(currentIndex);
 
+  const users = getUser();
+  console.log(users);
+
+  console.log(response);
   const childRefs = useMemo(
     () =>
       Array(db.length)
@@ -55,6 +73,8 @@ function Advanced() {
   const canGoBack = currentIndex < db.length - 1;
 
   const canSwipe = currentIndex >= 0;
+
+
 
   // set last direction and decrease current index
   const swiped = (direction, nameToDelete, index) => {
@@ -101,6 +121,8 @@ function Advanced() {
     };
   }, []);
 
+  
+
   return (
     <div>
       <div className="inset-center">
@@ -112,7 +134,7 @@ function Advanced() {
             onCardLeftScreen={() => outOfFrame(person.name, index)}
           >
             <div className="absolute">
-              <Profile person={person}></Profile>
+              <ProfileCard person={person}></ProfileCard>
             </div>
           </TinderCard>
         ))}

@@ -1,6 +1,6 @@
 import Logo from "../images/login.png";
 
-const Profile = ({ person }) => {
+const ProfileCard = ({ person }) => {
   return (
     <div class="min-w-max max-w-xl card lg:card-side cursor-pointer border-black bg-pink-0">
       <figure className="m-auto mr-3 rounded-lg">
@@ -85,4 +85,4 @@ const Profile = ({ person }) => {
   );
 };
 
-export default Profile;
+export default ProfileCard;
