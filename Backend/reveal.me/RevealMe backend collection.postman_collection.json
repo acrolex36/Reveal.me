@@ -15,7 +15,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"first_name\": \"f1\",\r\n    \"last_name\": \"f2\",\r\n    \"email\": \"test@test.com\",\r\n    \"plainTextPassword\": \"qweresrqwer\"\r\n}",
+					"raw": "{\r\n    \"first_name\": \"test1\",\r\n    \"last_name\": \"test1\",\r\n    \"email\": \"test@test.com\",\r\n    \"plainTextPassword\": \"test123\",\r\n    \"confirmPlainPassword\": \"test123\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -81,7 +81,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"email\": \"test@test.com\",\r\n    \"newPlainPassword\": \"test123\",\r\n    \"confirmNewPlainPassword\": \"test123\"\r\n}",
+					"raw": "{\r\n    \"email\": \"user@test.com\",\r\n    \"newPlainPassword\": \"test123\",\r\n    \"confirmNewPlainPassword\": \"test123\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -89,7 +89,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5000/api/auth/forgetpassword",
+					"raw": "http://localhost:5000/api/auth/login/forgetpassword",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -98,7 +98,187 @@
 					"path": [
 						"api",
 						"auth",
+						"login",
 						"forgetpassword"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateOneUserProfileHead",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYWY3OTJkYWIwOTRhYTlmZWYyYTg2ZSIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsImlhdCI6MTY1NTg0NTk4N30.sJltKnc33fkrOt7_peAWVP_Ji-huxcoBKzCEktZi6gI",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"first_name\": \"bryan1\",\r\n    \"last_name\": \"hadiyanto\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/user/profile/head/bryan@test.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"user",
+						"profile",
+						"head",
+						"bryan@test.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateOneUserProfileBody",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYWY3OTJkYWIwOTRhYTlmZWYyYTg2ZSIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsImlhdCI6MTY1NTg0NTk4N30.sJltKnc33fkrOt7_peAWVP_Ji-huxcoBKzCEktZi6gI",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"gender\": \"male\",\r\n        \"gender_interest\": [\"male\",\"female\"],\r\n        \"age\": 20,\r\n        \"profile_picture\": \"\",\r\n        \"dob_date\": 1,\r\n        \"dob_month\": 1,\r\n        \"dob_year\": 2002,\r\n        \"height\": 170,\r\n        \"nationality\": \"indonesia\",\r\n        \"occupation\": \"abc\",\r\n        \"interest\": [\"i1\",\"i2\",\"i3\"],\r\n        \"language\": [\"indonesien\",\"deutsch\"]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/user/profile/body/bryan@test.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"user",
+						"profile",
+						"body",
+						"bryan@test.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getUser",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjcxZGQ5OWM3MGY4OGQ5ZmMwMzgzNiIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsImlhdCI6MTY1NjI0MzMyMywiZXhwIjoxNjU2MzI5NzIzfQ.PH36baiQpI4VFnkAxmKQCpV2t__U0STyMzWZlbZiGMc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/test/alluser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"test",
+						"alluser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getOneUserDetailWithId",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjcxZGQ5OWM3MGY4OGQ5ZmMwMzgzNiIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsImlhdCI6MTY1NjI0MzMyMywiZXhwIjoxNjU2MzI5NzIzfQ.PH36baiQpI4VFnkAxmKQCpV2t__U0STyMzWZlbZiGMc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/test/singleuser/62b79fedfcf9a51b2a4c29da",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"test",
+						"singleuser",
+						"62b79fedfcf9a51b2a4c29da"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getOneUserDetailWithEmail",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjZhYzRlZWE2MGRmNGMwN2JjZDZkMSIsImVtYWlsIjoidXNlckB0ZXN0LmNvbSIsImlhdCI6MTY1NjEzODgzNCwiZXhwIjoxNjU2MjI1MjM0fQ.BWAPL_8QFld7dLUCMgXbAq1N0Jnvmk2pb2NZzxGHCFQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/test/singleuser/user@test.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"test",
+						"singleuser",
+						"user@test.com"
 					]
 				}
 			},
