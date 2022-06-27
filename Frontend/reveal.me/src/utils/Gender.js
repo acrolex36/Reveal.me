@@ -1,11 +1,11 @@
 export const Genders = [
     {
-        gender: "Male"
+        gender: "male"
     },
     {
-        gender: "Female"
+        gender: "female"
     },
     {
-        gender: "Diverse"
+        gender: "diverse"
     }
 ];

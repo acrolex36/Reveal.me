@@ -94,7 +94,7 @@ const Nationality = props => {
     <option value="hungarian">Hungarian</option>
     <option value="icelander">Icelander</option>
     <option value="indian">Indian</option>
-    <option value="indonesia">Indonesian</option>
+    <option value="indonesian">Indonesian</option>
     <option value="iranian">Iranian</option>
     <option value="iraqi">Iraqi</option>
     <option value="irish">Irish</option>
