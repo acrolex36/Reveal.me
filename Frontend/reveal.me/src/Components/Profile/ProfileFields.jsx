@@ -196,47 +196,53 @@ const ProfileFields = () => {
     // console.log(updatedChecked);
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
+      await axios
+        .put(
+          `http://localhost:5000/api/user/profile/head/${accountData.email}`,
+          {
+            first_name: accountData.first_name,
+            last_name: accountData.last_name,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json; charset=UTF-8",
+              Authorization: `Bearer ${cookies.Token}`,
+            },
+          }
+        )
+        .catch(function (res) {
+          if (res.response.status === 404) {
+            navigate("/create_profile");
+            setError("failed to update Profile, please try again");
+          }
+        });
 
       await axios
-      .put(`http://localhost:5000/api/user/profile/head/${accountData.email}`, {
-        first_name: accountData.first_name,
-        last_name: accountData.last_name
-      }, {
-        headers: {
-          "Content-Type": "application/json; charset=UTF-8",
-          Authorization: `Bearer ${cookies.Token}`,
-        },
-      })
-      .catch(function(res){
-        if(res.response.status == 404){
-          navigate ('/create_profile');
-          setError('failed to update Profile, please try again');
-        }
-      });
-
-      await axios
-      .put(`http://localhost:5000/api/user/profile/body/${accountData.email}`, accountData.userDetail, {
-        headers: {
-          "Content-Type": "application/json; charset=UTF-8",
-          Authorization: `Bearer ${cookies.Token}`,
-        },
-      })
-      .then(function(response){
-        if(response.status == 201){
-          navigate ('/');
-        }
-      })
-      .catch(function(res){
-        if(res.response.status == 404){
-          navigate ('/create_profile');
-          setError('failed to update Profile, please try again');
-        }
-      });
+        .put(
+          `http://localhost:5000/api/user/profile/body/${accountData.email}`,
+          accountData.userDetail,
+          {
+            headers: {
+              "Content-Type": "application/json; charset=UTF-8",
+              Authorization: `Bearer ${cookies.Token}`,
+            },
+          }
+        )
+        .then(function (response) {
+          if (response.status === 200) {
+            navigate("/");
+          }
+        })
+        .catch(function (res) {
+          if (res.response.status === 404) {
+            navigate("/create_profile");
+            setError("failed to update Profile, please try again");
+          }
+        });
 
       // window.location.reload()
     } catch (error) {
@@ -265,7 +271,10 @@ const ProfileFields = () => {
                 <div className="py-3 center mx-auto">
                   <div className="bg-white px-4 py-5 rounded-lg shadow-lg text-center w-fit">
                     <div className="mb-4 w-48">
-                    <img src={accountData.userDetail.profile_picture} />
+                      <img
+                        src={accountData.userDetail.profile_picture}
+                        alt="profile picture"
+                      />
                     </div>
                     <label className="cursor-pointer mt-6">
                       <span
@@ -518,20 +527,20 @@ const ProfileFields = () => {
                         >
                           Language
                         </label>
-                        <label for="my-modal" class="btn bg-darker-pink">
+                        <label for="my-modal" className="btn bg-darker-pink">
                           Select Language
                         </label>
                         <input
                           type="checkbox"
                           id="my-modal"
-                          class="modal-toggle"
+                          className="modal-toggle"
                         />
-                        <div class="modal">
-                          <div class="modal-box">
+                        <div className="modal">
+                          <div className="modal-box">
                             <h1 className="mb-4 text-lg font-normal text-darker-pink">
                               Select the Languages that you're good at!
                             </h1>
-                            <div class="flex flex-wrap">
+                            <div className="flex flex-wrap">
                               {Languages.map(({ value, label }) => {
                                 return (
                                   <div
@@ -544,12 +553,14 @@ const ProfileFields = () => {
                                       value={value}
                                       id={value}
                                       name={value}
-                                      checked={accountData.userDetail.languages.includes(value)}
+                                      checked={accountData.userDetail.languages.includes(
+                                        value
+                                      )}
                                       onChange={() =>
                                         handleOnChangeLanguage(value, Languages)
                                       }
                                     />
-                                    <label class="form-check-label inline-block text-gray-800">
+                                    <label className="form-check-label inline-block text-gray-800">
                                       {label}
                                     </label>
                                   </div>
@@ -566,10 +577,10 @@ const ProfileFields = () => {
                                   Close
                                 </label>
                               </div>
-                              <div class="modal-action">
+                              <div className="modal-action">
                                 <label
                                   for="my-modal"
-                                  class="btn inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-pink-100 bg-darker-pink hover:bg-pink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                  className="btn inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-pink-100 bg-darker-pink hover:bg-pink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                 >
                                   OK
                                 </label>
