@@ -643,7 +643,7 @@ export const getOneConversation = async (req: Request, res: Response) => {
     const { userId1, userId2 } = req.params;
     
     try {
-      const oneConversation = await Messages.find({members:{$all:[
+      const oneConversation = await Messages.findOne({members:{$all:[
         userId1,
         userId2,
       ]}});
@@ -655,6 +655,71 @@ export const getOneConversation = async (req: Request, res: Response) => {
   }
 };
 
+//GET - /oneconversation/:userId1/:userId2 # find one conversation between 2 user
+export const getOneConversationById = async (req: Request, res: Response) => {
+  checkToken(req, res, () => {
+    authSuccess = true;
+  });
+
+  if (authSuccess) {
+    const { id } = req.params;
+    
+    try {
+      const oneConversationId = await Messages.findById(id);
+
+      res.status(200).json(oneConversationId);
+    } catch (error) {
+      res.status(404).json({ message: error });
+    }
+    authSuccess = false;
+  }
+};
+
+
+//GET - /oneconversation/:userId1/:userId2 # find one conversation between 2 user
+export const getTotalMessage = async (req: Request, res: Response) => {
+  checkToken(req, res, () => {
+    authSuccess = true;
+  });
+
+  if (authSuccess) {
+    const { userId1, userId2 } = req.params;
+    
+    try {
+      const oneConversation = await Messages.findOne({members:{$all:[
+        userId1,
+        userId2,
+      ]}});
+
+      // const total1 = await Messages.aggregate([{$project: {
+        
+      //   count: { $size:"$messages"}}}])
+      
+      //const total = await Messages.find().count()
+
+      const messages = oneConversation.messages
+
+      var totalMessages = []
+
+      var totalUser1 = 0
+      for(let i of messages) {
+        if (i.sender === userId1) totalUser1++
+      }
+      totalMessages.push(totalUser1)
+
+      var totalUser2 = 0
+      for(let i of messages) {
+        if (i.sender === userId2) totalUser2++
+      }
+      totalMessages.push(totalUser2)
+
+      res.status(200).json(totalMessages);
+    } catch (error) {
+      res.status(404).json({ message: error });
+    }
+    authSuccess = false;
+  }
+};
 
 // //POST - /recipe # insert a new Recipe
 // export const createNewRecipe = async (req: Request, res: Response) => {

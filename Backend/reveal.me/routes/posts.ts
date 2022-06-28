@@ -18,7 +18,9 @@ import {
   getAllConversation,
   updateMessages,
   getOneConversation,
-  getAllConversationFromOneUser
+  getAllConversationFromOneUser,
+  getTotalMessage,
+  getOneConversationById
 
 } from "../controllers/posts";
 
@@ -49,6 +51,9 @@ router.put("/conversation/message/:id", updateMessages);
 router.get("/test/allconversation", getAllConversation);
 router.get("/allconversation/:userId", getAllConversationFromOneUser);
 router.get("/oneconversation/:userId1/:userId2", getOneConversation);
+router.get("/oneconversationid/:id", getOneConversationById);
+router.get("/oneconversation/totalmessage/:userId1/:userId2", getTotalMessage);
+
 
 
 
