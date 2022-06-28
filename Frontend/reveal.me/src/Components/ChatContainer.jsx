@@ -1,11 +1,14 @@
-import React, {useState} from 'react'
-import Chat from "./Chat"
+import React, {useEffect, useState} from 'react';
+import Chat from "./Chat";
+import axios from "axios";
+import {Cookies, useCookies} from "react-cookie";
 const ChatContainer = () => {
-
-    const [accountData, setAccountData] = useState({
-    first_name: "",
-    last_name: "",
-    userDetail: {
+    const [cookies, setCookie, removeCookie] = useCookies(null);
+    const[allConversation, setConversation] = useState([]);
+    const [allMessages, setAllMessages] = useState({
+    time: "",
+    members: [],
+    messages: {
       gender: "",
       dob_date: "",
       dob_month: "",
@@ -19,6 +22,28 @@ const ChatContainer = () => {
       description: "",
     },
   });
+
+  const getUserMessages = async (cookies) => {
+    try {
+      const id = cookies.UserId;
+      const token = cookies.Token;
+      const response = await axios
+      .get(`http://localhost:5000/api/allconversation/${id}`,{
+        headers:{
+          "Content-Type": "application/json; charset=UTF-8",
+            Authorization: `Bearer ${token}`,
+        },
+      });
+      setConversation((allConversation)=>[...allConversation, ...response.data]);
+      console.log(allConversation)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(()=>{
+    getUserMessages();
+  }, [])
 
   return (
         <div class="w-full mx-auto">
@@ -84,7 +109,7 @@ const ChatContainer = () => {
             <Chat></Chat>
           </div>
         </div>
-          <div class="hidden lg:col-span-1 lg:block w-full">
+          {/* <div class="hidden lg:col-span-1 lg:block w-full">
           <div class="h-full">
             <div class="card w-full bg-base-100 shadow-xl h-full">
               <figure><img src="https://api.lorem.space/image/face?w=150&h=150" alt="profile picture" className='w-full'/></figure>
@@ -95,7 +120,7 @@ const ChatContainer = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   )
