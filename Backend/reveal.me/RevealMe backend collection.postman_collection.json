@@ -164,7 +164,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n        \"gender\": \"male\",\r\n        \"gender_interest\": [\"male\",\"female\"],\r\n        \"age\": 20,\r\n        \"profile_picture\": \"\",\r\n        \"dob_date\": 1,\r\n        \"dob_month\": 1,\r\n        \"dob_year\": 2002,\r\n        \"height\": 170,\r\n        \"nationality\": \"indonesia\",\r\n        \"occupation\": \"abc\",\r\n        \"interest\": [\"i1\",\"i2\",\"i3\"],\r\n        \"language\": [\"indonesien\",\"deutsch\"]\r\n}",
+					"raw": "{\r\n        \"gender\": \"male\",\r\n        \"gender_interest\": [\"male\",\"female\"],\r\n        \"age\": 20,\r\n        \"profile_picture\": \"\",\r\n        \"dob_date\": 1,\r\n        \"dob_month\": 1,\r\n        \"dob_year\": 2002,\r\n        \"height\": 170,\r\n        \"nationality\": \"indonesian\",\r\n        \"occupation\": \"abc\",\r\n        \"hobbies\": [\"Sport\",\"Cooking\",\"Painting\"],\r\n        \"languages\": [\"Indonesian\",\"German\"],\r\n        \"description\": \"lol\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -197,7 +197,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjcxZGQ5OWM3MGY4OGQ5ZmMwMzgzNiIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsImlhdCI6MTY1NjI0MzMyMywiZXhwIjoxNjU2MzI5NzIzfQ.PH36baiQpI4VFnkAxmKQCpV2t__U0STyMzWZlbZiGMc",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjcxZGQ5OWM3MGY4OGQ5ZmMwMzgzNiIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsImlhdCI6MTY1NjMzNzUyNywiZXhwIjoxNjU2NDIzOTI3fQ.KZLZSSYB3ZmTVyw1c4z0dyWN5Rd49EqS9fVNZ_srWZk",
 							"type": "string"
 						}
 					]
@@ -236,7 +236,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5000/api/test/singleuser/62b79fedfcf9a51b2a4c29da",
+					"raw": "http://localhost:5000/api/test/singleuser/id/62b79fedfcf9a51b2a4c29da",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -246,6 +246,7 @@
 						"api",
 						"test",
 						"singleuser",
+						"id",
 						"62b79fedfcf9a51b2a4c29da"
 					]
 				}
@@ -260,7 +261,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjZhYzRlZWE2MGRmNGMwN2JjZDZkMSIsImVtYWlsIjoidXNlckB0ZXN0LmNvbSIsImlhdCI6MTY1NjEzODgzNCwiZXhwIjoxNjU2MjI1MjM0fQ.BWAPL_8QFld7dLUCMgXbAq1N0Jnvmk2pb2NZzxGHCFQ",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjcxZGQ5OWM3MGY4OGQ5ZmMwMzgzNiIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsImlhdCI6MTY1NjMzNzUyNywiZXhwIjoxNjU2NDIzOTI3fQ.KZLZSSYB3ZmTVyw1c4z0dyWN5Rd49EqS9fVNZ_srWZk",
 							"type": "string"
 						}
 					]
@@ -268,7 +269,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5000/api/test/singleuser/user@test.com",
+					"raw": "http://localhost:5000/api/test/singleuser/email/bryan@test.com",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -278,7 +279,8 @@
 						"api",
 						"test",
 						"singleuser",
-						"user@test.com"
+						"email",
+						"bryan@test.com"
 					]
 				}
 			},
