@@ -592,7 +592,7 @@ export const updateMessages = async (req: Request, res: Response) => {
   }
 };
 
-//GET - /test/allconversation # find all messages
+//GET - /allconversation/:userId # find all messages from one particular user
 export const getAllConversationFromOneUser = async (req: Request, res: Response) => {
   checkToken(req, res, () => {
     authSuccess = true;
@@ -633,7 +633,7 @@ export const getAllConversation = async (req: Request, res: Response) => {
 
 };
 
-//GET - /test/allconversation # find all messages
+//GET - /oneconversation/:userId1/:userId2 # find one conversation between 2 user
 export const getOneConversation = async (req: Request, res: Response) => {
   checkToken(req, res, () => {
     authSuccess = true;
