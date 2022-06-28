@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 
 //model Conversation
 const messageSchema = new mongoose.Schema({
-  _id: mongoose.Schema.Types.ObjectId,
   time: {
     type: Date,
     default: new Date(),
@@ -31,10 +30,6 @@ const messageSchema = new mongoose.Schema({
       },
     },
   ],
-  total_messages: {
-    type: Number,
-    default: 0,
-  },
 });
 
 var Messages = mongoose.model("messageHistory", messageSchema);
