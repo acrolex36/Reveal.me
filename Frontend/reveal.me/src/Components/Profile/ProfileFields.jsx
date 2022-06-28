@@ -326,7 +326,8 @@ const ProfileFields = () => {
                             id="email-address"
                             autoComplete="email"
                             className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block xl:w-96 w-full shadow-sm sm:text-sm border border-pink-100 rounded-md"
-                            value={accountData.email}
+                            // value={accountData.email}
+                            defaultValue={accountData.email}
                           />
                         </div>
 
@@ -343,8 +344,9 @@ const ProfileFields = () => {
                             id="password"
                             autoComplete="password"
                             className="mt-1 focus:outline-none bg-gray-100 focus:ring focus:ring-darker-pink block w-full xl:w-96 shadow-sm sm:text-sm border border-pink-100 rounded-md"
-                            disabled="true"
-                            value={accountData.password}
+                            disabled={true}
+                            // value={accountData.password}
+                            defaultValue={accountData.password}
                           />
                         </div>
 
@@ -361,8 +363,9 @@ const ProfileFields = () => {
                             id="confirm-password"
                             autoComplete="confirm-password"
                             className="mt-1 focus:outline-none bg-gray-100 focus:ring focus:ring-darker-pink block w-full xl:w-96 shadow-sm sm:text-sm border border-pink-100 rounded-md"
-                            disabled="true"
-                            value={accountData.password}
+                            disabled={true}
+                            // value={accountData.password}
+                            defaultValue={accountData.password}
                           />
                         </div>
                       </div>
@@ -518,20 +521,20 @@ const ProfileFields = () => {
                         >
                           Language
                         </label>
-                        <label for="my-modal" class="btn bg-darker-pink">
+                        <label htmlFor="my-modal" className="btn bg-darker-pink">
                           Select Language
                         </label>
                         <input
                           type="checkbox"
                           id="my-modal"
-                          class="modal-toggle"
+                          className="modal-toggle"
                         />
-                        <div class="modal">
-                          <div class="modal-box">
+                        <div className="modal">
+                          <div className="modal-box">
                             <h1 className="mb-4 text-lg font-normal text-darker-pink">
                               Select the Languages that you're good at!
                             </h1>
-                            <div class="flex flex-wrap">
+                            <div className="flex flex-wrap">
                               {Languages.map(({ value, label }) => {
                                 return (
                                   <div
@@ -549,7 +552,7 @@ const ProfileFields = () => {
                                         handleOnChangeLanguage(value, Languages)
                                       }
                                     />
-                                    <label class="form-check-label inline-block text-gray-800">
+                                    <label className="form-check-label inline-block text-gray-800">
                                       {label}
                                     </label>
                                   </div>
@@ -559,17 +562,17 @@ const ProfileFields = () => {
                             <div className="flex flex-row justify-end">
                               <div className="modal-action">
                                 <label
-                                  for="my-modal"
+                                  htmlFor="my-modal"
                                   className="btn inline-flex justify-center py-2 px-4 mr-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-darker-pink bg-gray-100 hover:bg-pink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                   onClick={resetLanguage}
                                 >
                                   Close
                                 </label>
                               </div>
-                              <div class="modal-action">
+                              <div className="modal-action">
                                 <label
-                                  for="my-modal"
-                                  class="btn inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-pink-100 bg-darker-pink hover:bg-pink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                  htmlFor="my-modal"
+                                  className="btn inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-pink-100 bg-darker-pink hover:bg-pink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                 >
                                   OK
                                 </label>
@@ -608,7 +611,7 @@ const ProfileFields = () => {
 
                       <div className="col-span-6 sm:col-span-6 lg:col-span-2">
                         <label
-                          htmlFor=""
+                          htmlFor="date-of-birth"
                           className="block text-sm font-medium text-darker-pink"
                         >
                           Date of Birth

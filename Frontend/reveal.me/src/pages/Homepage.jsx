@@ -10,7 +10,7 @@ const HomePage = () => {
           <aside className="hidden sm:block">
             <Sidebar></Sidebar>
           </aside>
-          <main class="">
+          <main className="">
             {/* <TinderContainer></TinderContainer> */}
           </main>
         </div>
