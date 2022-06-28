@@ -57,14 +57,31 @@ const Sidebar = () => {
               >
                 <img
                   className="w-10 h-10 rounded-full"
-                  src="/docs/images/people/profile-picture-5.jpg"
-                  alt=""
+                  src={accountData.userDetail.profile_picture}
+                  // src="/docs/images/people/profile-picture-5.jpg"
+                  // alt=""
                 />
               </a>
               <div className=" font-medium dark:text-white">
-                <div>Erik Erikson</div>
+                <div>
+                  {/* Erik Erikson */}
+                  <input
+                          type="text"
+                          name="first-name"
+                          id="first-name"
+                          
+                          value={`${accountData.first_name} ${accountData.last_name}`}
+                        />
+                  </div>
                 <div className="text-sm text-gray-500 dark:text-gray-400">
-                  Enterpreneur
+                  {/* Enterpreneur */}
+                  <input
+                          type="text"
+                          name="first-name"
+                          id="first-name"
+                          
+                          value={`${accountData.occupation}`}
+                        />
                 </div>
               </div>
             </div>
