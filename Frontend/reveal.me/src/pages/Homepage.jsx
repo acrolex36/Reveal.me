@@ -1,5 +1,5 @@
 import Sidebar from "../Components/Sidebar";
-import TinderContainer from "../Components/TinderContainer";
+// import TinderContainer from "../Components/TinderContainer";
 import Header from "../Components/Header";
 const HomePage = () => {
   return (
@@ -11,7 +11,7 @@ const HomePage = () => {
             <Sidebar></Sidebar>
           </aside>
           <main class="">
-            <TinderContainer></TinderContainer>
+            {/* <TinderContainer></TinderContainer> */}
           </main>
         </div>
       </div>
