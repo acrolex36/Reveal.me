@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
-import {TinderCard} from "react-tinder-card";
+import TinderCard from "react-tinder-card";
 import ProfileCard from "./Profile/ProfileCard";
 import love_button from "../images/love_button.png";
 import reject_button from "../images/reject_button.png";
@@ -141,7 +141,7 @@ function TinderContainer() {
           className="sm:py-24 sm:px-6 lg:max-w-5xl "
           onClick={() => swipe("left")}
         >
-          <div class="w-full aspect-w-1 aspect-h-1  overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
+          <div className="w-full aspect-w-1 aspect-h-1  overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
             <img
               className="scale-50 hover:scale-75 ease-in duration-150"
               src={reject_button}
@@ -153,7 +153,7 @@ function TinderContainer() {
           className="sm:py-24 sm:px-6 lg:max-w-5xl "
           onClick={() => goBack()}
         >
-          <div class="w-full aspect-w-1 aspect-h-1  overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
+          <div className="w-full aspect-w-1 aspect-h-1  overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
             <img
               className="scale-50 hover:scale-75 ease-in duration-150"
               src={back_button}
@@ -165,7 +165,7 @@ function TinderContainer() {
           className="sm:py-24 sm:px-6 lg:max-w-5xl "
           onClick={() => swipe("right")}
         >
-          <div class="w-full aspect-w-1 aspect-h-1 overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
+          <div className="w-full aspect-w-1 aspect-h-1 overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
             <img
               className="scale-50 hover:scale-75 ease-in duration-75"
               src={love_button}
