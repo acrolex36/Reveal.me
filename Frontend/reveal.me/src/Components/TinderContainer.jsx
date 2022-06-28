@@ -5,6 +5,7 @@ import love_button from "../images/love_button.png";
 import reject_button from "../images/reject_button.png";
 import back_button from "../images/back_button.png";
 import axios from "axios";
+import { useCookies } from "react-cookie";
 
 const db = [
   {
@@ -33,26 +34,32 @@ const db = [
   },
 ];
 
- // const getUser = async () => {
-  // const token = cookies.Token;
-  // const userList = await axios.get(
-  //   `http://localhost:5000/api/test/alluser/`,
-  //   {
-  //     headers: {
-  //       "Content-Type": "application/json; charset=UTF-8",
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //   }
-  // );
-//   return userList;
-// }
+const getUser = async (cookies) => {
+  const token = cookies.Token;
+  const userList = await axios.get(`http://localhost:5000/api/test/alluser/`, {
+    headers: {
+      "Content-Type": "application/json; charset=UTF-8",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  console.log(userList);
+  return userList;
+};
 
 function TinderContainer() {
   const [currentIndex, setCurrentIndex] = useState(db.length - 1);
   const [lastDirection, setLastDirection] = useState();
+  const [cookies, setCookie, removeCookie] = useCookies(null);
+  let potentialMatches;
   // used for outOfFrame closure
   const currentIndexRef = useRef(currentIndex);
 
+  useEffect(() => {
+    // console.log("i fire once");
+    if (cookies) {
+      potentialMatches = getUser(cookies);
+    }
+  }, [cookies]);
 
   const childRefs = useMemo(
     () =>
@@ -70,8 +77,6 @@ function TinderContainer() {
   const canGoBack = currentIndex < db.length - 1;
 
   const canSwipe = currentIndex >= 0;
-
-
 
   // set last direction and decrease current index
   const swiped = (direction, nameToDelete, index) => {
@@ -117,8 +122,6 @@ function TinderContainer() {
       window.removeEventListener("keydown", handleKey);
     };
   }, []);
-
-
 
   return (
     <div>
