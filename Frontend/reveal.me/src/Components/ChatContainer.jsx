@@ -1,10 +1,29 @@
-import React from 'react'
+import React, {useState} from 'react'
 import Chat from "./Chat"
 const ChatContainer = () => {
+
+    const [accountData, setAccountData] = useState({
+    first_name: "",
+    last_name: "",
+    userDetail: {
+      gender: "",
+      dob_date: "",
+      dob_month: "",
+      dob_year: "",
+      occupation: "",
+      gender_interest: [],
+      height: "",
+      interest: [],
+      language: [],
+      nationality: "",
+      description: "",
+    },
+  });
+
   return (
-        <div class="container mx-auto">
-      <div class="border rounded lg:grid lg:grid-cols-3 w-5xl h-4/5">
-        <div class="border-r border-gray-300 lg:col-span-1">
+        <div class="w-full mx-auto">
+      <div class="border rounded lg:grid lg:grid-cols-4 w-full h-4/5">
+        <div class="border-r border-gray-300 lg:col-span-1 lg:block">
           <div class="mx-3 my-3">
             <div class="relative text-gray-600">
               <span class="absolute inset-y-0 left-0 flex items-center pl-2">
@@ -63,6 +82,18 @@ const ChatContainer = () => {
         <div class="hidden lg:col-span-2 lg:block">
           <div class="w-full max-h-4/5">
             <Chat></Chat>
+          </div>
+        </div>
+          <div class="hidden lg:col-span-1 lg:block w-full">
+          <div class="h-full">
+            <div class="card w-full bg-base-100 shadow-xl h-full">
+              <figure><img src="https://api.lorem.space/image/face?w=150&h=150" alt="profile picture" className='w-full'/></figure>
+              <div class="card-body">
+                <h1 class="card-title">{`${accountData.first_name} ${accountData.last_name}Name`}</h1>
+                <h2 className='mb-[30px]'>{`${accountData.userDetail.occupation}test`}</h2>
+                <p>{`${accountData.userDetail.description}description`}</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
