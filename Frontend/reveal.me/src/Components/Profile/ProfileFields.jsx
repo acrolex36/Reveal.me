@@ -71,7 +71,13 @@ const ProfileFields = () => {
     const reader = new FileReader();
     reader.onload = () => {
       if (reader.readyState === 2) {
-        setSelectedFile(reader.result);
+        setAccountData((accountData) => ({
+          ...accountData,
+          userDetail: {
+            ...accountData.userDetail,
+            profile_picture: reader.result,
+          },
+        }));
       }
     };
     reader.readAsDataURL(e.target.files[0]);
