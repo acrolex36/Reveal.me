@@ -2,20 +2,16 @@ import React, {useState, useEffect} from 'react'
 import {Cookies, useCookies} from "react-cookie";
 import { useParams } from 'react-router-dom';
 import axios from "axios";
-const Chat = ({matchId}) => {
-   const {
-    id2
-  } = matchId;
+const Chat = ({matchId, usersMessages}) => {
+
    const [cookies, setCookie, removeCookie] = useCookies(null);
    const token = cookies.Token;
    const { _id } = useParams();
    const id = cookies.UserId;
    const [accountData, setAccountData] = useState([])
-   const [usersMessages, setUsersMessages] = useState(null)
 
    const getAccount = async () => {
     try {
-      console.log(matchId)
       const response = await axios.get(
         `http://localhost:5000/api/test/singleuser/id/${matchId}`,
         {
@@ -25,10 +21,10 @@ const Chat = ({matchId}) => {
           },
         }
       );
-      // console.log(response);
       // console.log(response.data)
-      // setAccountData(response.data);
-      // console.log(accountData)
+      setAccountData(response.data);
+      console.log(accountData)
+      console.log(usersMessages)
       // console.log(accountData.first_name)
     } catch (err) {
       console.error(err.message);
@@ -47,7 +43,7 @@ const Chat = ({matchId}) => {
          }
       );
       console.log(response.data)
-      setUsersMessages( response.data)
+      setUsersMessages(response.data)
       console.log(usersMessages.messages)
    } catch (error) {
       
@@ -70,8 +66,7 @@ const Chat = ({matchId}) => {
 
    useEffect(()=>{
     getAccount()
-    getUserMessages()
-  }, [matchId])
+  }, [usersMessages])
 
    const [textArea, setTextArea] = useState()
   return (
@@ -91,39 +86,22 @@ const Chat = ({matchId}) => {
             <div class="text-lg mt-1 flex items-center">
                <span class="text-gray-700 mr-3">{`${accountData.first_name} ${accountData.last_name}`}</span>
             </div>
-            <span class="text-md text-gray-600"></span>
+            {/* <span class="text-md text-gray-600">{`${accountData.userDetail.occupation}`}</span> */}
          </div>
       </div>
    </div>
    <div id="messages" class="flex flex-col space-y-3 p-4 overflow-y-auto scrollbar-thumb-blue scrollbar-w-2 scrolling-touch h-[648px] max-h-[1200px]">
-      {/* {usersMessages.messages.map((msg, index) =>{
-         <div key={index}class="chat-message">
-         <div class={`flex items-end ${msg.sender === id ? ' ' : 'justify-end'}` }>
-            <div class={`flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 ${msg.sender === id ? 'item-start' : 'item-end'}`}>
-               <div><span class={`px-4 py-2 rounded-lg inline-block 
-               ${msg.sender === id ? 'rounded-bl-none bg-gray-300 text-gray-600' : 'rounded-br-none bg-blue-600 text-white'}`}>{msg.message}</span>
+      {/* {usersMessages.messages.map(({message, sender, timestamp}) =>{
+         <div key={timestamp}class="chat-message">
+         <div >
+            <div >
+               <div><span >{sender}</span>
                </div>
             </div>
             <img src="https://images.unsplash.com/photo-1549078642-b2ba4bda0cdb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144" alt="My profile" class="w-6 h-6 rounded-full order-1"/>
          </div>
       </div>
       })} */}
-      <div class="chat-message">
-         <div class="flex items-end">
-            <div class="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-start">
-               <div><span class="px-4 py-2 rounded-lg inline-block rounded-bl-none bg-gray-300 text-gray-600">Can be verified on any platform using docker</span></div>
-            </div>
-            <img src="https://images.unsplash.com/photo-1549078642-b2ba4bda0cdb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144" alt="My profile" class="w-6 h-6 rounded-full order-1"/>
-         </div>
-      </div>
-      <div class="chat-message">
-         <div class="flex items-end justify-end">
-            <div class="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-1 items-end">
-               <div><span class="px-4 py-2 rounded-lg inline-block rounded-br-none bg-blue-600 text-white ">Your error message says permission denied, npm global installs must be given root privileges.</span></div>
-            </div>
-            <img src="https://images.unsplash.com/photo-1590031905470-a1a1feacbb0b?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144" alt="My profile" class="w-6 h-6 rounded-full order-2"/>
-         </div>
-      </div>
    </div>
    <div class="border-t-2 border-gray-200 px-4 pt-4 mb-2 sm:mb-0">
       <div class="relative flex">

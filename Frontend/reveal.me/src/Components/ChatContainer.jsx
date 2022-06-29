@@ -9,16 +9,18 @@ const ChatContainer = () => {
     const[allConversation, setConversation] = useState([]);
     const [senderDetail, setSenderDetail] = useState([]);
     const [listOfContactDetails, setListOfContactDetail] = useState([]);
-    const list = []
+    const [usersMessages, setUsersMessages] = useState(null)
+    // const list = []
     const id = cookies.UserId;
     const token = cookies.Token;
     
     const setChat = (_id) =>{
       setClickedUser(true);
       setIdMatch(_id)
+      getUserMessages(_id)
     }
     
-    const getUserMessages = async () => {
+    const getUserConversation = async () => {
     try {
       const id = cookies.UserId;
       const token = cookies.Token;
@@ -29,13 +31,33 @@ const ChatContainer = () => {
             Authorization: `Bearer ${token}`,
         },
       });
-      const data = await response.data;
+      // const data = await response.data;
       // console.log(response.data)
-      setConversation((allConversation) => [...allConversation, ...response.data]);
+      // setConversation((allConversation) => [...allConversation, ...response.data]);
+      setConversation(response.data)
       // console.log(allConversation)
     } catch (error) {
       console.log(error)
     }
+  }
+
+    const getUserMessages = async (_id)=> {
+   try {
+      const response = await axios.get(
+         `http://localhost:5000/api/oneconversation/${id}/${_id}`,
+         {
+            headers: {
+            "Content-Type": "application/json; charset=UTF-8",
+            Authorization: `Bearer ${token}`,
+          },
+         }
+      );
+      console.log(response.data)
+      setUsersMessages(response.data)
+      console.log(usersMessages.messages)
+   } catch (error) {
+      
+   }
   }
 
   const getInfoUser = async ()=>{
@@ -47,16 +69,17 @@ const ChatContainer = () => {
       let listSenderId = [];
       for( let userCounter = 0;userCounter<allConversation.length; userCounter++){
         // for(let j = 0; j<allConversation.at(i).members.length; j++){
-          if(allConversation.at(userCounter).members[0] != id){
+          if(allConversation.at(userCounter).members.at(0) != id){
             listSenderId.push(allConversation.at(userCounter).members.at(0));
             // break;
           }
           else {
             listSenderId.push(allConversation.at(userCounter).members.at(1));
           }
-          console.log(userCounter)
-
       }
+      console.log("listId")
+      console.log(listSenderId)
+      let list = [];
       for(let i = 0; i<listSenderId.length; i++){
         const response = await axios.get(
           `http://localhost:5000/api/test/singleuser/id/${listSenderId.at(i)}`,
@@ -69,9 +92,11 @@ const ChatContainer = () => {
         );
         list.push(response.data);
         // console.log(listOfContactDetail);
+        console.log(list)
       }
       // console.log(list);
-      setListOfContactDetail((listOfContactDetails) => [...listOfContactDetails, ...list]);
+      // setListOfContactDetail((listOfContactDetails) => [...listOfContactDetails, ...list]);
+      setListOfContactDetail(list)
       console.log(listOfContactDetails);
       
     } catch (error) {
@@ -81,8 +106,8 @@ const ChatContainer = () => {
 
   useEffect(()=>{
     // if(cookies){
-    setConversation([])
-    getUserMessages()
+      setConversation([])
+    getUserConversation()
     getInfoUser()
     // }
   }, [])
@@ -106,7 +131,7 @@ const ChatContainer = () => {
 
           <ul class="overflow-auto h-[32rem]">
             <h2 class="my-2 mb-2 ml-2 text-lg text-gray-600">Messages</h2>
-            {listOfContactDetails.length > 0 && allConversation.length && <li>
+             <li>
               {listOfContactDetails.map(({_id, userDetail, first_name, last_name}) =>(
               
                 <a key={_id} onClick={()=>setChat(_id)}
@@ -122,13 +147,14 @@ const ChatContainer = () => {
                 </a>
               ))}
               
-            </li>}
+            </li>
           </ul>
         </div>
         <div class="hidden lg:col-span-2 lg:block">
           <div class="w-full max-h-4/5">
             {clickedUser && <Chat
              matchId={matchId}
+             usersMessages={usersMessages}
              >
               </Chat>}
           </div>
