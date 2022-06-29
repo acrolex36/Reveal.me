@@ -1,10 +1,11 @@
 import express, { Request, response, Response } from "express";
-import mongoose from "mongoose";
+import mongoose, { ObjectId } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 import User, { GenderTypes } from "../models/postUser";
-import Message from "../models/postMessages";
+import Messages from "../models/postMessages";
+
 
 const router = express.Router();
 
@@ -197,6 +198,7 @@ export const forgetpassword = async (req: Request, res: Response) => {
       .json({ status: "error", error: "Invalid username/password" });
   }
 };
+
 
 var authSuccess: boolean;
 
@@ -528,6 +530,190 @@ export const getOneUserDetail = async (req: Request, res: Response) => {
       //   }
 
       res.status(200).json(user);
+    } catch (error) {
+      res.status(404).json({ message: error });
+    }
+    authSuccess = false;
+  }
+};
+
+
+//POST - /message/conversation/:userId1/:userId2 # create new Conversation 
+export const createConversation = async (req: Request, res: Response) => {
+  checkToken(req, res, () => {
+    authSuccess = true;
+  });
+
+  if (authSuccess) {
+  const { userId1, userId2 } = req.params;
+  
+  const members = [userId1, userId2]
+
+  const message = await new Messages({
+    members
+  });
+    try {
+      await message.save();
+
+      res.status(201).json(message);
+    } catch (error) {
+      res.status(400).json({ message: error});
+    }
+    authSuccess = false
+  }
+};
+
+//PUT - /conversation/message/ # update messages
+export const updateMessages = async (req: Request, res: Response) => {
+  checkToken(req, res, () => {
+    authSuccess = true;
+  });
+
+  if (authSuccess) {
+  const { id } = req.params
+  const { userId, message} = req.body
+  
+    try {
+      const conversation = await Messages.findById(id);
+
+      conversation.messages.push({
+
+        sender: userId,
+        message: message
+
+      })
+
+      await conversation.save()
+      res.status(200).json(conversation);
+    } catch (error) {
+      res.status(404).json({ message: error });
+    }
+  authSuccess = false;
+  }
+};
+
+//GET - /allconversation/:userId # find all messages from one particular user
+export const getAllConversationFromOneUser = async (req: Request, res: Response) => {
+  checkToken(req, res, () => {
+    authSuccess = true;
+  });
+
+  if (authSuccess) {
+    const { userId } = req.params;  
+    
+    try {
+        const allConversation = await Messages.find({members:{$all:[
+          userId,
+        ]}});
+        
+        res.status(200).json(allConversation);
+      } catch (error) {
+        res.status(404).json({ message: error });
+      }
+      authSuccess = false;
+  }
+  
+};
+
+//GET - /test/allconversation # find all messages
+export const getAllConversation = async (req: Request, res: Response) => {
+  checkToken(req, res, () => {
+    authSuccess = true;
+  });
+
+  if (authSuccess) {
+    try {
+      const allConversation = await Messages.find();
+      res.status(200).json(allConversation);
+    } catch (error) {
+      res.status(404).json({ message: error });
+    }
+    authSuccess = false;
+  }
+
+};
+
+//GET - /oneconversation/:userId1/:userId2 # find one conversation between 2 user
+export const getOneConversation = async (req: Request, res: Response) => {
+  checkToken(req, res, () => {
+    authSuccess = true;
+  });
+
+  if (authSuccess) {
+    const { userId1, userId2 } = req.params;
+    
+    try {
+      const oneConversation = await Messages.findOne({members:{$all:[
+        userId1,
+        userId2,
+      ]}});
+      res.status(200).json(oneConversation);
+    } catch (error) {
+      res.status(404).json({ message: error });
+    }
+    authSuccess = false;
+  }
+};
+
+//GET - /oneconversation/:userId1/:userId2 # find one conversation between 2 user
+export const getOneConversationById = async (req: Request, res: Response) => {
+  checkToken(req, res, () => {
+    authSuccess = true;
+  });
+
+  if (authSuccess) {
+    const { id } = req.params;
+    
+    try {
+      const oneConversationId = await Messages.findById(id);
+
+      res.status(200).json(oneConversationId);
+    } catch (error) {
+      res.status(404).json({ message: error });
+    }
+    authSuccess = false;
+  }
+};
+
+
+//GET - /oneconversation/:userId1/:userId2 # find one conversation between 2 user
+export const getTotalMessage = async (req: Request, res: Response) => {
+  checkToken(req, res, () => {
+    authSuccess = true;
+  });
+
+  if (authSuccess) {
+    const { userId1, userId2 } = req.params;
+    
+    try {
+      const oneConversation = await Messages.findOne({members:{$all:[
+        userId1,
+        userId2,
+      ]}});
+
+      // const total1 = await Messages.aggregate([{$project: {
+        
+      //   count: { $size:"$messages"}}}])
+      
+      //const total = await Messages.find().count()
+
+      const messages = oneConversation.messages
+
+      var totalMessages = []
+
+      var totalUser1 = 0
+      for(let i of messages) {
+        if (i.sender === userId1) totalUser1++
+      }
+      totalMessages.push(totalUser1)
+
+      var totalUser2 = 0
+      for(let i of messages) {
+        if (i.sender === userId2) totalUser2++
+      }
+      totalMessages.push(totalUser2)
+
+      res.status(200).json(totalMessages);
     } catch (error) {
       res.status(404).json({ message: error });
     }
