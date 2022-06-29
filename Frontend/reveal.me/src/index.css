@@ -6,5 +6,10 @@
 .inset-center {
     position: absolute;
     top: 25%;
-    left: 32%;
+    left: 35%;
   }
+
+.width-card{
+    width: 800px;
+    height: 350px;
+}

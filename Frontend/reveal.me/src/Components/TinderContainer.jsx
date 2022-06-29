@@ -7,63 +7,51 @@ import back_button from "../images/back_button.png";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 
-const db = [
-  {
-    name: "Richard Hendricks",
-    age: 19,
-    profile_picture: "https://api.lorem.space/image/album?w=400&h=400",
-    height: 177,
-    education: "Student at Hochschule Darmstadt",
-    language: ["English", "German"],
-  },
-  {
-    name: "Erlich Bachman",
-    age: 20,
-    profile_picture: "https://api.lorem.space/image/album?w=400&h=400",
-    height: 164,
-    education: "Student at TU Darmstadt",
-    language: ["English"],
-  },
-  {
-    name: "Monica Hall",
-    age: 23,
-    profile_picture: "https://api.lorem.space/image/album?w=400&h=400",
-    height: 187,
-    education: "Student at Hochschule Darmstadt",
-    language: ["Chinese", "English"],
-  },
-];
-
-const getUser = async (cookies) => {
-  const token = cookies.Token;
-  const userList = await axios.get(`http://localhost:5000/api/test/alluser/`, {
-    headers: {
-      "Content-Type": "application/json; charset=UTF-8",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  console.log(userList);
-  return userList;
-};
-
 function TinderContainer() {
-  const [currentIndex, setCurrentIndex] = useState(db.length - 1);
-  const [lastDirection, setLastDirection] = useState();
-  const [cookies, setCookie, removeCookie] = useCookies(null);
-  let potentialMatches;
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(filteredUsers.length - 1);
+  const [cookies] = useCookies(null);
+  const [userData, setUserData] = useState([]);
+
   // used for outOfFrame closure
   const currentIndexRef = useRef(currentIndex);
 
   useEffect(() => {
-    // console.log("i fire once");
+    const token = cookies.Token;
+
+    const getUserData = async () => {
+      const response = await axios.get(
+        `http://localhost:5000/api/test/singleuser/id/${cookies.UserId}`,
+        {
+          headers: {
+            "Content-Type": "application/json; charset=UTF-8",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setUserData((userData) => [...userData, response.data]);
+    };
+    const getFilteredUsers = async () => {
+      const response = await axios.get(
+        `http://localhost:5000/api/test/alluser/`,
+        {
+          headers: {
+            "Content-Type": "application/json; charset=UTF-8",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setFilteredUsers((filteredUsers) => [...filteredUsers, ...response.data]);
+    };
     if (cookies) {
-      potentialMatches = getUser(cookies);
+      getFilteredUsers(cookies);
+      getUserData();
     }
-  }, [cookies]);
+  }, []);
 
   const childRefs = useMemo(
     () =>
-      Array(db.length)
+      Array(filteredUsers.length)
         .fill(0)
         .map(() => React.createRef()),
     []
@@ -74,24 +62,47 @@ function TinderContainer() {
     currentIndexRef.current = val;
   };
 
-  const canGoBack = currentIndex < db.length - 1;
+  const canGoBack = currentIndex < filteredUsers.length - 1;
 
   const canSwipe = currentIndex >= 0;
 
   // set last direction and decrease current index
   const swiped = (direction, nameToDelete, index) => {
-    setLastDirection(direction);
     updateCurrentIndex(index - 1);
   };
 
-  const outOfFrame = (name, idx) => {
+  const outOfFrame = async (dir, name, idx, swipedId) => {
     console.log(`${name} (${idx}) left the screen!`, currentIndexRef.current);
+    const token = cookies.Token;
+    if (dir === "right") {
+      if (userData.at(0).oneSideMatch.includes(swipedId)) {
+        alert("IT'S A MATCH");
+      }
+      const response = await axios.put(
+        `http://localhost:5000/api/user/profile/id/${cookies.UserId}/${swipedId}`,
+        {
+          oneSideMatch: cookies.UserId,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json; charset=UTF-8",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        console.log(response.data);
+      } else {
+        console.log("error updating");
+      }
+    }
+
     // handle the case in which go back is pressed before card goes outOfFrame
-    currentIndexRef.current >= idx && childRefs[idx].current.restoreCard();
+    // currentIndexRef.current >= idx && childRefs[idx].current.restoreCard();
   };
 
   const swipe = async (dir) => {
-    if (canSwipe && currentIndex < db.length) {
+    if (canSwipe && currentIndex < filteredUsers.length) {
       await childRefs[currentIndex].current.swipe(dir); // Swipe the card!
     }
   };
@@ -125,58 +136,64 @@ function TinderContainer() {
 
   return (
     <div>
-      <div className="inset-center">
-        {db.map((person, index) => (
-          <TinderCard
-            ref={childRefs[index]}
-            key={person.name}
-            onSwipe={(dir) => swiped(dir, person.name, index)}
-            onCardLeftScreen={() => outOfFrame(person.name, index)}
-          >
-            <div className="absolute">
-              <ProfileCard person={person}></ProfileCard>
-            </div>
-          </TinderCard>
-        ))}
-      </div>
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 flex flex-row justify-evenly w-1/2 ">
-        <button
-          className="sm:py-24 sm:px-6 lg:max-w-5xl "
-          onClick={() => swipe("left")}
-        >
-          <div className="w-full aspect-w-1 aspect-h-1  overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
-            <img
-              className="scale-50 hover:scale-75 ease-in duration-150"
-              src={reject_button}
-              alt="reject button"
-            />
+      {filteredUsers.length > 0 && userData.length > 0 && (
+        <>
+          <div className="inset-center">
+            {filteredUsers.map((person, index) => (
+              <TinderCard
+                preventSwipe={["up", "down"]}
+                ref={childRefs[index]}
+                onSwipe={(dir) => swiped(dir, person.first_name, index)}
+                onCardLeftScreen={(dir) =>
+                  outOfFrame(dir, person.first_name, index, person._id)
+                }
+              >
+                <div className="absolute">
+                  <ProfileCard person={person}></ProfileCard>
+                </div>
+              </TinderCard>
+            ))}
           </div>
-        </button>
-        <button
-          className="sm:py-24 sm:px-6 lg:max-w-5xl "
-          onClick={() => goBack()}
-        >
-          <div className="w-full aspect-w-1 aspect-h-1  overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
-            <img
-              className="scale-50 hover:scale-75 ease-in duration-150"
-              src={back_button}
-              alt="back button"
-            />
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 flex flex-row justify-evenly w-1/2 ">
+            <button
+              className="sm:py-24 sm:px-6 lg:max-w-5xl "
+              onClick={() => swipe("left")}
+            >
+              <div className="w-full aspect-w-1 aspect-h-1  overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
+                <img
+                  className="scale-50 hover:scale-75 ease-in duration-150"
+                  src={reject_button}
+                  alt="reject button"
+                />
+              </div>
+            </button>
+            <button
+              className="sm:py-24 sm:px-6 lg:max-w-5xl "
+              onClick={() => goBack()}
+            >
+              <div className="w-full aspect-w-1 aspect-h-1  overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
+                <img
+                  className="scale-50 hover:scale-75 ease-in duration-150"
+                  src={back_button}
+                  alt="back button"
+                />
+              </div>
+            </button>
+            <button
+              className="sm:py-24 sm:px-6 lg:max-w-5xl "
+              onClick={() => swipe("right")}
+            >
+              <div className="w-full aspect-w-1 aspect-h-1 overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
+                <img
+                  className="scale-50 hover:scale-75 ease-in duration-75"
+                  src={love_button}
+                  alt="love button"
+                />
+              </div>
+            </button>
           </div>
-        </button>
-        <button
-          className="sm:py-24 sm:px-6 lg:max-w-5xl "
-          onClick={() => swipe("right")}
-        >
-          <div className="w-full aspect-w-1 aspect-h-1 overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
-            <img
-              className="scale-50 hover:scale-75 ease-in duration-75"
-              src={love_button}
-              alt="love button"
-            />
-          </div>
-        </button>
-      </div>
+        </>
+      )}
     </div>
   );
 }
