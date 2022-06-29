@@ -196,47 +196,53 @@ const ProfileFields = () => {
     // console.log(updatedChecked);
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
+      await axios
+        .put(
+          `http://localhost:5000/api/user/profile/head/${accountData.email}`,
+          {
+            first_name: accountData.first_name,
+            last_name: accountData.last_name,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json; charset=UTF-8",
+              Authorization: `Bearer ${cookies.Token}`,
+            },
+          }
+        )
+        .catch(function (res) {
+          if (res.response.status === 404) {
+            navigate("/create_profile");
+            setError("failed to update Profile, please try again");
+          }
+        });
 
       await axios
-      .put(`http://localhost:5000/api/user/profile/head/${accountData.email}`, {
-        first_name: accountData.first_name,
-        last_name: accountData.last_name
-      }, {
-        headers: {
-          "Content-Type": "application/json; charset=UTF-8",
-          Authorization: `Bearer ${cookies.Token}`,
-        },
-      })
-      .catch(function(res){
-        if(res.response.status == 404){
-          navigate ('/create_profile');
-          setError('failed to update Profile, please try again');
-        }
-      });
-
-      await axios
-      .put(`http://localhost:5000/api/user/profile/body/${accountData.email}`, accountData.userDetail, {
-        headers: {
-          "Content-Type": "application/json; charset=UTF-8",
-          Authorization: `Bearer ${cookies.Token}`,
-        },
-      })
-      .then(function(response){
-        if(response.status == 201){
-          navigate ('/');
-        }
-      })
-      .catch(function(res){
-        if(res.response.status == 404){
-          navigate ('/create_profile');
-          setError('failed to update Profile, please try again');
-        }
-      });
+        .put(
+          `http://localhost:5000/api/user/profile/body/${accountData.email}`,
+          accountData.userDetail,
+          {
+            headers: {
+              "Content-Type": "application/json; charset=UTF-8",
+              Authorization: `Bearer ${cookies.Token}`,
+            },
+          }
+        )
+        .then(function (response) {
+          if (response.status === 200) {
+            navigate("/");
+          }
+        })
+        .catch(function (res) {
+          if (res.response.status === 404) {
+            navigate("/create_profile");
+            setError("failed to update Profile, please try again");
+          }
+        });
 
       // window.location.reload()
     } catch (error) {
@@ -265,7 +271,10 @@ const ProfileFields = () => {
                 <div className="py-3 center mx-auto">
                   <div className="bg-white px-4 py-5 rounded-lg shadow-lg text-center w-fit">
                     <div className="mb-4 w-48">
-                    <img src={accountData.userDetail.profile_picture} />
+                      <img
+                        src={accountData.userDetail.profile_picture}
+                        alt="profile picture"
+                      />
                     </div>
                     <label className="cursor-pointer mt-6">
                       <span
@@ -547,7 +556,9 @@ const ProfileFields = () => {
                                       value={value}
                                       id={value}
                                       name={value}
-                                      checked={accountData.userDetail.languages.includes(value)}
+                                      checked={accountData.userDetail.languages.includes(
+                                        value
+                                      )}
                                       onChange={() =>
                                         handleOnChangeLanguage(value, Languages)
                                       }
