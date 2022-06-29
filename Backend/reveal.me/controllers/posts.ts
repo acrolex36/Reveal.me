@@ -6,7 +6,6 @@ import jwt from "jsonwebtoken";
 import User, { GenderTypes } from "../models/postUser";
 import Messages from "../models/postMessages";
 
-
 const router = express.Router();
 
 const JWT_SECRET = "asdfhasdfwqber12312sa";
@@ -54,12 +53,10 @@ export const register = async (req: Request, res: Response) => {
   }
 
   if (plainTextPassword.length < 5) {
-    return res
-      .status(409)
-      .json({
-        status: "error",
-        error: "password is too short. Should atleast 6 characters",
-      });
+    return res.status(409).json({
+      status: "error",
+      error: "password is too short. Should atleast 6 characters",
+    });
   }
 
   //no matter how long the password is, encrypt length is the same
@@ -79,16 +76,6 @@ export const register = async (req: Request, res: Response) => {
       JWT_SECRET,
       { expiresIn: "24h" }
     );
-
-    const user = await User.findOne({ email }).lean();
-    await User.updateOne(
-      {
-        _id: user._id,
-      },
-      { $set: { user_id: user._id } }
-    );
-
-    // console.log("User created successfully", response)
 
     return res.status(201).json({
       userId: response._id,
@@ -128,7 +115,12 @@ export const login = async (req: Request, res: Response) => {
           {
             _id: user._id,
           },
-          { $set: { lastLogin: Date.now(), $set: {userDetail: { is_online: true }} } }
+          {
+            $set: {
+              lastLogin: Date.now(),
+              $set: { userDetail: { is_online: true } },
+            },
+          }
         );
 
         var token = jwt.sign({ id: user._id, email: user.email }, JWT_SECRET, {
@@ -168,12 +160,10 @@ export const forgetpassword = async (req: Request, res: Response) => {
     }
 
     if (newPlainPassword.length < 5) {
-      return res
-        .status(409)
-        .json({
-          status: "error",
-          error: "password is too short. Should atleast 6 characters",
-        });
+      return res.status(409).json({
+        status: "error",
+        error: "password is too short. Should atleast 6 characters",
+      });
     }
 
     if (newPlainPassword !== confirmNewPlainPassword) {
@@ -198,7 +188,6 @@ export const forgetpassword = async (req: Request, res: Response) => {
       .json({ status: "error", error: "Invalid username/password" });
   }
 };
-
 
 var authSuccess: boolean;
 
@@ -361,8 +350,8 @@ export const updateMatchedUserById = async (req: Request, res: Response) => {
     const { id, matchedUserId } = req.params;
 
     try {
-      const user = await User.findById( id );
-      const matchedUser = await User.findById( matchedUserId );
+      const user = await User.findById(id);
+      const matchedUser = await User.findById(matchedUserId);
 
       const updateMatch = {
         $push: { oneSideMatch: user._id },
@@ -471,37 +460,39 @@ export const getAllFilteredUserById = async (req: Request, res: Response) => {
     authSuccess = true;
   });
 
-  if(authSuccess){
+  if (authSuccess) {
     const { id } = req.params;
 
     try {
       const user = await User.findById(id);
 
-      const gender = user.userDetail.gender
-      const gender_interest = user.userDetail.gender_interest
-      const interest = user.userDetail.hobbies
+      const gender = user.userDetail.gender;
+      const gender_interest = user.userDetail.gender_interest;
+      const interest = user.userDetail.hobbies;
 
-      const other_users = await User.find({_id:{ $ne: id }})
+      const other_users = await User.find({ _id: { $ne: id } });
 
-      var gendered_users = []
+      var gendered_users = [];
 
       for (var interested_gender of gender_interest) {
         for (var temp_user of other_users) {
-          if(temp_user.userDetail.gender == interested_gender
-            && temp_user.userDetail.gender_interest.includes(gender)) {
-            gendered_users.push(temp_user)
+          if (
+            temp_user.userDetail.gender == interested_gender &&
+            temp_user.userDetail.gender_interest.includes(gender)
+          ) {
+            gendered_users.push(temp_user);
           }
         }
       }
 
-      var returnedUsers = []
+      var returnedUsers = [];
 
-      for(let filter of gendered_users){
-        for(let user_interest of interest){
-            if(filter.userDetail.hobbies.includes(user_interest)){
-              returnedUsers.push(filter)
-              break
-            }
+      for (let filter of gendered_users) {
+        for (let user_interest of interest) {
+          if (filter.userDetail.hobbies.includes(user_interest)) {
+            returnedUsers.push(filter);
+            break;
+          }
         }
       }
 
@@ -537,29 +528,28 @@ export const getOneUserDetail = async (req: Request, res: Response) => {
   }
 };
 
-
-//POST - /message/conversation/:userId1/:userId2 # create new Conversation 
+//POST - /message/conversation/:userId1/:userId2 # create new Conversation
 export const createConversation = async (req: Request, res: Response) => {
   checkToken(req, res, () => {
     authSuccess = true;
   });
 
   if (authSuccess) {
-  const { userId1, userId2 } = req.params;
-  
-  const members = [userId1, userId2]
+    const { userId1, userId2 } = req.params;
 
-  const message = await new Messages({
-    members
-  });
+    const members = [userId1, userId2];
+
+    const message = await new Messages({
+      members,
+    });
     try {
       await message.save();
 
       res.status(201).json(message);
     } catch (error) {
-      res.status(400).json({ message: error});
+      res.status(400).json({ message: error });
     }
-    authSuccess = false
+    authSuccess = false;
   }
 };
 
@@ -570,49 +560,49 @@ export const updateMessages = async (req: Request, res: Response) => {
   });
 
   if (authSuccess) {
-  const { id } = req.params
-  const { userId, message} = req.body
-  
+    const { id } = req.params;
+    const { userId, message } = req.body;
+
     try {
       const conversation = await Messages.findById(id);
 
       conversation.messages.push({
-
         sender: userId,
-        message: message
+        message: message,
+      });
 
-      })
-
-      await conversation.save()
+      await conversation.save();
       res.status(200).json(conversation);
     } catch (error) {
       res.status(404).json({ message: error });
     }
-  authSuccess = false;
+    authSuccess = false;
   }
 };
 
 //GET - /allconversation/:userId # find all messages from one particular user
-export const getAllConversationFromOneUser = async (req: Request, res: Response) => {
+export const getAllConversationFromOneUser = async (
+  req: Request,
+  res: Response
+) => {
   checkToken(req, res, () => {
     authSuccess = true;
   });
 
   if (authSuccess) {
-    const { userId } = req.params;  
-    
+    const { userId } = req.params;
+
     try {
-        const allConversation = await Messages.find({members:{$all:[
-          userId,
-        ]}});
-        
-        res.status(200).json(allConversation);
-      } catch (error) {
-        res.status(404).json({ message: error });
-      }
-      authSuccess = false;
+      const allConversation = await Messages.find({
+        members: { $all: [userId] },
+      });
+
+      res.status(200).json(allConversation);
+    } catch (error) {
+      res.status(404).json({ message: error });
+    }
+    authSuccess = false;
   }
-  
 };
 
 //GET - /test/allconversation # find all messages
@@ -630,7 +620,6 @@ export const getAllConversation = async (req: Request, res: Response) => {
     }
     authSuccess = false;
   }
-
 };
 
 //GET - /oneconversation/:userId1/:userId2 # find one conversation between 2 user
@@ -641,12 +630,11 @@ export const getOneConversation = async (req: Request, res: Response) => {
 
   if (authSuccess) {
     const { userId1, userId2 } = req.params;
-    
+
     try {
-      const oneConversation = await Messages.findOne({members:{$all:[
-        userId1,
-        userId2,
-      ]}});
+      const oneConversation = await Messages.findOne({
+        members: { $all: [userId1, userId2] },
+      });
       res.status(200).json(oneConversation);
     } catch (error) {
       res.status(404).json({ message: error });
@@ -663,7 +651,7 @@ export const getOneConversationById = async (req: Request, res: Response) => {
 
   if (authSuccess) {
     const { id } = req.params;
-    
+
     try {
       const oneConversationId = await Messages.findById(id);
 
@@ -675,7 +663,6 @@ export const getOneConversationById = async (req: Request, res: Response) => {
   }
 };
 
-
 //GET - /oneconversation/:userId1/:userId2 # find one conversation between 2 user
 export const getTotalMessage = async (req: Request, res: Response) => {
   checkToken(req, res, () => {
@@ -684,34 +671,33 @@ export const getTotalMessage = async (req: Request, res: Response) => {
 
   if (authSuccess) {
     const { userId1, userId2 } = req.params;
-    
+
     try {
-      const oneConversation = await Messages.findOne({members:{$all:[
-        userId1,
-        userId2,
-      ]}});
+      const oneConversation = await Messages.findOne({
+        members: { $all: [userId1, userId2] },
+      });
 
       // const total1 = await Messages.aggregate([{$project: {
-        
+
       //   count: { $size:"$messages"}}}])
-      
+
       //const total = await Messages.find().count()
 
-      const messages = oneConversation.messages
+      const messages = oneConversation.messages;
 
-      var totalMessages = []
+      var totalMessages = [];
 
-      var totalUser1 = 0
-      for(let i of messages) {
-        if (i.sender === userId1) totalUser1++
+      var totalUser1 = 0;
+      for (let i of messages) {
+        if (i.sender === userId1) totalUser1++;
       }
-      totalMessages.push(totalUser1)
+      totalMessages.push(totalUser1);
 
-      var totalUser2 = 0
-      for(let i of messages) {
-        if (i.sender === userId2) totalUser2++
+      var totalUser2 = 0;
+      for (let i of messages) {
+        if (i.sender === userId2) totalUser2++;
       }
-      totalMessages.push(totalUser2)
+      totalMessages.push(totalUser2);
 
       res.status(200).json(totalMessages);
     } catch (error) {
@@ -720,72 +706,5 @@ export const getTotalMessage = async (req: Request, res: Response) => {
     authSuccess = false;
   }
 };
-
-// //POST - /recipe # insert a new Recipe
-// export const createNewRecipe = async (req: Request, res: Response) => {
-//   const { title, description, selectedFile, instruction, ingredient } =
-//     req.body;
-
-//   const newPostMessage = new PostMessage({
-//     title,
-//     description,
-//     selectedFile,
-//     instruction,
-//     ingredient,
-//   });
-
-//   try {
-//     await newPostMessage.save();
-
-//     res.status(201).json(newPostMessage);
-//   } catch (error) {
-//     res.status(409).json({ message: error });
-//   }
-// };
-
-// //PUT - /recipe/:{id} # update exist recipe with {id nr}
-// export const updateRecipe = async (req: Request, res: Response) => {
-//   const { id } = req.params;
-//   const { title, description, ingredient, instruction } = req.body;
-
-//   if (!mongoose.Types.ObjectId.isValid(id))
-//     return res.status(404).send(`No post with id: ${id}`);
-
-//   const updatedPost = { title, description, ingredient, instruction, _id: id };
-
-//   await PostMessage.findByIdAndUpdate(id, updatedPost, { new: true });
-
-//   res.json(updatedPost);
-// };
-
-// //DELETE - /recipe/:{id} # delete recipe with {id nr}
-// export const deleteRecipe = async (req: Request, res: Response) => {
-//   const { id } = req.params;
-
-//   if (!mongoose.Types.ObjectId.isValid(id))
-//     return res.status(404).send(`No post with id: ${id}`);
-
-//   await PostMessage.findByIdAndRemove(id);
-
-//   res.json({ message: "Post deleted successfully." });
-// };
-
-// //PUT - /recipe/:{id}/likeRecipe # update exist recipe like value with {id nr}
-// export const likeRecipe = async (req: Request, res: Response) => {
-//   const { id } = req.params;
-
-//   if (!mongoose.Types.ObjectId.isValid(id))
-//     return res.status(404).send(`No post with id: ${id}`);
-
-//   const post = await PostMessage.findById(id);
-
-//   const updatedPost = await PostMessage.findByIdAndUpdate(
-//     id,
-//     { likeCount: post.likeCount + 1 },
-//     { new: true }
-//   );
-
-//   res.json(updatedPost);
-// };
 
 export default router;

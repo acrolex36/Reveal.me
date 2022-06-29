@@ -3,11 +3,9 @@ import {
   register,
   login,
   forgetpassword,
-
   updateOneUser,
   updateOneUserProfile,
   updateMatchedUser,
-  
   getAllUser,
   getOneUserDetailwithId,
   getOneUserDetail,
@@ -20,13 +18,12 @@ import {
   getOneConversation,
   getAllConversationFromOneUser,
   getTotalMessage,
-  getOneConversationById
-
+  getOneConversationById,
 } from "../controllers/posts";
 
 const router = express.Router();
 
-//Authentification 
+//Authentification
 router.post("/auth/register", register);
 router.post("/auth/login", login);
 router.post("/auth/login/forgetpassword", forgetpassword);
@@ -35,7 +32,6 @@ router.put("/user/profile/head/:email", updateOneUser);
 router.put("/user/profile/body/:email", updateOneUserProfile);
 router.put("/user/profile/:email/:matchedUserEmail", updateMatchedUser); //not use
 router.put("/user/profile/id/:id/:matchedUserId", updateMatchedUserById);
-
 
 router.get("/test/alluser", getAllUser);
 router.get("/test/singleuser/id/:id", getOneUserDetailwithId);
@@ -53,8 +49,5 @@ router.get("/allconversation/:userId", getAllConversationFromOneUser);
 router.get("/oneconversation/:userId1/:userId2", getOneConversation);
 router.get("/oneconversationid/:id", getOneConversationById);
 router.get("/oneconversation/totalmessage/:userId1/:userId2", getTotalMessage);
-
-
-
 
 export default router;
