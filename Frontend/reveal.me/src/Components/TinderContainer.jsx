@@ -57,7 +57,7 @@ function TinderContainer() {
                 .fill(0)
                 .map(() => React.createRef()),
         []
-    );
+);
 
     const updateCurrentIndex = (val) => {
         setCurrentIndex(val);
