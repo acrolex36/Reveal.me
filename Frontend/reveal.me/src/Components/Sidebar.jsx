@@ -1,50 +1,4 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { Cookies, useCookies } from "react-cookie";
-
 const Sidebar = () => {
-  const [cookies, setCookie, removeCookie] = useCookies(null);
-  const [accountData, setAccountData] = useState({
-    email: "",
-    first_name: "",
-    last_name: "",
-    userDetail: {
-      profile_picture: "",
-      occupation: "",
-    },
-  });
-
-  const getAccount = async (cookies) => {
-    try {
-      // const email = cookies.Email;
-      const id = cookies.UserId;
-      const token = cookies.Token;
-      const response = await axios.get(
-        `http://localhost:5000/api/test/singleuser/id/${id}`,
-        {
-          headers: {
-            "Content-Type": "application/json; charset=UTF-8",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log(response);
-      setAccountData(response.data);
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
-
-  useEffect(() => {
-    // console.log("i fire once");
-    if (cookies) {
-      getAccount(cookies);
-    }
-  }, [cookies]);
-
-
   return (
     <aside className="w-64 bg-pink-0 ml-3 rounded-2xl">
       <div className="hidden sm:block p-4 dark:bg-gray-800">
@@ -56,32 +10,15 @@ const Sidebar = () => {
                 className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
               >
                 <img
-                  className="w-10 h-10 rounded-full"
-                  src={accountData.userDetail.profile_picture}
-                  // src="/docs/images/people/profile-picture-5.jpg"
-                  // alt=""
+                    className="w-10 h-10 rounded-full"
+                  src=""
+                  alt=""
                 />
               </a>
               <div className=" font-medium dark:text-white">
-                <div>
-                  {/* Erik Erikson */}
-                  <input
-                          type="text"
-                          name="first-name"
-                          id="first-name"
-                          
-                          value={`${accountData.first_name} ${accountData.last_name}`}
-                        />
-                  </div>
+                <div>Erik Erikson</div>
                 <div className="text-sm text-gray-500 dark:text-gray-400">
-                  {/* Enterpreneur */}
-                  <input
-                          type="text"
-                          name="first-name"
-                          id="first-name"
-                          
-                          value={`${accountData.occupation}`}
-                        />
+                  Enterpreneur
                 </div>
               </div>
             </div>
