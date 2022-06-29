@@ -3,27 +3,22 @@ import Chat from "./Chat";
 import axios from "axios";
 import {Cookies, useCookies} from "react-cookie";
 const ChatContainer = () => {
+  const [ clickedUser, setClickedUser ] = useState(null)
+  const [matchId, setIdMatch] = useState()
     const [cookies, setCookie, removeCookie] = useCookies(null);
     const[allConversation, setConversation] = useState([]);
-    const [allMessages, setAllMessages] = useState({
-    time: "",
-    members: [],
-    messages: {
-      gender: "",
-      dob_date: "",
-      dob_month: "",
-      dob_year: "",
-      occupation: "",
-      gender_interest: [],
-      height: "",
-      interest: [],
-      language: [],
-      nationality: "",
-      description: "",
-    },
-  });
-
-  const getUserMessages = async () => {
+    const [senderDetail, setSenderDetail] = useState([]);
+    const [listOfContactDetails, setListOfContactDetail] = useState([]);
+    const list = []
+    const id = cookies.UserId;
+    const token = cookies.Token;
+    
+    const setChat = (_id) =>{
+      setClickedUser(true);
+      setIdMatch(_id)
+    }
+    
+    const getUserMessages = async () => {
     try {
       const id = cookies.UserId;
       const token = cookies.Token;
@@ -34,15 +29,62 @@ const ChatContainer = () => {
             Authorization: `Bearer ${token}`,
         },
       });
-      setConversation((allConversation)=>[...allConversation, ...response.data]);
-      console.log(allConversation)
+      const data = await response.data;
+      // console.log(response.data)
+      setConversation((allConversation) => [...allConversation, ...response.data]);
+      // console.log(allConversation)
     } catch (error) {
       console.log(error)
     }
   }
 
+  const getInfoUser = async ()=>{
+    try {
+      const id = cookies.UserId;
+      const token = cookies.Token;
+      console.log(allConversation)
+      // console.log(allConversation.length)
+      let listSenderId = [];
+      for( let userCounter = 0;userCounter<allConversation.length; userCounter++){
+        // for(let j = 0; j<allConversation.at(i).members.length; j++){
+          if(allConversation.at(userCounter).members[0] != id){
+            listSenderId.push(allConversation.at(userCounter).members.at(0));
+            // break;
+          }
+          else {
+            listSenderId.push(allConversation.at(userCounter).members.at(1));
+          }
+          console.log(userCounter)
+
+      }
+      for(let i = 0; i<listSenderId.length; i++){
+        const response = await axios.get(
+          `http://localhost:5000/api/test/singleuser/id/${listSenderId.at(i)}`,
+          {
+            headers: {
+              "Content-Type": "application/json; charset=UTF-8",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        list.push(response.data);
+        // console.log(listOfContactDetail);
+      }
+      // console.log(list);
+      setListOfContactDetail((listOfContactDetails) => [...listOfContactDetails, ...list]);
+      console.log(listOfContactDetails);
+      
+    } catch (error) {
+      
+    }
+  }
+
   useEffect(()=>{
-    getUserMessages();
+    // if(cookies){
+    setConversation([])
+    getUserMessages()
+    getInfoUser()
+    // }
   }, [])
 
   return (
@@ -64,49 +106,31 @@ const ChatContainer = () => {
 
           <ul class="overflow-auto h-[32rem]">
             <h2 class="my-2 mb-2 ml-2 text-lg text-gray-600">Messages</h2>
-            <li>
-              <a
-                class="flex items-center px-3 py-2 text-sm transition duration-150 ease-in-out border-b border-gray-300 cursor-pointer hover:bg-gray-100 focus:outline-none">
-                <img class="object-cover w-10 h-10 rounded-full"
-                  src="https://cdn.pixabay.com/photo/2018/09/12/12/14/man-3672010__340.jpg" alt="username" />
-                <div class="w-full pb-2">
-                  <div class="flex justify-between">
-                    <span class="block ml-2 font-semibold text-gray-600">Jhon Don</span>
-                    <span class="block ml-2 text-sm text-gray-600">25 minutes</span>
+            {listOfContactDetails.length > 0 && allConversation.length && <li>
+              {listOfContactDetails.map(({_id, userDetail, first_name, last_name}) =>(
+              
+                <a key={_id} onClick={()=>setChat(_id)}
+                  class="flex items-center px-3 py-2 text-sm transition duration-150 ease-in-out border-b border-gray-300 cursor-pointer hover:bg-gray-100 focus:outline-none">
+                      <img class="object-cover w-10 h-10 rounded-full"
+                    src={userDetail.profile_picture} alt="userpic" />
+                  
+                  <div class="w-full pb-2">
+                     <div class="flex justify-between">
+                      <span class="block ml-2 font-semibold text-gray-600">{`${first_name} ${last_name}`}</span>
+                    </div>
                   </div>
-                  <span class="block ml-2 text-sm text-gray-600">bye</span>
-                </div>
-              </a>
-              <a
-                class="flex items-center px-3 py-2 text-sm transition duration-150 ease-in-out bg-gray-100 border-b border-gray-300 cursor-pointer focus:outline-none">
-                <img class="object-cover w-10 h-10 rounded-full"
-                  src="https://cdn.pixabay.com/photo/2016/06/15/15/25/loudspeaker-1459128__340.png" alt="username" />
-                <div class="w-full pb-2">
-                  <div class="flex justify-between">
-                    <span class="block ml-2 font-semibold text-gray-600">Same</span>
-                    <span class="block ml-2 text-sm text-gray-600">50 minutes</span>
-                  </div>
-                  <span class="block ml-2 text-sm text-gray-600">Good night</span>
-                </div>
-              </a>
-              <a
-                class="flex items-center px-3 py-2 text-sm transition duration-150 ease-in-out border-b border-gray-300 cursor-pointer hover:bg-gray-100 focus:outline-none">
-                <img class="object-cover w-10 h-10 rounded-full"
-                  src="https://cdn.pixabay.com/photo/2018/01/15/07/51/woman-3083383__340.jpg" alt="username" />
-                <div class="w-full pb-2">
-                  <div class="flex justify-between">
-                    <span class="block ml-2 font-semibold text-gray-600">Emma</span>
-                    <span class="block ml-2 text-sm text-gray-600">6 hour</span>
-                  </div>
-                  <span class="block ml-2 text-sm text-gray-600">Good Morning</span>
-                </div>
-              </a>
-            </li>
+                </a>
+              ))}
+              
+            </li>}
           </ul>
         </div>
         <div class="hidden lg:col-span-2 lg:block">
           <div class="w-full max-h-4/5">
-            <Chat></Chat>
+            {clickedUser && <Chat
+             matchId={matchId}
+             >
+              </Chat>}
           </div>
         </div>
           {/* <div class="hidden lg:col-span-1 lg:block w-full">

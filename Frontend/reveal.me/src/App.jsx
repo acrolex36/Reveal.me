@@ -18,6 +18,7 @@ const App = () => {
         <Route path="/register" element={<RegisterPage />}></Route>
         <Route path="/create_profile" element={<CreateProfilePage />}></Route>
         <Route path="/chat" element={<ChatPage />}></Route>
+        <Route path="/chat/user/:_id" element={<ChatPage />}></Route>
       </Routes>
       <div className="App">
         {/* <h1 className=" font-bold underline">Hello world!</h1> */}
