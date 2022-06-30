@@ -2,15 +2,23 @@ import React, {useState, useEffect} from 'react'
 import {Cookies, useCookies} from "react-cookie";
 import { useParams } from 'react-router-dom';
 import axios from "axios";
-const Chat = ({matchId, usersMessages}) => {
+const Chat = (props) => {
 
+   const {
+      matchId,
+   } = props
    const [cookies, setCookie, removeCookie] = useCookies(null);
    const token = cookies.Token;
    const { _id } = useParams();
    const id = cookies.UserId;
    const [accountData, setAccountData] = useState([])
-
-   const getAccount = async () => {
+   const [userData, setUserData] = useState([])
+   const [usersMessages2, setUsersMessages] = useState(null)
+   const [messages, setMessages] = useState()
+   const [mId, setMId] = useState("")
+   let userPic
+  let matchPic
+   const getMatchAccount = async () => {
     try {
       const response = await axios.get(
         `http://localhost:5000/api/test/singleuser/id/${matchId}`,
@@ -21,15 +29,31 @@ const Chat = ({matchId, usersMessages}) => {
           },
         }
       );
-      // console.log(response.data)
-      setAccountData(response.data);
+      const data = response.data;
+      setAccountData(data);
       console.log(accountData)
-      console.log(usersMessages)
-      // console.log(accountData.first_name)
+      matchPic = accountData.userDetail.profile_picture
+
     } catch (err) {
       console.error(err.message);
     }
   };
+
+  const getUserAccount = async () => {
+      const response2 = await axios.get(
+         `http://localhost:5000/api/test/singleuser/id/${id}`,
+        {
+          headers: {
+            "Content-Type": "application/json; charset=UTF-8",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      const data2 = response2.data;
+      setUserData(data2);
+      console.log(userData)
+      userPic = userData.userDetail.profile_picture
+  }
 
   const getUserMessages = async ()=> {
    try {
@@ -42,37 +66,29 @@ const Chat = ({matchId, usersMessages}) => {
           },
          }
       );
-      console.log(response.data)
-      setUsersMessages(response.data)
-      console.log(usersMessages.messages)
+      const data = response.data
+      console.log(data)
+      setUsersMessages(data)
+      console.log(usersMessages2.messages)
+      const newMessage = usersMessages2.messages
+      setMessages(newMessage)
+      console.log(messages)
    } catch (error) {
       
    }
   }
 
-//   const getClickedUsersMessages = async () => {
-//         try {
-//             const response = await axios.get(`http://localhost:5000/api/oneconversation/${matchId}/${id}`, {  
-//             headers: {
-//             "Content-Type": "application/json; charset=UTF-8",
-//             Authorization: `Bearer ${token}`,
-//           },
-//             })
-//             console.log(response.data)
-//         } catch (error) {
-//             console.log(error)
-//         }
-//     }
-
    useEffect(()=>{
-    getAccount()
-  }, [usersMessages])
+    getMatchAccount()
+    getUserAccount()
+    getUserMessages()
+  }, [props, messages])
 
    const [textArea, setTextArea] = useState()
   return (
 
     <div class="flex-1 p:2 sm:p-4 justify-between flex flex-col h-4/5">
-   <div class="flex sm:items-center justify-between pb-2 border-b-2 border-gray-200">
+   {accountData && accountData.userDetail && <div class="flex sm:items-center justify-between pb-2 border-b-2 border-gray-200">
       <div class="relative flex items-center space-x-4">
          <div class="relative">
             <span class="absolute text-green-500 right-0 bottom-0">
@@ -80,28 +96,31 @@ const Chat = ({matchId, usersMessages}) => {
                   <circle cx="8" cy="8" r="8" fill="currentColor"></circle>
                </svg>
             </span>
-         <img src="https://images.unsplash.com/photo-1549078642-b2ba4bda0cdb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144" alt="" class="w-10 sm:w-10 h-10 sm:h-10 rounded-full"/>
+         <img src={accountData.userDetail.profile_picture} alt="" class="w-10 sm:w-10 h-10 sm:h-10 rounded-full"/>
          </div>
          <div class="flex flex-col leading-tight">
             <div class="text-lg mt-1 flex items-center">
                <span class="text-gray-700 mr-3">{`${accountData.first_name} ${accountData.last_name}`}</span>
             </div>
-            {/* <span class="text-md text-gray-600">{`${accountData.userDetail.occupation}`}</span> */}
+            <span class="text-md text-gray-600">{`${accountData.userDetail.occupation}`}</span>
          </div>
       </div>
-   </div>
+   </div>}
    <div id="messages" class="flex flex-col space-y-3 p-4 overflow-y-auto scrollbar-thumb-blue scrollbar-w-2 scrolling-touch h-[648px] max-h-[1200px]">
-      {/* {usersMessages.messages.map(({message, sender, timestamp}) =>{
-         <div key={timestamp}class="chat-message">
-         <div >
-            <div >
-               <div><span >{sender}</span>
-               </div>
+      {messages && messages.map((msg) =>{
+         
+         return <div key={msg.timestamp}class="chat-message">
+            
+               <div class={`flex items-end ${msg.sender === id ? ' ' : 'justify-end'}` }>
+            <div class={`flex flex-col space-y-2 text-xs max-w-xs mx-2 ${msg.sender === id ? 'order-2 item-start' : 'order-1 item-end'}`}>
+               <div><span class={`px-4 py-2 rounded-lg inline-block 
+               ${msg.sender === id ? 'rounded-bl-none bg-gray-300 text-gray-600' : 'rounded-br-none bg-pink-100 text-white'}`}>{msg.message}</span>
             </div>
-            <img src="https://images.unsplash.com/photo-1549078642-b2ba4bda0cdb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144" alt="My profile" class="w-6 h-6 rounded-full order-1"/>
+            </div>
+            <img src={`${msg.sender === id}` ? `${userData.userDetail.profile_picture}` : `${matchPic}`} alt="My profile" class={`w-6 h-6 rounded-full ${msg.sender === id ? "order-1" : "order-2"}`}/>
          </div>
       </div>
-      })} */}
+      })}
    </div>
    <div class="border-t-2 border-gray-200 px-4 pt-4 mb-2 sm:mb-0">
       <div class="relative flex">

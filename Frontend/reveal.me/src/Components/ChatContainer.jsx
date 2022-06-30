@@ -2,63 +2,65 @@ import React, {useEffect, useState} from 'react';
 import Chat from "./Chat";
 import axios from "axios";
 import {Cookies, useCookies} from "react-cookie";
+import useFetch from "./useFetch"
+// const {data: conversations, error, isPending} = useFetch(`http://localhost:5000/api/allconversation/${id}`, token)
+// import useFetch from "./useFetch"
 const ChatContainer = () => {
   const [ clickedUser, setClickedUser ] = useState(null)
   const [matchId, setIdMatch] = useState()
-    const [cookies, setCookie, removeCookie] = useCookies(null);
+
     const[allConversation, setConversation] = useState([]);
     const [senderDetail, setSenderDetail] = useState([]);
     const [listOfContactDetails, setListOfContactDetail] = useState([]);
-    const [usersMessages, setUsersMessages] = useState(null)
+    // const [usersMessages, setUsersMessages] = useState(null)
     // const list = []
-    const id = cookies.UserId;
-    const token = cookies.Token;
+const [cookies, setCookie, removeCookie] = useCookies(null);
+const id = cookies.UserId;
+const token = cookies.Token;
+// const {data: conversations, error, isPending} = useFetch(`http://localhost:5000/api/allconversation/${id}`, token)
     
     const setChat = (_id) =>{
       setClickedUser(true);
       setIdMatch(_id)
-      getUserMessages(_id)
     }
     
     const getUserConversation = async () => {
     try {
-      const id = cookies.UserId;
-      const token = cookies.Token;
-      const response = await axios
-      .get(`http://localhost:5000/api/allconversation/${id}`,{
+      
+      const response = await fetch(`http://localhost:5000/api/allconversation/${id}`,{
         headers:{
           "Content-Type": "application/json; charset=UTF-8",
             Authorization: `Bearer ${token}`,
         },
       });
-      // const data = await response.data;
+      const data = await response.json();
       // console.log(response.data)
       // setConversation((allConversation) => [...allConversation, ...response.data]);
-      setConversation(response.data)
-      // console.log(allConversation)
+      setConversation(data)
+      console.log(allConversation)
     } catch (error) {
       console.log(error)
     }
   }
 
-    const getUserMessages = async (_id)=> {
-   try {
-      const response = await axios.get(
-         `http://localhost:5000/api/oneconversation/${id}/${_id}`,
-         {
-            headers: {
-            "Content-Type": "application/json; charset=UTF-8",
-            Authorization: `Bearer ${token}`,
-          },
-         }
-      );
-      console.log(response.data)
-      setUsersMessages(response.data)
-      console.log(usersMessages.messages)
-   } catch (error) {
+  //   const getUserMessages = async (_id)=> {
+  //  try {
+  //     const response = await axios.get(
+  //        `http://localhost:5000/api/oneconversation/${id}/${_id}`,
+  //        {
+  //           headers: {
+  //           "Content-Type": "application/json; charset=UTF-8",
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //        }
+  //     );
+  //     console.log(response.data)
+  //     setUsersMessages(response.data)
+  //     console.log(usersMessages)
+  //  } catch (error) {
       
-   }
-  }
+  //  }
+  // }
 
   const getInfoUser = async ()=>{
     try {
@@ -105,12 +107,12 @@ const ChatContainer = () => {
   }
 
   useEffect(()=>{
-    // if(cookies){
-      setConversation([])
+    if(cookies){
+      // setConversation([])
     getUserConversation()
     getInfoUser()
-    // }
-  }, [])
+    }
+  }, [cookies])
 
   return (
         <div class="w-full mx-auto">
@@ -132,7 +134,7 @@ const ChatContainer = () => {
           <ul class="overflow-auto h-[32rem]">
             <h2 class="my-2 mb-2 ml-2 text-lg text-gray-600">Messages</h2>
              <li>
-              {listOfContactDetails.map(({_id, userDetail, first_name, last_name}) =>(
+              {listOfContactDetails && listOfContactDetails.map(({_id, userDetail, first_name, last_name}) =>(
               
                 <a key={_id} onClick={()=>setChat(_id)}
                   class="flex items-center px-3 py-2 text-sm transition duration-150 ease-in-out border-b border-gray-300 cursor-pointer hover:bg-gray-100 focus:outline-none">
@@ -154,7 +156,6 @@ const ChatContainer = () => {
           <div class="w-full max-h-4/5">
             {clickedUser && <Chat
              matchId={matchId}
-             usersMessages={usersMessages}
              >
               </Chat>}
           </div>
