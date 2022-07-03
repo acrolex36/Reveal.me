@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import Chat from "./Chat";
 import axios from "axios";
 import {Cookies, useCookies} from "react-cookie";
-import useFetch from "./useFetch"
 import ChatProfile from './ChatProfile';
 const ChatContainer = () => {
   const [ clickedUser, setClickedUser ] = useState(null)
