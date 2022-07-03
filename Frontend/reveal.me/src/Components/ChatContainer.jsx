@@ -100,12 +100,12 @@ const ChatContainer = () => {
 
   useEffect(()=>{
     if(cookies){
-      setInterval(()=>{
+      // setInterval(()=>{
         getUserConversation()
         getInfoUser()
-      }, 3000);
+      // }, 3000);
     }
-  }, [loading, matchId, accountData, loadingMatch])
+  }, [loading, matchId, accountData, clickedUser, loadingMatch])
 
   return (
         <div className="w-full mx-auto">
@@ -147,7 +147,7 @@ const ChatContainer = () => {
         </div>
         <div className="hidden lg:col-span-2 lg:block">
           <div className="w-full max-h-4/5">
-            {clickedUser && <Chat
+            {clickedUser && matchId && <Chat
              matchId={matchId}
              >
               </Chat>}

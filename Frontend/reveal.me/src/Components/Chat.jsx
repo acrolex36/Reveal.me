@@ -15,6 +15,7 @@ const Chat = (props) => {
    const [messages, setMessages] = useState()
    const [loadingMatch, setLoadingMatch] = useState(false)
    const [loadingUser, setLoadingUser] = useState(false)
+   const [loading, setLoading] = useState(false)
    const [textArea, setTextArea] = useState('')
    const [sent, setSent] = useState(false)
 
@@ -108,7 +109,11 @@ const Chat = (props) => {
     getMatchAccount()
     getUserAccount()
     getUserMessages()
-  }, [matchId, messages, loadingMatch, loadingUser, sent])
+    if((accountData.length>0 && accountData.userDetail.profile_picture) && (userData.length>0 && userData.userDetail.profile_picture) && (messages))
+      setLoading(false)
+   else
+      setLoading(true)
+  }, [props, loading, sent])
 
    
   return (
