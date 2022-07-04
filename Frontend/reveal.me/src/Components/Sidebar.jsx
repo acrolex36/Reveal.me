@@ -44,7 +44,7 @@ const Sidebar = () => {
     }, [cookies]);
 
     return (
-        <aside className="w-64 bg-pink-0 ml-3 rounded-2xl">
+        <aside className="w-64 bg-pink-0 ml-3 rounded-2xl h-full ">
             <div className="flex items-center p-4 dark:bg-gray-800">
                 <ul className="space-y-2">
                     <li className="mt-7 mb-3">

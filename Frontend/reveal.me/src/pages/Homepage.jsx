@@ -7,10 +7,8 @@ const HomePage = () => {
     <>
       <div className="flex flex-col h-screen bg-pink-50 ">
         <Header></Header>
-        <div className="">
-          <aside className="hidden sm:block">
+        <div className="flex flex-1">
             <Sidebar></Sidebar>
-          </aside>
           <main>
             <TinderContainer></TinderContainer>
           </main>

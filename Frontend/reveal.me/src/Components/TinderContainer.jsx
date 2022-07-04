@@ -7,20 +7,21 @@ import back_button from "../images/back_button.png";
 import axios from "axios";
 import {useCookies} from "react-cookie";
 
+
 function TinderContainer() {
     const [filteredUsers, setFilteredUsers] = useState([]);
-    const [currentIndex, setCurrentIndex] = useState(filteredUsers.length - 1);
+    const [currentIndex, setCurrentIndex] = useState(0);
     const [cookies] = useCookies(null);
     const [userData, setUserData] = useState([]);
     const token = cookies.Token;
     const myUserId = cookies.UserId;
+
 
     // used for outOfFrame closure
     const currentIndexRef = useRef(currentIndex);
 
     // Fetch data
     useEffect(() => {
-
         const getUserData = async () => {
             const response = await axios.get(
                 `http://localhost:5000/api/test/singleuser/id/${myUserId}`,
@@ -51,13 +52,15 @@ function TinderContainer() {
         }
     }, []);
 
+    useEffect(() => setCurrentIndex(filteredUsers?.length - 1), [filteredUsers])
+
     const childRefs = useMemo(
         () =>
             Array(filteredUsers.length)
                 .fill(0)
                 .map(() => React.createRef()),
-        []
-);
+        [filteredUsers]
+    );
 
     const updateCurrentIndex = (val) => {
         setCurrentIndex(val);
@@ -72,6 +75,7 @@ function TinderContainer() {
     const swiped = (direction, nameToDelete, index) => {
         updateCurrentIndex(index - 1);
     };
+
 
     const outOfFrame = async (dir, name, idx, swipedId) => {
         console.log(`${name} (${idx}) left the screen!`, currentIndexRef.current);
@@ -136,10 +140,10 @@ function TinderContainer() {
     useEffect(() => {
         const handleKey = (e) => {
             if (e.keyCode === 37) {
-                console.log("back");
+                console.log("left");
                 swipe("left");
             } else if (e.keyCode === 39) {
-                console.log("back");
+                console.log("right");
                 swipe("right");
             } else if (e.keyCode === 40) {
                 console.log("back");
@@ -173,7 +177,7 @@ function TinderContainer() {
                         ))}
                     </div>
                     <div
-                        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 flex flex-row justify-evenly w-1/2 ">
+                        className="absolute top-128 left-128  w-1/2 flex flex-row justify-evenly ">
                         <button
                             className="sm:py-24 sm:px-6 lg:max-w-5xl "
                             onClick={() => swipe("left")}
