@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react'
 import {Cookies, useCookies} from "react-cookie";
 import { useParams } from 'react-router-dom';
 import axios from "axios";
-// import {format} from "timeago.js"
 const Chat = (props) => {
    const {
       messages,
@@ -13,11 +12,8 @@ const Chat = (props) => {
    const id = cookies.UserId;
    const [accountData, setAccountData] = useState([])
    const [userData, setUserData] = useState([])
-   const [oneUserMessages, setUsersMessages] = useState([])
-   const [newMessages, setMessages] = useState()
    const [loadingMatch, setLoadingMatch] = useState(false)
    const [loadingUser, setLoadingUser] = useState(false)
-   const [loadingMessage, setLoadingMessage] = useState(false)
    const [loading, setLoading] = useState(false)
    const [sent, setSent] = useState(false)
 
@@ -64,44 +60,23 @@ const Chat = (props) => {
         setLoadingUser(true)
   }
 
-  const getUserMessages = async ()=> {
-   try {
-      const response = await axios.get(
-         `http://localhost:5000/api/oneconversation/${id}/${matchId}`,
-         {
-            headers: {
-            "Content-Type": "application/json; charset=UTF-8",
-            Authorization: `Bearer ${token}`,
-          },
-         }
-      );
-      const data = response.data
-      setUsersMessages(data)
-      const newMessage = oneUserMessages.messages
-      setMessages(newMessage)
-   } catch (error) {
-      
-   }
-  }
+
 
    useEffect(()=>{
    const matchId = currentChat?.members?.find(m=>m !== id)
-   // setUsersMessages(currentChat)
-   // setMessages(currentChat?.messages)
    getMatchAccount(matchId)
    getUserAccount()
    
-   //  getUserMessages()
     if((accountData.length>0 && accountData.userDetail.profile_picture) && (userData.length>0 && userData.userDetail.profile_picture) && (messages))
       setLoading(false)
    else
       setLoading(true)
-  }, [props, loading, loadingMessage, sent])
+  }, [props, loading])
 
    
   return (
 <>
-   {/* {accountData && accountData.userDetail && <div class="flex sm:items-center justify-between pb-2 border-b-2 border-gray-200">
+   {accountData && accountData.userDetail && <div class="flex sm:items-center justify-between pb-2 border-b-2 border-gray-200">
       <div className="relative flex items-center space-x-4">
          <div className="relative">
             <span className="absolute text-green-500 right-0 bottom-0">
@@ -118,37 +93,7 @@ const Chat = (props) => {
             <span className="text-md text-gray-600">{`${accountData.userDetail.occupation}`}</span>
          </div>
       </div>
-   </div>} */}
-   {/* <div id="messages" className="flex flex-col space-y-3 p-4 overflow-y-auto scrollbar-thumb-blue scrollbar-w-2 scrolling-touch h-[648px] max-h-[1200px]"> */}
-      {/* {messages && messages.map((msg, index) =>{
-         
-         return <div key={index}class="chat-message">
-            
-               <div className={`flex items-end ${msg.sender === id ? 'justify-end' : ' '}` }>
-            <div className={`flex flex-col space-y-2 text-xs max-w-xs mx-2 ${msg.sender === id ? 'order-1 item-end' : 'order-2 item-start'}`}>
-               <div><span class={` 
-               ${msg.sender === id ? 'px-4 py-2 rounded-lg inline-block rounded-br-none bg-gray-300 text-gray-600' : 'px-4 py-2 rounded-lg inline-block rounded-bl-none bg-pink-100 text-white'}`}>{msg.message}</span>
-            </div>
-            </div>
-            <img src={`${msg.sender === id ? userData.userDetail.profile_picture : accountData.userDetail.profile_picture} `} alt="My profile" className={`w-6 h-6 rounded-full ${msg.sender === id ? "order-2" : "order-1"}`}/>
-         </div>
-      </div>
-      })} */}
-      {messages && messages.map((msg, index) =>{
-         
-         return <div key={index}class="chat-message">
-      
-      <div className={`flex items-end ${msg.sender === id ? 'justify-end' : ' '}` }>
-            <div className={`flex flex-col space-y-2 text-xs max-w-xs mx-2 ${msg.sender === id ? 'order-1 item-end' : 'order-2 item-start'}`}>
-               <div><span class={` 
-               ${msg.sender === id ? 'px-4 py-2 rounded-lg inline-block rounded-br-none bg-gray-300 text-gray-600' : 'px-4 py-2 rounded-lg inline-block rounded-bl-none bg-pink-100 text-white'}`}>{msg.message}</span>
-            </div>
-            </div>
-            <img src={`${msg.sender === id ? userData?.userDetail?.profile_picture : accountData?.userDetail?.profile_picture} `} alt="My profile" className={`w-6 h-6 rounded-full ${msg.sender === id ? "order-2" : "order-1"}`}/>
-         </div>
-         </div>})}
-   {/* </div> */}
-   
+   </div>}
 </>
   )
 }

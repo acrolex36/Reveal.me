@@ -4,8 +4,8 @@ import Sidebar from "../Components/Sidebar";
 import ChatContainer from '../Components/Chat/ChatContainer';
 const ChatPage = () => {
   return (
-    <div className='overflow-y-none'>
-        <div className="flex flex-col h-full overflow-y-none bg-pink">
+    
+        <div className="flex flex-col h-screen overflow-y-none bg-pink">
         <div>
           <Header></Header>
         </div>
@@ -20,7 +20,6 @@ const ChatPage = () => {
           </div>
         </div>
       </div>
-    </div>
   )
 }
 

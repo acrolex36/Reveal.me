@@ -8,17 +8,10 @@ const ChatConversations = (props) => {
     const [user, setUser] = useState(null)
     const [loadingMatch, setLoadingMatch] = useState(false)
     const [cookies, setCookie, removeCookie] = useCookies(null);
-    // const id = cookies.UserId;
     const token = cookies.Token;
-
-    const openChat = (id) =>{
-        setChat(id)
-    }
 
     useEffect(()=>{
         const matchId = conversation.members.find(m=>m !== currentUser)
-        // console.log(currentUser);
-        // console.log(matchId)
         const getUser = async ()=>{
             try {
       const response = await axios.get(
@@ -32,7 +25,6 @@ const ChatConversations = (props) => {
       );
       const dataMatch = response.data;
       setUser(dataMatch);
-      console.log(user);
       if(user.length>0 && user.userDetail){
         setLoadingMatch(false)
       }
