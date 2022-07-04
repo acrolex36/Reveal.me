@@ -48,8 +48,8 @@ const ChatContainer = () => {
     e.preventDefault()
       try {
          const response = await axios
-        .put(
-          `http://localhost:5000/api/conversation/message/${currentChat?._id}`,
+        .post(
+          `http://localhost:5000/api/message/${currentChat?._id}`,
           {
             userId: id,
             message: textArea
@@ -74,7 +74,7 @@ const ChatContainer = () => {
        const getMessages = async () => {
       try {
         const res = await axios.get(
-        `http://localhost:5000/api/oneconversationid/${currentChat?._id}`,
+        `http://localhost:5000/api/message/all/${currentChat?._id}`,
         {
           headers: {
             "Content-Type": "application/json; charset=UTF-8",
@@ -83,7 +83,7 @@ const ChatContainer = () => {
         }
       );
         const data = res.data;
-        setMessages(data.messages);
+        setMessages(data);
       } catch (err) {
         console.log(err);
       }
@@ -101,7 +101,7 @@ const ChatContainer = () => {
 
     const getUserAccount = async () => {
       const response = await axios.get(
-         `http://localhost:5000/api/test/singleuser/id/${id}`,
+         `http://localhost:5000/api/singleuser/id/${id}`,
         {
           headers: {
             "Content-Type": "application/json; charset=UTF-8",
@@ -121,7 +121,7 @@ const ChatContainer = () => {
     const getMatchAccount = async (matchId) => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/test/singleuser/id/${matchId}`,
+        `http://localhost:5000/api/singleuser/id/${matchId}`,
         {
           headers: {
             "Content-Type": "application/json; charset=UTF-8",

@@ -15,7 +15,7 @@ const ChatConversations = (props) => {
         const getUser = async ()=>{
             try {
       const response = await axios.get(
-        `http://localhost:5000/api/test/singleuser/id/${matchId}`,
+        `http://localhost:5000/api/singleuser/id/${matchId}`,
         {
           headers: {
             "Content-Type": "application/json; charset=UTF-8",
