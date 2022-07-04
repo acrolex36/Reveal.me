@@ -1,7 +1,7 @@
 import React from 'react'
 import Header from "../Components/Header";
 import Sidebar from "../Components/Sidebar";
-import ChatContainer from '../Components/ChatContainer';
+import ChatContainer from '../Components/Chat/ChatContainer';
 const ChatPage = () => {
   return (
     <div className='overflow-y-none'>
