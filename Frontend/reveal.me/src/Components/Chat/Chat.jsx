@@ -2,24 +2,26 @@ import React, {useState, useEffect} from 'react'
 import {Cookies, useCookies} from "react-cookie";
 import { useParams } from 'react-router-dom';
 import axios from "axios";
+// import {format} from "timeago.js"
 const Chat = (props) => {
    const {
-      matchId,
+      messages,
+      currentChat
    } = props
    const [cookies, setCookie, removeCookie] = useCookies(null);
    const token = cookies.Token;
    const id = cookies.UserId;
    const [accountData, setAccountData] = useState([])
    const [userData, setUserData] = useState([])
-   const [oneUserMessages, setUsersMessages] = useState(null)
-   const [messages, setMessages] = useState()
+   const [oneUserMessages, setUsersMessages] = useState([])
+   const [newMessages, setMessages] = useState()
    const [loadingMatch, setLoadingMatch] = useState(false)
    const [loadingUser, setLoadingUser] = useState(false)
+   const [loadingMessage, setLoadingMessage] = useState(false)
    const [loading, setLoading] = useState(false)
-   const [textArea, setTextArea] = useState('')
    const [sent, setSent] = useState(false)
 
-   const getMatchAccount = async () => {
+   const getMatchAccount = async (matchId) => {
     try {
       const response = await axios.get(
         `http://localhost:5000/api/test/singleuser/id/${matchId}`,
@@ -82,44 +84,22 @@ const Chat = (props) => {
    }
   }
 
-   const sendMessage = async ()=>{
-      try {
-         await axios
-        .put(
-          `http://localhost:5000/api/conversation/message/${oneUserMessages._id}`,
-          {
-            userId: id,
-            message: textArea
-          },
-          {
-            headers: {
-              "Content-Type": "application/json; charset=UTF-8",
-              Authorization: `Bearer ${cookies.Token}`,
-            },
-          }
-        )
-        setSent(true);
-        setTextArea('')
-      } catch (error) {
-         console.log(error);
-      }
-   }
-
    useEffect(()=>{
-    getMatchAccount()
-    getUserAccount()
-    getUserMessages()
+   const matchId = currentChat?.members?.find(m=>m !== id)
+   getMatchAccount(matchId)
+   getUserAccount()
+   
     if((accountData.length>0 && accountData.userDetail.profile_picture) && (userData.length>0 && userData.userDetail.profile_picture) && (messages))
       setLoading(false)
    else
       setLoading(true)
-  }, [props, loading, sent])
+  }, [props, loading, loadingMessage, sent])
+  
 
    
   return (
 <>
-   <div className="flex-1 p:2 sm:p-4 justify-between flex flex-col h-4/5">
-   {accountData && accountData.userDetail && <div class="flex sm:items-center justify-between pb-2 border-b-2 border-gray-200">
+   {/* {accountData && accountData.userDetail && <div class="flex sm:items-center justify-between pb-2 border-b-2 border-gray-200">
       <div className="relative flex items-center space-x-4">
          <div className="relative">
             <span className="absolute text-green-500 right-0 bottom-0">
@@ -136,9 +116,9 @@ const Chat = (props) => {
             <span className="text-md text-gray-600">{`${accountData.userDetail.occupation}`}</span>
          </div>
       </div>
-   </div>}
-   <div id="messages" className="flex flex-col space-y-3 p-4 overflow-y-auto scrollbar-thumb-blue scrollbar-w-2 scrolling-touch h-[648px] max-h-[1200px]">
-      {messages && messages.map((msg, index) =>{
+   </div>} */}
+   {/* <div id="messages" className="flex flex-col space-y-3 p-4 overflow-y-auto scrollbar-thumb-blue scrollbar-w-2 scrolling-touch h-[648px] max-h-[1200px]"> */}
+      {/* {messages && messages.map((msg, index) =>{
          
          return <div key={index}class="chat-message">
             
@@ -151,29 +131,22 @@ const Chat = (props) => {
             <img src={`${msg.sender === id ? userData.userDetail.profile_picture : accountData.userDetail.profile_picture} `} alt="My profile" className={`w-6 h-6 rounded-full ${msg.sender === id ? "order-2" : "order-1"}`}/>
          </div>
       </div>
-      })}
-   </div>
-   <div className="border-t-2 border-gray-200 px-4 pt-4 mb-2 sm:mb-0">
-      <div className="relative flex">
-         <input type="text" value={textArea} placeholder="Write your message!" className="w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-600 pl-3 bg-gray-200 rounded-md py-3" onChange={(e)=>setTextArea(e.target.value)}/>
-         <div className="absolute right-0 items-center inset-y-0 hidden sm:flex">
-            <button type="button" className="inline-flex items-center justify-center rounded-full h-10 w-10 transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:outline-none">
-               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6 text-gray-600">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
-               </svg>
-            </button>
-            <button onClick={()=>sendMessage()} type="button" className="inline-flex items-center justify-center rounded-lg px-4 py-3 transition duration-500 ease-in-out text-white bg-blue-500 hover:bg-blue-400 focus:outline-none">
-               <span className="font-bold">Send</span>
-               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-6 w-6 ml-2 transform rotate-90">
-                  <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
-               </svg>
-            </button>
+      })} */}
+      {messages && messages.map((msg, index) =>{
+         
+         return <div key={index}class="chat-message">
+      
+      <div className={`flex items-end ${msg.sender === id ? 'justify-end' : ' '}` }>
+            <div className={`flex flex-col space-y-2 text-xs max-w-xs mx-2 ${msg.sender === id ? 'order-1 item-end' : 'order-2 item-start'}`}>
+               <div><span class={` 
+               ${msg.sender === id ? 'px-4 py-2 rounded-lg inline-block rounded-br-none bg-gray-300 text-gray-600' : 'px-4 py-2 rounded-lg inline-block rounded-bl-none bg-pink-100 text-white'}`}>{msg.message}</span>
+            </div>
+            </div>
+            <img src={`${msg.sender === id ? userData?.userDetail?.profile_picture : accountData?.userDetail?.profile_picture} `} alt="My profile" className={`w-6 h-6 rounded-full ${msg.sender === id ? "order-2" : "order-1"}`}/>
          </div>
-      </div>
-   </div>
-</div>
-
+         </div>})}
+   {/* </div> */}
+   
 </>
   )
 }
