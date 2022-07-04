@@ -4,6 +4,8 @@ module.exports = {
     extend: {
       spacing: {
         '128': '32rem', // following the standard of 128 / 4 = 32
+        '148': '40rem',
+        '188': '47rem',
       }
     },
     colors:{

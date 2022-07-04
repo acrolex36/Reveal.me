@@ -140,14 +140,11 @@ function TinderContainer() {
     useEffect(() => {
         const handleKey = (e) => {
             if (e.keyCode === 37) {
-                console.log("left");
-                swipe("left");
+                () => swipe("left");
             } else if (e.keyCode === 39) {
-                console.log("right");
-                swipe("right");
+                () => swipe("right");
             } else if (e.keyCode === 40) {
-                console.log("back");
-                goBack();
+                () => goBack();
             }
         };
         window.addEventListener("keydown", handleKey);
@@ -160,7 +157,7 @@ function TinderContainer() {
         <div>
             {filteredUsers.length > 0 && userData.length > 0 && (
                 <>
-                    <div className="inset-center">
+                    <div className="absolute top-64 left-188 flex justify-center">
                         {filteredUsers.map((person, index) => (
                             <TinderCard
                                 preventSwipe={["up", "down"]}
@@ -177,7 +174,7 @@ function TinderContainer() {
                         ))}
                     </div>
                     <div
-                        className="absolute top-128 left-128  w-1/2 flex flex-row justify-evenly ">
+                        className="absolute top-128 left-148 w-1/2 flex flex-row justify-evenly ">
                         <button
                             className="sm:py-24 sm:px-6 lg:max-w-5xl "
                             onClick={() => swipe("left")}

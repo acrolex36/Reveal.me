@@ -22,7 +22,7 @@ const ProfileCard = ({person}) => {
 
     return (
         <div className="card width-card lg:card-side cursor-pointer border-black bg-pink-0">
-            <figure className=" rounded-lg">
+            <figure className="w-[400px] rounded-lg">
                 <img
                     className="w-full blur"
                     src={details.profile_picture}
@@ -30,12 +30,12 @@ const ProfileCard = ({person}) => {
                 />
             </figure>
 
-            <div className="max-w-md justify-between p-4 leading-normal">
+            <div className="max-w-md justify-between my-3 mx-5 p-4 leading-normal">
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
                         {person.first_name}, {person.userDetail.age}
                     </h1>
-                    <h2 className="text-2xl tracking-tight text-gray-900 dark:text-white">
+                    <h2 className="text-xl tracking-tight text-gray-900 dark:text-white">
                         {person.userDetail.occupation}
                     </h2>
                 </div>
