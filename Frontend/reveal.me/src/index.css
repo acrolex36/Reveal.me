@@ -4,10 +4,8 @@
 @tailwind utilities;
 
 .inset-center {
-    position: absolute;
-    top: 25%;
-    left: 31%;
-  }
+    left: 48rem;
+}
 
 .width-card{
     width: 800px;

@@ -9,9 +9,9 @@ const ProfileCard = ({person}) => {
                 xmlns="http://www.w3.org/2000/svg"
             >
                 <path
-                    fill-rule="evenodd"
+                    fillRule="evenodd"
                     d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                    clip-rule="evenodd"
+                    clipRule="evenodd"
                 ></path>
             </svg>
             <span className="text-base font-normal leading-tight text-gray-500 dark:text-gray-400">
@@ -22,7 +22,7 @@ const ProfileCard = ({person}) => {
 
     return (
         <div className="card width-card lg:card-side cursor-pointer border-black bg-pink-0">
-            <figure className=" rounded-lg">
+            <figure className="w-[400px] rounded-lg">
                 <img
                     className="w-full blur"
                     src={details.profile_picture}
@@ -30,12 +30,12 @@ const ProfileCard = ({person}) => {
                 />
             </figure>
 
-            <div className="max-w-md justify-between p-4 leading-normal">
+            <div className="max-w-md justify-between my-3 mx-5 p-4 leading-normal">
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
                         {person.first_name}, {person.userDetail.age}
                     </h1>
-                    <h2 className="text-2xl tracking-tight text-gray-900 dark:text-white">
+                    <h2 className="text-xl tracking-tight text-gray-900 dark:text-white">
                         {person.userDetail.occupation}
                     </h2>
                 </div>
