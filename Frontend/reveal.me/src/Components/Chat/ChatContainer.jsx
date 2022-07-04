@@ -1,10 +1,9 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState} from 'react';
 import Chat from "./Chat";
 import axios from "axios";
 import {Cookies, useCookies} from "react-cookie";
 import ChatProfile from './ChatProfile';
 import ChatConversations from './ChatConversations';
-
 const ChatContainer = () => {
   const [ clickedUser, setClickedUser ] = useState(null)
   const [matchId, setIdMatch] = useState(null)
@@ -18,7 +17,6 @@ const ChatContainer = () => {
    const [oneUserMessages, setUsersMessages] = useState(null)
    const [messages, setMessages] = useState([])
   const [textArea, setTextArea] = useState('')
-  const scrollRef = useRef()
   const id = cookies.UserId;
   const token = cookies.Token;
 
@@ -90,6 +88,7 @@ const ChatContainer = () => {
             },
           }
         )
+        // setSent(true);
         setMessages([...messages, response.data])
         setTextArea('')
       } catch (error) {
@@ -121,10 +120,7 @@ const ChatContainer = () => {
       }
     };
     getMessages();
-  }, [currentChat]);
-
-
-
+  }, [currentChat, messages]);
 
   console.log(messages)
 
@@ -148,6 +144,20 @@ const ChatContainer = () => {
           <ul className="overflow-auto h-[32rem]">
             <h2 className="my-2 mb-2 ml-2 text-lg text-gray-600">Messages</h2>
              <li>
+              {/* {listOfContactDetails.length>0 && allConversation.length>0 ? listOfContactDetails.map(({_id, userDetail, first_name, last_name}) =>(
+              
+                <a key={_id} onClick={()=>setChat(_id)}
+                  className="flex items-center px-3 py-2 text-sm transition duration-150 ease-in-out border-b border-gray-300 cursor-pointer hover:bg-gray-100 focus:outline-none">
+                      <img className="object-cover w-10 h-10 rounded-full"
+                    src={userDetail.profile_picture} alt="userpic" />
+                  
+                  <div className="w-full pb-2" onLoad={()=>setLoading(false)}>
+                     <div className="flex justify-between">
+                      <span className="block ml-2 font-semibold text-gray-600">{`${first_name} ${last_name}`}</span>
+                    </div>
+                  </div>
+                </a>
+              )) : <div>Fetching Messages...</div>} */}
               {allConversation && allConversation.length > 0 ? allConversation.map((convo)=>(
                 <div onClick={()=>setCurrentChat(convo)}>
                 <ChatConversations conversation={convo}
@@ -162,14 +172,17 @@ const ChatContainer = () => {
         </div>
         { currentChat && (<div className="hidden lg:col-span-2 lg:block">
           <div className="w-full max-h-4/5">
+            {/* {clickedUser && matchId && <Chat
+             matchId={matchId}
+             conversation={allConversation}
+             >
+              </Chat>} */}
               <div id="messages" className="flex flex-col space-y-3 p-4 overflow-y-auto scrollbar-thumb-blue scrollbar-w-2 scrolling-touch h-[648px] max-h-[1200px]">
               {messages && 
-                  
                   <Chat 
                   messages={messages}
                   currentChat={currentChat}
                   ></Chat>
-                  
             }
               </div>
           </div>
@@ -192,6 +205,7 @@ const ChatContainer = () => {
          </div>
       </div>
    </div>
+
         </div>)}
         <div class="hidden lg:col-span-1 lg:block w-full">
           <div class="h-full">

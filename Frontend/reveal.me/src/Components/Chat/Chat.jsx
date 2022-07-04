@@ -86,15 +86,17 @@ const Chat = (props) => {
 
    useEffect(()=>{
    const matchId = currentChat?.members?.find(m=>m !== id)
+   // setUsersMessages(currentChat)
+   // setMessages(currentChat?.messages)
    getMatchAccount(matchId)
    getUserAccount()
    
+   //  getUserMessages()
     if((accountData.length>0 && accountData.userDetail.profile_picture) && (userData.length>0 && userData.userDetail.profile_picture) && (messages))
       setLoading(false)
    else
       setLoading(true)
   }, [props, loading, loadingMessage, sent])
-  
 
    
   return (
