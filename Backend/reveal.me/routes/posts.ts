@@ -20,7 +20,10 @@ import {
   getOneConversation,
   getAllConversationFromOneUser,
   getTotalMessage,
-  getOneConversationById
+  getOneConversationById,
+  updateMessage,
+  getTotalMessages,
+  getAllMessages
 
 } from "../controllers/posts";
 
@@ -45,6 +48,7 @@ router.get("/test/filtereduser/email/:email", getAllFilteredUser); //not use
 
 //Message
 router.post("/conversation/message/:userId1/:userId2", createConversation);
+router.post("/message/:conversationId", updateMessage)
 
 router.put("/conversation/message/:id", updateMessages);
 
@@ -53,6 +57,8 @@ router.get("/allconversation/:userId", getAllConversationFromOneUser);
 router.get("/oneconversation/:userId1/:userId2", getOneConversation);
 router.get("/oneconversationid/:id", getOneConversationById);
 router.get("/oneconversation/totalmessage/:userId1/:userId2", getTotalMessage);
+router.get("/message/total/:userId1/:userId2", getTotalMessages)
+router.get("/message/all/:conversationId", getAllMessages)
 
 
 

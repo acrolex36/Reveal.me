@@ -4,7 +4,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 import User, { GenderTypes } from "../models/postUser";
-import Messages from "../models/postMessages";
+import Conversation from "../models/postConversation";
+import Message from "../models/postMessage";
 
 
 const router = express.Router();
@@ -549,7 +550,7 @@ export const createConversation = async (req: Request, res: Response) => {
   
   const members = [userId1, userId2]
 
-  const message = await new Messages({
+  const message = await new Conversation({
     members
   });
     try {
@@ -574,7 +575,7 @@ export const updateMessages = async (req: Request, res: Response) => {
   const { userId, message} = req.body
   
     try {
-      const conversation = await Messages.findById(id);
+      const conversation = await Conversation.findById(id);
 
       conversation.messages.push({
 
@@ -592,6 +593,33 @@ export const updateMessages = async (req: Request, res: Response) => {
   }
 };
 
+//POST -  #post new message from one conversation
+export const updateMessage = async (req: Request, res: Response) => {
+  checkToken(req, res, () => {
+    authSuccess = true;
+  });
+
+  if (authSuccess) {
+  const { conversationId } = req.params
+  const { userId, message} = req.body
+  
+    try {
+      const messages = await new Message({
+        conversationId: conversationId,
+        sender: userId,
+        message: message
+
+      });
+
+      await messages.save()
+      res.status(200).json(messages);
+    } catch (error) {
+      res.status(404).json({ message: error });
+    }
+  authSuccess = false;
+  }
+};
+
 //GET - /allconversation/:userId # find all messages from one particular user
 export const getAllConversationFromOneUser = async (req: Request, res: Response) => {
   checkToken(req, res, () => {
@@ -602,7 +630,7 @@ export const getAllConversationFromOneUser = async (req: Request, res: Response)
     const { userId } = req.params;  
     
     try {
-        const allConversation = await Messages.find({members:{$all:[
+        const allConversation = await Conversation.find({members:{$all:[
           userId,
         ]}});
         
@@ -623,7 +651,7 @@ export const getAllConversation = async (req: Request, res: Response) => {
 
   if (authSuccess) {
     try {
-      const allConversation = await Messages.find();
+      const allConversation = await Conversation.find();
       res.status(200).json(allConversation);
     } catch (error) {
       res.status(404).json({ message: error });
@@ -643,7 +671,7 @@ export const getOneConversation = async (req: Request, res: Response) => {
     const { userId1, userId2 } = req.params;
     
     try {
-      const oneConversation = await Messages.findOne({members:{$all:[
+      const oneConversation = await Conversation.findOne({members:{$all:[
         userId1,
         userId2,
       ]}});
@@ -665,7 +693,7 @@ export const getOneConversationById = async (req: Request, res: Response) => {
     const { id } = req.params;
     
     try {
-      const oneConversationId = await Messages.findById(id);
+      const oneConversationId = await Conversation.findById(id);
 
       res.status(200).json(oneConversationId);
     } catch (error) {
@@ -677,6 +705,26 @@ export const getOneConversationById = async (req: Request, res: Response) => {
 
 
 //GET - /oneconversation/:userId1/:userId2 # find one conversation between 2 user
+export const getAllMessages = async (req: Request, res: Response) => {
+  checkToken(req, res, () => {
+    authSuccess = true;
+  });
+
+  if (authSuccess) {
+    const { conversationId } = req.params;
+    
+    try {
+      const oneConversationId = await Message.find({conversationId: conversationId});
+
+      res.status(200).json(oneConversationId);
+    } catch (error) {
+      res.status(404).json({ message: error });
+    }
+    authSuccess = false;
+  }
+};
+
+//GET - /oneconversation/:userId1/:userId2 # find one conversation between 2 user
 export const getTotalMessage = async (req: Request, res: Response) => {
   checkToken(req, res, () => {
     authSuccess = true;
@@ -686,7 +734,7 @@ export const getTotalMessage = async (req: Request, res: Response) => {
     const { userId1, userId2 } = req.params;
     
     try {
-      const oneConversation = await Messages.findOne({members:{$all:[
+      const oneConversation = await Conversation.findOne({members:{$all:[
         userId1,
         userId2,
       ]}});
@@ -712,6 +760,31 @@ export const getTotalMessage = async (req: Request, res: Response) => {
         if (i.sender === userId2) totalUser2++
       }
       totalMessages.push(totalUser2)
+
+      res.status(200).json(totalMessages);
+    } catch (error) {
+      res.status(404).json({ message: error });
+    }
+    authSuccess = false;
+  }
+};
+
+export const getTotalMessages = async (req: Request, res: Response) => {
+  checkToken(req, res, () => {
+    authSuccess = true;
+  });
+
+  if (authSuccess) {
+    const { userId1, userId2 } = req.params;
+    
+    try {
+      const total_user_1 = await Message.find({sender: userId1}).count()
+      const total_user_2 = await Message.find({sender: userId2}).count()
+
+      var totalMessages = []
+
+      totalMessages.push(total_user_1)
+      totalMessages.push(total_user_2)
 
       res.status(200).json(totalMessages);
     } catch (error) {
