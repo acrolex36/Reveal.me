@@ -53,7 +53,7 @@ const ChatContainer = () => {
       setTotalMessage(data)
       if(data.at(0) >= 5 && data.at(1) >= 5 && !isShown){
         setIsShown(true)
-        alert("CONGRATS! You've reached the total message to reveal yourself")
+        alert("CONGRATS! You've reached the total message to reveal each other")
       }
     }
     catch(error){
@@ -162,7 +162,7 @@ const ChatContainer = () => {
       console.log(data);
       if(data.at(0) >= 5 && data.at(1) >= 5 && !isShown){
         setIsShown(true)
-        alert("CONGRATS! You've reached the total message to reveal yourself")
+        alert("CONGRATS! You've reached the total message to reveal each other")
       }
       // console.log(totalMessage);
     }
