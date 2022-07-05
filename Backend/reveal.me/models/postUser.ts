@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export enum GenderTypes { 
+export enum GenderTypes {
   MALE = "male",
   FEMALE = "female",
   DIVERSE = "diverse",
@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
   password: {
     type: String,
@@ -33,10 +33,12 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: new Date(),
   },
-  oneSideMatch: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'user' 
-  }],
+  oneSideMatch: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+    },
+  ],
   userDetail: {
     is_online: {
       type: Boolean,
@@ -45,13 +47,13 @@ const userSchema = new mongoose.Schema({
     gender: {
       type: String,
       enum: GenderTypes,
-      // default: GenderTypes.MALE
-      // enum: ['male', 'female', 'diverse'],
     },
-    gender_interest: [{
-      type: String,
-      enum: GenderTypes,
-    }],
+    gender_interest: [
+      {
+        type: String,
+        enum: GenderTypes,
+      },
+    ],
     age: {
       type: Number,
     },
@@ -76,20 +78,22 @@ const userSchema = new mongoose.Schema({
     occupation: {
       type: String,
     },
-    hobbies: [{
-      type: String,
-    }],
-    languages: [{
-      type: String,
-    }],
+    hobbies: [
+      {
+        type: String,
+      },
+    ],
+    languages: [
+      {
+        type: String,
+      },
+    ],
     description: {
       type: String,
-    }
-  }
+    },
+  },
 });
 
 var User = mongoose.model("user", userSchema);
 
-
 export default User;
-

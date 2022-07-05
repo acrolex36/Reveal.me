@@ -14,7 +14,7 @@ const ProfilePage = () => {
           <aside className="hidden sm:block">
             <Sidebar></Sidebar>
           </aside>
-          <main class="flex flex-col px-4 w-1500">
+          <main className="flex flex-col px-4 w-1500">
             <ProfileFields></ProfileFields>
           </main>
         </div>

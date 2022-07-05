@@ -1,7 +1,7 @@
 const Header = () => {
   return (
-<div class="hidden sm:block navbar bg-darker-pink">
-  <a class="btn btn-ghost normal-case text-xl">Reveal.Me</a>
+<div className="hidden sm:block navbar bg-darker-pink">
+  <a href="/" className="btn btn-ghost normal-case text-xl">Reveal.Me</a>
 </div>
   );
 };
