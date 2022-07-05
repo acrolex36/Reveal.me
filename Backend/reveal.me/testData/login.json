@@ -1,4 +1,11 @@
 {
-    "email": "test@test.com",
-    "plainTextPassword": "test123"
+    "correctCredential": {
+        "email": "testing@test.com",
+        "plainTextPassword": "test123"
+    },
+    "falseCredential": {
+        "email": "test@test.com",
+        "plainTextPassword": "test"
+    }
+    
 }

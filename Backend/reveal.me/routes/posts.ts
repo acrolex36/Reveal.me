@@ -23,7 +23,8 @@ import {
   getOneConversationById,
   updateMessage,
   getTotalMessages,
-  getAllMessages
+  getAllMessages,
+  deleteUser
 
 } from "../controllers/posts";
 
@@ -39,6 +40,7 @@ router.put("/user/profile/body/:email", updateOneUserProfile);
 router.put("/user/profile/:email/:matchedUserEmail", updateMatchedUser); //not use
 router.put("/user/profile/id/:id/:matchedUserId", updateMatchedUserById);
 
+router.delete("/user/:id", deleteUser)
 
 router.get("/alluser", getAllUser);
 router.get("/singleuser/id/:id", getOneUserDetailwithId);
@@ -57,7 +59,7 @@ router.get("/allconversation/:userId", getAllConversationFromOneUser);
 router.get("/oneconversation/:userId1/:userId2", getOneConversation);//not use
 router.get("/oneconversationid/:id", getOneConversationById);//not use
 router.get("/oneconversation/totalmessage/:userId1/:userId2", getTotalMessage);//not use
-router.get("/message/total/:userId1/:userId2", getTotalMessages)
+router.get("/message/total/:conversationId", getTotalMessages)
 router.get("/message/all/:conversationId", getAllMessages)
 
 export default router;
