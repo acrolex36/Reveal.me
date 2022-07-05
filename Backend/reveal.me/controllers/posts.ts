@@ -379,6 +379,24 @@ export const updateMatchedUserById = async (req: Request, res: Response) => {
   }
 };
 
+//DELETE - /user/:userId
+export const deleteUser = async (req: Request, res: Response) => {
+  checkToken(req, res, () => {
+    authSuccess = true;
+  });
+
+  if (authSuccess) {
+    const { id } = req.params;
+    try {
+      const user = await User.findByIdAndDelete(id);
+      res.status(201).json(user);
+    } catch (error) {
+      res.status(404).json({ message: error });
+    }
+    authSuccess = false;
+  }
+};
+
 //GET - /test/alluser # return all User
 export const getAllUser = async (req: Request, res: Response) => {
   checkToken(req, res, () => {
@@ -775,11 +793,13 @@ export const getTotalMessages = async (req: Request, res: Response) => {
   });
 
   if (authSuccess) {
-    const { userId1, userId2 } = req.params;
+    const { conversationId } = req.params;
     
     try {
-      const total_user_1 = await Message.find({sender: userId1}).count()
-      const total_user_2 = await Message.find({sender: userId2}).count()
+      const conversation = await Conversation.findById(conversationId)
+
+      const total_user_1 = await Message.find({sender: conversation.members.at(0), conversationId: conversationId}).count()
+      const total_user_2 = await Message.find({sender: conversation.members.at(1), conversationId: conversationId}).count()
 
       var totalMessages = []
 
