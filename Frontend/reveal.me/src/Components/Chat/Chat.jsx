@@ -60,8 +60,6 @@ const Chat = (props) => {
         setLoadingUser(true)
   }
 
-
-
    useEffect(()=>{
    const matchId = currentChat?.members?.find(m=>m !== id)
    getMatchAccount(matchId)

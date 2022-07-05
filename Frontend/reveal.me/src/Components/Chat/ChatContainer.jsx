@@ -5,8 +5,10 @@ import {Cookies, useCookies} from "react-cookie";
 import ChatProfile from './ChatProfile';
 import ChatConversations from './ChatConversations';
 import ChatBubble from './ChatBubble';
+import { io } from "socket.io-client";
+
 const ChatContainer = () => {
-  const [matchId, setIdMatch] = useState(null)
+  //const [matchId, setIdMatch] = useState(null)
   const[allConversation, setConversation] = useState([]);
   const [currentChat, setCurrentChat] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -15,14 +17,42 @@ const ChatContainer = () => {
   const [cookies, setCookie, removeCookie] = useCookies(null);
   const [accountData, setAccountData] = useState([])
   const [loadingMatch, setLoadingMatch] = useState(false)
-   const [messages, setMessages] = useState([])
-   const [sent, setSent] = useState(false)
+  const [messages, setMessages] = useState([])
+  const [sent, setSent] = useState(false)
   const [textArea, setTextArea] = useState('')
+  const [arrivalMessage, setArrivalMessage] = useState(null)
   const id = cookies.UserId;
   const token = cookies.Token;
+  const socket = useRef();
   const [userData, setUserData] = useState([])
   const scrollRef = useRef(null);
     
+  useEffect(() => {
+    socket.current = io("ws://localhost:8900");
+    socket.current.on("getMessage", (data) => {
+      setArrivalMessage({
+        sender: data.senderId,
+        message: data.text,
+        timestamp: Date.now(),
+      });
+    });
+  }, []);
+
+  useEffect(() => {
+    arrivalMessage &&
+      currentChat?.members.includes(arrivalMessage.sender) &&
+      setMessages((prev) => [...prev, arrivalMessage]);
+  }, [arrivalMessage, currentChat]);
+
+  useEffect(() => {
+    socket.current.emit("addUser", id);
+    // socket.current.on("getUsers", (users) => {
+    //   setOnlineUsers(
+    //     user.followings.filter((f) => users.some((u) => u.userId === f))
+    //   );
+    // });
+  }, [id]);
+
   const getUserConversation = async () => {
     try {
       
@@ -34,7 +64,7 @@ const ChatContainer = () => {
       });
       const data = await response.data
       setConversation(data)
-      setIdMatch(conversation.members.find(m=>m!==id))
+      //setIdMatch(conversation.members.find(m=>m!==id))
       if(allConversation && allConversation.length >0)
       setLoading(false)
       else
@@ -46,13 +76,25 @@ const ChatContainer = () => {
 
   const sendMessage = async (e)=>{
     e.preventDefault()
+
+    const receiverId = currentChat.members.find(
+      (member) => member !== id
+    );
+
+    socket.current.emit("sendMessage", {
+      senderId: id,
+      receiverId,
+      text: textArea,
+    });
+
+
       try {
          const response = await axios
         .post(
           `http://localhost:5000/api/message/${currentChat?._id}`,
           {
             userId: id,
-            message: textArea
+            message: textArea,
           },
           {
             headers: {
@@ -62,7 +104,7 @@ const ChatContainer = () => {
           }
         )
         const newMessage = response.data
-        setMessages( [...messages, response.data])
+        setMessages( [...messages, newMessage])
         console.log(messages);
         setTextArea('')
         setSent(true);
@@ -71,7 +113,7 @@ const ChatContainer = () => {
       }
    }
 
-       const getMessages = async () => {
+    const getMessages = async () => {
       try {
         const res = await axios.get(
         `http://localhost:5000/api/message/all/${currentChat?._id}`,
@@ -89,7 +131,7 @@ const ChatContainer = () => {
       }
     };
 
-     const autoScroll = () =>{
+    const autoScroll = () =>{
       scrollRef.current?.scrollIntoView({ behavior: "smooth" });
     }
 

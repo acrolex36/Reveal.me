@@ -5,7 +5,8 @@ const ChatBubble = ({msg, userData, accountData}) => {
    const [cookies, setCookie, removeCookie] = useCookies(null);
    const token = cookies.Token;
    const id = cookies.UserId;
-    // console.log(msg);
+   console.log(msg.sender);
+   console.log(id);
   return (
     <div>
         <div class="chat-message">
