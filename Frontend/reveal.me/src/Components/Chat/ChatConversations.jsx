@@ -4,7 +4,7 @@ import axios from "axios";
 import {Cookies, useCookies} from "react-cookie";
 
 const ChatConversations = (props) => {
-    const {conversation, currentUser, setChat} = props
+    const {conversation, currentUser} = props
     const [user, setUser] = useState(null)
     const [loadingMatch, setLoadingMatch] = useState(false)
     const [cookies, setCookie, removeCookie] = useCookies(null);
@@ -25,7 +25,7 @@ const ChatConversations = (props) => {
       );
       const dataMatch = response.data;
       setUser(dataMatch);
-      if(user.length>0 && user.userDetail){
+      if(user && user.length>0 && user.userDetail){
         setLoadingMatch(false)
       }
       else

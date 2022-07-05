@@ -8,7 +8,6 @@ import ChatBubble from './ChatBubble';
 import { io } from "socket.io-client";
 
 const ChatContainer = () => {
-  //const [matchId, setIdMatch] = useState(null)
   const[allConversation, setConversation] = useState([]);
   const [currentChat, setCurrentChat] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -40,7 +39,7 @@ const ChatContainer = () => {
 
   useEffect(() => {
     arrivalMessage &&
-      currentChat?.members.includes(arrivalMessage.sender) &&
+      currentChat?.members?.includes(arrivalMessage.sender) &&
       setMessages((prev) => [...prev, arrivalMessage]);
   }, [arrivalMessage, currentChat]);
 
@@ -88,52 +87,49 @@ const ChatContainer = () => {
     });
 
 
-      try {
-         const response = await axios
-        .post(
-          `http://localhost:5000/api/message/${currentChat?._id}`,
-          {
-            userId: id,
-            message: textArea,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json; charset=UTF-8",
-              Authorization: `Bearer ${cookies.Token}`,
-            },
-          }
-        )
-        const newMessage = response.data
-        setMessages( [...messages, newMessage])
-        console.log(messages);
-        setTextArea('')
-        setSent(true);
-      } catch (error) {
-         console.log(error);
-      }
-   }
-
-    const getMessages = async () => {
-      try {
-        const res = await axios.get(
-        `http://localhost:5000/api/message/all/${currentChat?._id}`,
+    try {
+        const response = await axios
+      .post(
+        `http://localhost:5000/api/message/${currentChat?._id}`,
+        {
+          userId: id,
+          message: textArea,
+        },
         {
           headers: {
             "Content-Type": "application/json; charset=UTF-8",
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${cookies.Token}`,
           },
         }
-      );
-        const data = res.data;
-        setMessages(data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    const autoScroll = () =>{
-      scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+      )
+      const newMessage = response.data
+      setMessages( [...messages, newMessage])
+      console.log(messages);
+      setTextArea('')
+      setSent(true);
+    } catch (error) {
+        console.log(error);
     }
+  }
+
+  const getMessages = async () => {
+    try {
+      const res = await axios.get(
+      `http://localhost:5000/api/message/all/${currentChat?._id}`,
+      {
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+      const data = res.data;
+      setMessages(data);
+      
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(()=>{
         getUserConversation()
@@ -183,6 +179,7 @@ const ChatContainer = () => {
       console.error(err.message);
     }
   };
+  
     const matchId = currentChat?.members?.find(m=>m !== id)
     getMessages();
     getMatchAccount(matchId)
@@ -194,7 +191,7 @@ const ChatContainer = () => {
   }, [currentChat]);
 
   useEffect(() => {
-    autoScroll();
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   return (

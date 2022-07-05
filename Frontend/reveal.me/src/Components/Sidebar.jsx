@@ -21,7 +21,7 @@ const Sidebar = () => {
             const id = cookies.UserId;
             const token = cookies.Token;
             const response = await axios.get(
-                `http://localhost:5000/api/test/singleuser/id/${id}`,
+                `http://localhost:5000/api/singleuser/id/${id}`,
                 {
                     headers: {
                         "Content-Type": "application/json; charset=UTF-8",
@@ -31,6 +31,7 @@ const Sidebar = () => {
             );
             console.log(response);
             setAccountData(response.data);
+            console.log(accountData);
         } catch (err) {
             console.error(err.message);
         }
@@ -52,18 +53,18 @@ const Sidebar = () => {
                             <section className={"flex flex-col items-center space-y-1.5"}>
                                 <img
                                     className="w-1/2 rounded-full"
-                                    src={accountData.userDetail.profile_picture}
+                                    src={accountData?.userDetail?.profile_picture}
                                     alt="profile picture"
                                 />
                                 <div className=" font-medium dark:text-white">
                                     <div>
                                         <div className="text-center text-sm text-gray-500 dark:text-gray-400">
-                                            {`${accountData.first_name} ${accountData.last_name}`}
+                                            {`${accountData?.first_name} ${accountData?.last_name}`}
                                         </div>
                                     </div>
 
                                     <div className="text-center text-sm text-gray-500 dark:text-gray-400">
-                                        {accountData.userDetail.occupation}
+                                        {accountData?.userDetail?.occupation}
                                     </div>
                                 </div>
                             </section>
