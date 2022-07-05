@@ -6,8 +6,8 @@ import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>
-  <CookiesProvider>
+ <CookiesProvider>
     <App/>
-  {/* // </React.StrictMode> */}
-  </CookiesProvider>
+  {/* </React.StrictMode> */}
+ </CookiesProvider>
 );
