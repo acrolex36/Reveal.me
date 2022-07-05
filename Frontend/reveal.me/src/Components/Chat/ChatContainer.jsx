@@ -40,8 +40,28 @@ const ChatContainer = () => {
   }, []);
 
   useEffect(() => {
+    const check = async (receiverId) =>{
+    try {
+      
+      const response = await axios.get(`http://localhost:5000/api/message/total/${currentChat._id}`,{
+        headers:{
+          "Content-Type": "application/json; charset=UTF-8",
+            Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.data
+      setTotalMessage(data)
+      if(data.at(0) >= 5 && data.at(1) >= 5 && !isShown){
+        setIsShown(true)
+        alert("CONGRATS! You've reached the total message to reveal yourself")
+      }
+    }
+    catch(error){
+      console.log(error);
+    }
+  }
     arrivalMessage &&
-      currentChat?.members?.includes(arrivalMessage.sender) &&
+      currentChat?.members?.includes(arrivalMessage.sender) && check() &&
       setMessages((prev) => [...prev, arrivalMessage]);
   }, [arrivalMessage, currentChat]);
 
@@ -57,7 +77,7 @@ const ChatContainer = () => {
   const checkTotalMessage = async (receiverId) =>{
     try {
       
-      const response = await axios.get(`http://localhost:5000/api/message/total/${id}/${receiverId}`,{
+      const response = await axios.get(`http://localhost:5000/api/message/total/${currentChat._id}`,{
         headers:{
           "Content-Type": "application/json; charset=UTF-8",
             Authorization: `Bearer ${token}`,
@@ -140,13 +160,19 @@ const ChatContainer = () => {
       const data = await response.data
       setTotalMessage(data)
       console.log(data);
+      if(data.at(0) >= 5 && data.at(1) >= 5 && !isShown){
+        setIsShown(true)
+        alert("CONGRATS! You've reached the total message to reveal yourself")
+      }
       // console.log(totalMessage);
     }
     catch(error){
       console.log(error);
     }
   }
-    check(receiverId)
+  check(receiverId)
+  console.log(totalMessage);
+
   }
 
   const getMessages = async (matchId) => {
@@ -221,7 +247,7 @@ const ChatContainer = () => {
     getMessages(matchId);
     getMatchAccount(matchId)
     getUserAccount()
-    checkTotalMessage(matchId)
+    checkTotalMessage(currentChat)
 
     if((accountData.length>0 && accountData.userDetail.profile_picture) && (userData.length>0 && userData.userDetail.profile_picture) && (messages))
       setLoadingAcc(false)
@@ -235,11 +261,6 @@ const ChatContainer = () => {
     getMessages(matchId);
     getMatchAccount(matchId)
     getUserAccount()
-    if(totalMessage.at(0) >= 5 && totalMessage.at(1) >= 5 && !isShown){
-      console.log(totalMessage);
-      setIsShown(true)
-      alert("CONGRATS! You've reached the total message to reveal yourself")
-    }
   }, [totalMessage, currentChat])
 
   useEffect(() => {

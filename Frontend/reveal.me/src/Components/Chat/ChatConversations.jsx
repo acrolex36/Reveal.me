@@ -39,7 +39,7 @@ const ChatConversations = (props) => {
 
       const checkTotalMessage = async () =>{
     try {
-      console.log(conversation);
+      
       const response = await axios.get(`http://localhost:5000/api/message/total/${conversation._id}`,{
         headers:{
           "Content-Type": "application/json; charset=UTF-8",
