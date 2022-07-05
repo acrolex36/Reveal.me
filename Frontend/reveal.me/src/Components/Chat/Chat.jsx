@@ -6,7 +6,7 @@ const Chat = (props) => {
    const {
       messages,
       currentChat,
-      blur
+      totalMessage
    } = props
    const [cookies, setCookie, removeCookie] = useCookies(null);
    const token = cookies.Token;
@@ -17,6 +17,7 @@ const Chat = (props) => {
    const [loadingUser, setLoadingUser] = useState(false)
    const [loading, setLoading] = useState(false)
    const [sent, setSent] = useState(false)
+   // const [totalMessage, setTotalMessage] = useState([])
 
    const getMatchAccount = async (matchId) => {
     try {
@@ -61,11 +62,28 @@ const Chat = (props) => {
         setLoadingUser(true)
   }
 
+//    const checkTotalMessage = async (matchId) =>{
+//     try {
+//       const response = await axios.get(`http://localhost:5000/api/message/total/${id}/${matchId}`,{
+//         headers:{
+//           "Content-Type": "application/json; charset=UTF-8",
+//             Authorization: `Bearer ${token}`,
+//         },
+//       });
+//       const data = await response.data
+//       setTotalMessage(data)
+
+//     }
+//     catch(error){
+//       console.log(error);
+//     }
+//   }
+
    useEffect(()=>{
    const matchId = currentChat?.members?.find(m=>m !== id)
    getMatchAccount(matchId)
    getUserAccount()
-   
+   // checkTotalMessage(matchId)
     if((accountData.length>0 && accountData.userDetail.profile_picture) && (userData.length>0 && userData.userDetail.profile_picture) && (messages))
       setLoading(false)
    else
@@ -75,7 +93,7 @@ const Chat = (props) => {
    
   return (
 <>
-   {accountData && accountData.userDetail && <div class="flex sm:items-center justify-between pb-2 border-b-2 border-gray-200">
+   {totalMessage && accountData && accountData.userDetail && <div class="flex sm:items-center justify-between pb-2 border-b-2 border-gray-200">
       <div className="relative flex items-center space-x-4">
          <div className="relative">
             {/* <span className="absolute text-green-500 right-0 bottom-0">
@@ -83,7 +101,7 @@ const Chat = (props) => {
                   <circle cx="8" cy="8" r="8" fill="currentColor"></circle>
                </svg>
             </span> */}
-         <img src={accountData.userDetail.profile_picture} alt="" class={`w-10 sm:w-10 h-10 sm:h-10 rounded-full ${blur ? "blur" : ""}`}/>
+         <img src={accountData.userDetail.profile_picture} alt="" class={`w-10 sm:w-10 h-10 sm:h-10 rounded-full ${totalMessage.at(0) >=5 && totalMessage.at(1) >=5 ? "" : "blur"}`}/>
          </div>
          <div className="flex flex-col leading-tight">
             <div className="text-lg mt-1 flex items-center">

@@ -17,7 +17,6 @@ const ChatContainer = () => {
   const [accountData, setAccountData] = useState([])
   const [loadingMatch, setLoadingMatch] = useState(false)
   const [messages, setMessages] = useState([])
-  const [sent, setSent] = useState(false)
   const [textArea, setTextArea] = useState('')
   const [arrivalMessage, setArrivalMessage] = useState(null)
   const id = cookies.UserId;
@@ -25,9 +24,10 @@ const ChatContainer = () => {
   const socket = useRef();
   const [userData, setUserData] = useState([])
   const [totalMessage, setTotalMessage] = useState([])
+  const [isShown, setIsShown] = useState(false)
   const scrollRef = useRef(null);
-  const [blur, setBlur] = useState(true)
-
+  let count = 0;
+  
   useEffect(() => {
     socket.current = io("ws://localhost:8900");
     socket.current.on("getMessage", (data) => {
@@ -54,7 +54,7 @@ const ChatContainer = () => {
     // });
   }, [id]);
 
-  const checkBlur = async (receiverId) =>{
+  const checkTotalMessage = async (receiverId) =>{
     try {
       
       const response = await axios.get(`http://localhost:5000/api/message/total/${id}/${receiverId}`,{
@@ -65,7 +65,7 @@ const ChatContainer = () => {
       });
       const data = await response.data
       setTotalMessage(data)
-
+      // console.log(totalMessage);
     }
     catch(error){
       console.log(error);
@@ -107,22 +107,6 @@ const ChatContainer = () => {
     });
 
     try {
-      
-      const response = await axios.get(`http://localhost:5000/api/message/total/${id}/${receiverId}`,{
-        headers:{
-          "Content-Type": "application/json; charset=UTF-8",
-            Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await response.data
-      setTotalMessage(data)
-
-    }
-    catch(error){
-      console.log(error);
-    }
-
-    try {
         const response = await axios
       .post(
         `http://localhost:5000/api/message/${currentChat?._id}`,
@@ -139,22 +123,33 @@ const ChatContainer = () => {
       )
       const newMessage = response.data
       setMessages( [...messages, newMessage])
-      console.log(messages);
       setTextArea('')
-      setSent(true);
-      checkBlur(receiverId)
-      if(totalMessage.at(0) > 5 && totalMessage.at(1) > 5){
-        console.log(totalMessage);
-        alert("CONGRATS! You've reached the total message to reveal yourself")
-        setBlur(false)
-      }
       
     } catch (error) {
         console.log(error);
     }
+    const check = async (receiverId) =>{
+    try {
+      
+      const response = await axios.get(`http://localhost:5000/api/message/total/${currentChat._id}`,{
+        headers:{
+          "Content-Type": "application/json; charset=UTF-8",
+            Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.data
+      setTotalMessage(data)
+      console.log(data);
+      // console.log(totalMessage);
+    }
+    catch(error){
+      console.log(error);
+    }
+  }
+    check(receiverId)
   }
 
-  const getMessages = async () => {
+  const getMessages = async (matchId) => {
     try {
       const res = await axios.get(
       `http://localhost:5000/api/message/all/${currentChat?._id}`,
@@ -167,32 +162,31 @@ const ChatContainer = () => {
     );
       const data = res.data;
       setMessages(data);
-      
     } catch (err) {
       console.log(err);
     }
   };
 
-      const getUserAccount = async () => {
-      const response = await axios.get(
-         `http://localhost:5000/api/singleuser/id/${id}`,
-        {
-          headers: {
-            "Content-Type": "application/json; charset=UTF-8",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      const dataUser = response.data;
-      setUserData(dataUser);
-      if(userData.length>0 && userData.userDetail){
-         setLoadingUser(false)
+  const getUserAccount = async () => {
+    const response = await axios.get(
+        `http://localhost:5000/api/singleuser/id/${id}`,
+      {
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+          Authorization: `Bearer ${token}`,
+        },
       }
-      else
-        setLoadingUser(true)
+    )
+    const dataUser = response.data;
+    setUserData(dataUser);
+    if(userData.length>0 && userData.userDetail){
+        setLoadingUser(false)
     }
+    else
+      setLoadingUser(true)
+  }
 
-    const getMatchAccount = async (matchId) => {
+  const getMatchAccount = async (matchId) => {
     try {
       const response = await axios.get(
         `http://localhost:5000/api/singleuser/id/${matchId}`,
@@ -223,29 +217,30 @@ const ChatContainer = () => {
   useEffect(() => {
 
     const matchId = currentChat?.members?.find(m=>m !== id)
-    getMessages();
+    // console.log(matchId);
+    getMessages(matchId);
     getMatchAccount(matchId)
     getUserAccount()
-    checkBlur(matchId)
-    console.log(blur);
-    
+    checkTotalMessage(matchId)
+
     if((accountData.length>0 && accountData.userDetail.profile_picture) && (userData.length>0 && userData.userDetail.profile_picture) && (messages))
       setLoadingAcc(false)
    else
       setLoadingAcc(true)
+
   }, [currentChat]);
 
   useEffect(()=>{
-    if(totalMessage.at(0) > 5 && totalMessage.at(1) > 5){
-      console.log(totalMessage);
-      alert("CONGRATS! You've reached the total message to reveal yourself")
-      setBlur(false)
-    } 
     const matchId = currentChat?.members?.find(m=>m !== id)
-    getMessages();
+    getMessages(matchId);
     getMatchAccount(matchId)
     getUserAccount()
-  }, [blur, totalMessage])
+    if(totalMessage.at(0) >= 5 && totalMessage.at(1) >= 5 && !isShown){
+      console.log(totalMessage);
+      setIsShown(true)
+      alert("CONGRATS! You've reached the total message to reveal yourself")
+    }
+  }, [totalMessage, currentChat])
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -276,7 +271,6 @@ const ChatContainer = () => {
                 <div onClick={()=>setCurrentChat(convo)}>
                 <ChatConversations conversation={convo}
                 currentUser={id}
-                blur={blur}
                 onClick={()=>setCurrentChat(convo)}
                 ></ChatConversations>
                 </div>
@@ -292,17 +286,17 @@ const ChatContainer = () => {
                   <Chat 
                   messages={messages}
                   currentChat={currentChat}
-                  blur={blur}
+                  totalMessage={totalMessage}
                   ></Chat>
                 }
                   <div id="messages" className="position:static flex flex-col space-y-3 p-4 overflow-y-auto scrollbar-thumb-blue scrollbar-w-2 scrolling-touch h-[648px] max-h-[1200px]">
-                {messages && accountData && userData && accountData?.userDetail && userData?.userDetail && messages.map((m)=>(
+                {totalMessage && messages && accountData && userData && accountData?.userDetail && userData?.userDetail && messages.map((m)=>(
                   <div ref={scrollRef}>
                   <ChatBubble
                   msg={m}
                   userData={userData}
                   accountData={accountData}
-                  blur={blur}
+                  totalMessage={totalMessage}
                   >
                   </ChatBubble>
                   </div>
@@ -337,10 +331,10 @@ const ChatContainer = () => {
         </div>)}
         <div class="hidden lg:col-span-1 lg:block w-full">
           <div class="h-full">
-            {currentChat && accountData && accountData.userDetail && 
+            {totalMessage && currentChat && accountData && accountData.userDetail && 
             <ChatProfile
               accountData={accountData}
-              blur={blur}
+              totalMessage={totalMessage}
             >
             </ChatProfile>}
           </div>

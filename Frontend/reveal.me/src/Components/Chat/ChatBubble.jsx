@@ -1,9 +1,12 @@
 import React from 'react'
+import { useState } from 'react';
 import {Cookies, useCookies} from "react-cookie";
-
-const ChatBubble = ({msg, userData, accountData, blur}) => {
+import axios from "axios";
+const ChatBubble = ({msg, userData, accountData, totalMessage}) => {
    const [cookies, setCookie, removeCookie] = useCookies(null);
    const id = cookies.UserId;
+   const token = cookies.token
+
   return (
     <div>
         <div class="chat-message">
@@ -14,7 +17,7 @@ const ChatBubble = ({msg, userData, accountData, blur}) => {
                         ${msg.sender === id ? 'px-4 py-2 rounded-lg inline-block rounded-br-none bg-gray-300 text-gray-600' : 'px-4 py-2 rounded-lg inline-block rounded-bl-none bg-pink-100 text-white'}`}>{msg.message}</span>
                     </div>
                 </div>
-                <img src={`${msg.sender === id ? userData?.userDetail?.profile_picture : accountData?.userDetail?.profile_picture} `} alt="My profile" className={`w-6 h-6 rounded-full ${msg.sender === id ? "order-2" : "order-1"} ${blur ? "blur" : ""}`}/>
+                <img src={`${msg.sender === id ? userData?.userDetail?.profile_picture : accountData?.userDetail?.profile_picture} `} alt="My profile" className={`w-6 h-6 rounded-full ${msg.sender === id ? "order-2" : "order-1"} ${totalMessage.at(0) >= 5 && totalMessage.at(1) >=5 ? "" : "blur"} `} />
             </div>
          </div>
     </div>

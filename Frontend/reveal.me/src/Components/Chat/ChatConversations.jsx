@@ -4,12 +4,13 @@ import axios from "axios";
 import {Cookies, useCookies} from "react-cookie";
 
 const ChatConversations = (props) => {
-    const {conversation, currentUser, blur} = props
+    const {conversation, currentUser} = props
     const [user, setUser] = useState(null)
     const [loadingMatch, setLoadingMatch] = useState(false)
     const [cookies, setCookie, removeCookie] = useCookies(null);
+    const [totalMessage, setTotalMessage] = useState([])
     const token = cookies.Token;
-
+    const id = cookies.UserId;
     useEffect(()=>{
         const matchId = conversation.members.find(m=>m !== currentUser)
         const getUser = async ()=>{
@@ -35,12 +36,31 @@ const ChatConversations = (props) => {
       console.error(err.message);
     }
         }
+
+      const checkTotalMessage = async () =>{
+    try {
+      console.log(conversation);
+      const response = await axios.get(`http://localhost:5000/api/message/total/${conversation._id}`,{
+        headers:{
+          "Content-Type": "application/json; charset=UTF-8",
+            Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.data
+      setTotalMessage(data)
+
+    }
+    catch(error){
+      console.log(error);
+    }
+  }
     getUser()
-    }, [currentUser, conversation])
+    checkTotalMessage()
+    }, [props, currentUser, conversation])
   return (
     <div>
-        {user && user.userDetail && <div key={user._id}  className="flex items-center px-3 py-2 text-sm transition duration-150 ease-in-out border-b border-gray-300 cursor-pointer hover:bg-gray-100 focus:outline-none">
-        <img className={`object-cover w-10 h-10 rounded-full ${blur ? "blur" : ""}`}
+        {totalMessage && user && user.userDetail && <div key={user._id}  className="flex items-center px-3 py-2 text-sm transition duration-150 ease-in-out border-b border-gray-300 cursor-pointer hover:bg-gray-100 focus:outline-none">
+        <img className={`object-cover w-10 h-10 rounded-full ${totalMessage.at(0) >=5 && totalMessage.at(1) >=5 ? "" : "blur"}`}
         src={user.userDetail.profile_picture} alt="userpic" />
         <div className="w-full pb-2" onLoad={()=>setLoading(false)}>
             <div className="flex justify-between">
