@@ -2,3 +2,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.inset-center {
+    left: 48rem;
+}
+
+.width-card{
+    width: 800px;
+    height: 350px;
+}

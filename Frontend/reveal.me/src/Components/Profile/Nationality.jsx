@@ -1,12 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
+import ProfileFields from './ProfileFields'
+const Nationality = props => {
 
-const Nationality = () => {
+  const {inputValue , passData} = props
+
   return (
     <select
     id="nationality"
     name="nationality"
     autoComplete="nationality"
-    className="mt-1 block w-full py-2 px-3 border border-pink-100 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+    className="mt-1 block w-full py-2 px-3 border border-pink-100 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm h-10"
+    value= {inputValue}
+    onChange= {(e) => passData(e.target.value)}>
     <option value="">-- select one --</option>
     <option value="afghan">Afghan</option>
     <option value="albanian">Albanian</option>
@@ -200,7 +205,7 @@ const Nationality = () => {
     <option value="yemenite">Yemenite</option>
     <option value="zambian">Zambian</option>
     <option value="zimbabwean">Zimbabwean</option>
-</select>
+    </select>
   )
 }
 
