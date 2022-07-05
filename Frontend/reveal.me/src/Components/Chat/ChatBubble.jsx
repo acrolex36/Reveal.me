@@ -1,7 +1,7 @@
 import React from 'react'
 import {Cookies, useCookies} from "react-cookie";
 
-const ChatBubble = ({msg, userData, accountData}) => {
+const ChatBubble = ({msg, userData, accountData, blur}) => {
    const [cookies, setCookie, removeCookie] = useCookies(null);
    const id = cookies.UserId;
   return (
@@ -14,7 +14,7 @@ const ChatBubble = ({msg, userData, accountData}) => {
                         ${msg.sender === id ? 'px-4 py-2 rounded-lg inline-block rounded-br-none bg-gray-300 text-gray-600' : 'px-4 py-2 rounded-lg inline-block rounded-bl-none bg-pink-100 text-white'}`}>{msg.message}</span>
                     </div>
                 </div>
-                <img src={`${msg.sender === id ? userData?.userDetail?.profile_picture : accountData?.userDetail?.profile_picture} `} alt="My profile" className={`w-6 h-6 rounded-full blur ${msg.sender === id ? "order-2" : "order-1"}`}/>
+                <img src={`${msg.sender === id ? userData?.userDetail?.profile_picture : accountData?.userDetail?.profile_picture} `} alt="My profile" className={`w-6 h-6 rounded-full ${msg.sender === id ? "order-2" : "order-1"} ${blur ? "blur" : ""}`}/>
             </div>
          </div>
     </div>

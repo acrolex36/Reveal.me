@@ -5,7 +5,8 @@ import axios from "axios";
 const Chat = (props) => {
    const {
       messages,
-      currentChat
+      currentChat,
+      blur
    } = props
    const [cookies, setCookie, removeCookie] = useCookies(null);
    const token = cookies.Token;
@@ -82,7 +83,7 @@ const Chat = (props) => {
                   <circle cx="8" cy="8" r="8" fill="currentColor"></circle>
                </svg>
             </span> */}
-         <img src={accountData.userDetail.profile_picture} alt="" class="w-10 sm:w-10 h-10 sm:h-10 rounded-full blur"/>
+         <img src={accountData.userDetail.profile_picture} alt="" class={`w-10 sm:w-10 h-10 sm:h-10 rounded-full ${blur ? "blur" : ""}`}/>
          </div>
          <div className="flex flex-col leading-tight">
             <div className="text-lg mt-1 flex items-center">

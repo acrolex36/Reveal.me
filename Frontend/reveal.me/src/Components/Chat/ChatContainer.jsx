@@ -24,7 +24,9 @@ const ChatContainer = () => {
   const token = cookies.Token;
   const socket = useRef();
   const [userData, setUserData] = useState([])
+  const [totalMessage, setTotalMessage] = useState([])
   const scrollRef = useRef(null);
+  const [blur, setBlur] = useState(true)
 
   useEffect(() => {
     socket.current = io("ws://localhost:8900");
@@ -51,6 +53,24 @@ const ChatContainer = () => {
     //   );
     // });
   }, [id]);
+
+  const checkBlur = async (receiverId) =>{
+    try {
+      
+      const response = await axios.get(`http://localhost:5000/api/message/total/${id}/${receiverId}`,{
+        headers:{
+          "Content-Type": "application/json; charset=UTF-8",
+            Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.data
+      setTotalMessage(data)
+
+    }
+    catch(error){
+      console.log(error);
+    }
+  }
 
   const getUserConversation = async () => {
     try {
@@ -86,6 +106,21 @@ const ChatContainer = () => {
       text: textArea,
     });
 
+    try {
+      
+      const response = await axios.get(`http://localhost:5000/api/message/total/${id}/${receiverId}`,{
+        headers:{
+          "Content-Type": "application/json; charset=UTF-8",
+            Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.data
+      setTotalMessage(data)
+
+    }
+    catch(error){
+      console.log(error);
+    }
 
     try {
         const response = await axios
@@ -107,6 +142,13 @@ const ChatContainer = () => {
       console.log(messages);
       setTextArea('')
       setSent(true);
+      checkBlur(receiverId)
+      if(totalMessage.at(0) > 5 && totalMessage.at(1) > 5){
+        console.log(totalMessage);
+        alert("CONGRATS! You've reached the total message to reveal yourself")
+        setBlur(false)
+      }
+      
     } catch (error) {
         console.log(error);
     }
@@ -131,13 +173,7 @@ const ChatContainer = () => {
     }
   };
 
-  useEffect(()=>{
-        getUserConversation()
-  }, [loading, cookies])
-
-  useEffect(() => {
-
-    const getUserAccount = async () => {
+      const getUserAccount = async () => {
       const response = await axios.get(
          `http://localhost:5000/api/singleuser/id/${id}`,
         {
@@ -179,16 +215,37 @@ const ChatContainer = () => {
       console.error(err.message);
     }
   };
-  
+
+  useEffect(()=>{
+    getUserConversation()
+  }, [loading, cookies])
+
+  useEffect(() => {
+
     const matchId = currentChat?.members?.find(m=>m !== id)
     getMessages();
     getMatchAccount(matchId)
     getUserAccount()
+    checkBlur(matchId)
+    console.log(blur);
+    
     if((accountData.length>0 && accountData.userDetail.profile_picture) && (userData.length>0 && userData.userDetail.profile_picture) && (messages))
       setLoadingAcc(false)
    else
       setLoadingAcc(true)
   }, [currentChat]);
+
+  useEffect(()=>{
+    if(totalMessage.at(0) > 5 && totalMessage.at(1) > 5){
+      console.log(totalMessage);
+      alert("CONGRATS! You've reached the total message to reveal yourself")
+      setBlur(false)
+    } 
+    const matchId = currentChat?.members?.find(m=>m !== id)
+    getMessages();
+    getMatchAccount(matchId)
+    getUserAccount()
+  }, [blur, totalMessage])
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -219,6 +276,7 @@ const ChatContainer = () => {
                 <div onClick={()=>setCurrentChat(convo)}>
                 <ChatConversations conversation={convo}
                 currentUser={id}
+                blur={blur}
                 onClick={()=>setCurrentChat(convo)}
                 ></ChatConversations>
                 </div>
@@ -234,6 +292,7 @@ const ChatContainer = () => {
                   <Chat 
                   messages={messages}
                   currentChat={currentChat}
+                  blur={blur}
                   ></Chat>
                 }
                   <div id="messages" className="position:static flex flex-col space-y-3 p-4 overflow-y-auto scrollbar-thumb-blue scrollbar-w-2 scrolling-touch h-[648px] max-h-[1200px]">
@@ -243,6 +302,7 @@ const ChatContainer = () => {
                   msg={m}
                   userData={userData}
                   accountData={accountData}
+                  blur={blur}
                   >
                   </ChatBubble>
                   </div>
@@ -280,6 +340,7 @@ const ChatContainer = () => {
             {currentChat && accountData && accountData.userDetail && 
             <ChatProfile
               accountData={accountData}
+              blur={blur}
             >
             </ChatProfile>}
           </div>
