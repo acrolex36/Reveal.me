@@ -77,12 +77,12 @@ const Chat = (props) => {
    {accountData && accountData.userDetail && <div class="flex sm:items-center justify-between pb-2 border-b-2 border-gray-200">
       <div className="relative flex items-center space-x-4">
          <div className="relative">
-            <span className="absolute text-green-500 right-0 bottom-0">
+            {/* <span className="absolute text-green-500 right-0 bottom-0">
                <svg width="20" height="20">
                   <circle cx="8" cy="8" r="8" fill="currentColor"></circle>
                </svg>
-            </span>
-         <img src={accountData.userDetail.profile_picture} alt="" class="w-10 sm:w-10 h-10 sm:h-10 rounded-full"/>
+            </span> */}
+         <img src={accountData.userDetail.profile_picture} alt="" class="w-10 sm:w-10 h-10 sm:h-10 rounded-full blur"/>
          </div>
          <div className="flex flex-col leading-tight">
             <div className="text-lg mt-1 flex items-center">
