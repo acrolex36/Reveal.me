@@ -1,0 +1,35 @@
+{
+    "fullHeaderData": {
+        "first_name": "ami",
+        "last_name": "egen"
+    },
+    "missingHeaderData": {
+        "first_name": "ami"
+    },
+    "fullBodyData": {
+        "gender": "male",
+        "gender_interest": ["female", "male"],
+        "age": 20,
+        "profile_picture": " ",
+        "dob_date": 1,
+        "dob_month": 1,
+        "dob_year": 2002,
+        "height": 170,
+        "nationality": "indonesia",
+        "occupation": "bsc",
+        "hobbies": ["Basketball"],
+        "languages": ["indonesien","deutsch"]
+    },
+    "missingBodyData": {
+        "gender": "male",
+        "gender_interest": ["female", "male"],
+        "age": 20,
+        "profile_picture": " ",
+        "dob_date": 1,
+        "dob_month": 1,
+        "height": 170,
+        "occupation": "bsc",
+        "hobbies": ["Basketball"],
+        "languages": ["indonesien","deutsch"]
+    }
+}

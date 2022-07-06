@@ -23,12 +23,17 @@ const failRegister = require('../testData/register.json').failRegister;
 const correctConfirmPassword = require('../testData/forgetPassword.json').correctConfirmPassword;
 const falseConfirmPassword = require('../testData/forgetPassword.json').falseConfirmPassword;
 const passwordTooShort = require('../testData/forgetPassword.json').passwordTooShort;
+const fullHeaderData = require('../testData/updateData.json').fullHeaderData;
+const missingHeaderData = require('../testData/updateData.json').missingHeaderData;
+const fullBodyData = require('../testData/updateData.json').fullBodyData;
+const missingBodyData = require('../testData/updateData.json').missingBodyData;
 
 
 describe('Reveal.me API Tests', () => {
     const baseurl = 'http://localhost:5000/api'
     var userId
     var token
+    var email = correctCredential.email
 
     // before(function(done) {
     //     request(baseurl)
@@ -184,7 +189,51 @@ describe('Reveal.me API Tests', () => {
             });
     });
 
-    it()
+    it("should successfully update user", (done) => {
+        request(baseurl)
+            .put('/user/profile/head/' + email)
+            .send(fullHeaderData)
+            .set('Accept', 'application/json')
+            .set('Content-Type', 'application/json')
+            .set("Authorization", "Bearer " + token)
+            .end(function(err, res) {
+                expect(res.statusCode).to.be.equal(200);
+                expect(res.body.first_name).to.be.equal(fullHeaderData.first_name);
+                expect(res.body.last_name).to.be.equal(fullHeaderData.last_name);
+                if (err) {
+                    throw err;
+                }
+                done();
+            });
+    });
+
+    it("should successfully update user details", (done) => {
+        request(baseurl)
+            .put('/user/profile/body/' + email)
+            .send(fullBodyData)
+            .set('Accept', 'application/json')
+            .set('Content-Type', 'application/json')
+            .set("Authorization", "Bearer " + token)
+            .end(function(err, res) {
+                expect(res.statusCode).to.be.equal(200);
+                expect(res.body.userDetail.gender).to.be.equal(fullBodyData.gender);
+                expect(res.body.userDetail.gender_interest).to.have.members(fullBodyData.gender_interest);
+                expect(res.body.userDetail.age).to.be.equal(fullBodyData.age);
+                expect(res.body.userDetail.profile_picture).to.be.equal(fullBodyData.profile_picture);
+                expect(res.body.userDetail.dob_date).to.be.equal(fullBodyData.dob_date);
+                expect(res.body.userDetail.dob_month).to.be.equal(fullBodyData.dob_month);
+                expect(res.body.userDetail.dob_year).to.be.equal(fullBodyData.dob_year);
+                expect(res.body.userDetail.height).to.be.equal(fullBodyData.height);
+                expect(res.body.userDetail.nationality).to.be.equal(fullBodyData.nationality);
+                expect(res.body.userDetail.occupation).to.be.equal(fullBodyData.occupation);
+                expect(res.body.userDetail.hobbies).to.have.members(fullBodyData.hobbies);
+                expect(res.body.userDetail.languages).to.have.members(fullBodyData.languages);
+                if (err) {
+                    throw err;
+                }
+                done();
+            });
+    });
 
     // it("should successfully delete user", (done) => {
     //     request(baseurl)

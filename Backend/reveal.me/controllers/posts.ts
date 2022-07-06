@@ -393,7 +393,7 @@ export const updateMatchedUserById = async (req: Request, res: Response) => {
       const matchedUser = await User.findById( matchedUserId );
 
       const updateMatch = {
-        $push: { oneSideMatch: user._id },
+        $addToSet: { oneSideMatch: user._id },
       };
 
       await User.findByIdAndUpdate(matchedUser._id, updateMatch);
