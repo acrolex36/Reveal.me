@@ -5,6 +5,7 @@ import RegisterPage from "./pages/RegisterPage";
 import Homepage from "./pages/Homepage";
 import CreateProfilePage from "./pages/CreateProfilePage";
 import ChatPage from "./pages/ChatPage";
+import ExplorePage from "./pages/ExplorePage";
 const App = () => {
   return (
     <BrowserRouter>
@@ -15,6 +16,10 @@ const App = () => {
           path="/login/forgot_password"
           element={<ForgotPasswordPage />}
         ></Route>
+          <Route
+              path="/explore"
+              element={<ExplorePage />}
+          ></Route>
         <Route path="/register" element={<RegisterPage />}></Route>
         <Route path="/create_profile" element={<CreateProfilePage />}></Route>
         <Route path="/chat" element={<ChatPage />}></Route>

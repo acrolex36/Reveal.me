@@ -11,8 +11,8 @@ import {useCookies} from "react-cookie";
 function TinderContainer() {
     const [filteredUsers, setFilteredUsers] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [cookies] = useCookies(null);
     const [userData, setUserData] = useState([]);
+    const [cookies] = useCookies(null);
     const token = cookies.Token;
     const myUserId = cookies.UserId;
 
@@ -34,6 +34,7 @@ function TinderContainer() {
             );
             setUserData((userData) => [...userData, response.data]);
         };
+
         const getFilteredUsers = async () => {
             const response = await axios.get(
                 `http://localhost:5000/api/filtereduser/id/${myUserId}`,
@@ -157,7 +158,7 @@ function TinderContainer() {
         <div>
             {filteredUsers.length > 0 && userData.length > 0 && (
                 <>
-                    <div className="absolute top-64 left-188 flex justify-center">
+                    <div className="absolute top-60 left-148 flex justify-center">
                         {filteredUsers.map((person, index) => (
                             <TinderCard
                                 preventSwipe={["up", "down"]}
@@ -174,12 +175,11 @@ function TinderContainer() {
                         ))}
                     </div>
                     <div
-                        className="absolute top-128 left-148 w-1/2 flex flex-row justify-evenly ">
+                        className="absolute top-136 left-148 w-1/2 flex flex-row justify-evenly w-2/5">
                         <button
-                            className="sm:py-24 sm:px-6 lg:max-w-5xl "
                             onClick={() => swipe("left")}
                         >
-                            <div className="w-full aspect-w-1 aspect-h-1  overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
+                            <div className="w-full aspect-w-1 aspect-h-1  xl:aspect-w-7 xl:aspect-h-8">
                                 <img
                                     className="scale-50 hover:scale-75 ease-in duration-150"
                                     src={reject_button}
@@ -188,10 +188,9 @@ function TinderContainer() {
                             </div>
                         </button>
                         <button
-                            className="sm:py-24 sm:px-6 lg:max-w-5xl "
                             onClick={() => goBack()}
                         >
-                            <div className="w-full aspect-w-1 aspect-h-1  overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
+                            <div className="w-full aspect-w-1 aspect-h-1 xl:aspect-w-7 xl:aspect-h-8">
                                 <img
                                     className="scale-50 hover:scale-75 ease-in duration-150"
                                     src={back_button}
@@ -200,7 +199,6 @@ function TinderContainer() {
                             </div>
                         </button>
                         <button
-                            className="sm:py-24 sm:px-6 lg:max-w-5xl "
                             onClick={() => swipe("right")}
                         >
                             <div className="w-full aspect-w-1 aspect-h-1 overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
