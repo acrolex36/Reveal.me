@@ -24,7 +24,8 @@ import {
   updateMessage,
   getTotalMessages,
   getAllMessages,
-  deleteUser
+  deleteUser,
+  removeMatchedUser
 
 } from "../controllers/posts";
 
@@ -39,6 +40,7 @@ router.put("/user/profile/head/:email", updateOneUser);
 router.put("/user/profile/body/:email", updateOneUserProfile);
 router.put("/user/profile/:email/:matchedUserEmail", updateMatchedUser); //not use
 router.put("/user/profile/id/:id/:matchedUserId", updateMatchedUserById);
+router.put("/user/profile/remove/id/:id/:matchedUserId", removeMatchedUser);
 
 router.delete("/user/:id", deleteUser)
 

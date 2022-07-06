@@ -184,6 +184,8 @@ describe('Reveal.me API Tests', () => {
             });
     });
 
+    it()
+
     // it("should successfully delete user", (done) => {
     //     request(baseurl)
     //         .delete("/user/" + userId)

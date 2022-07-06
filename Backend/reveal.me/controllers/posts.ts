@@ -352,6 +352,33 @@ export const updateMatchedUser = async (req: Request, res: Response) => {
   }
 };
 
+//PUT - update oneSideMatch when both swiped right
+export const removeMatchedUser = async (req: Request, res: Response) => {
+  checkToken(req, res, () => {
+    authSuccess = true;
+  });
+
+  if (authSuccess) {
+    const { id, matchedUserId } = req.params;
+
+    try {
+      const user = await User.findById( id );
+      const matchedUser = await User.findById( matchedUserId );
+
+      const updateMatch = {
+        $pull: { oneSideMatch: matchedUser._id },
+      };
+
+      await User.findByIdAndUpdate(user._id, updateMatch);
+
+      res.status(200).json(user.oneSideMatch);
+    } catch (error) {
+      res.status(404).json({ message: error });
+    }
+    authSuccess = false;
+  }
+};
+
 //PUT - update oneSideMatch when swiped right
 export const updateMatchedUserById = async (req: Request, res: Response) => {
   checkToken(req, res, () => {
