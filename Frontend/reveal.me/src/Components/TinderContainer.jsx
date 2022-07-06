@@ -24,7 +24,7 @@ function TinderContainer() {
     useEffect(() => {
         const getUserData = async () => {
             const response = await axios.get(
-                `http://localhost:5000/api/test/singleuser/id/${myUserId}`,
+                `http://localhost:5000/api/singleuser/id/${myUserId}`,
                 {
                     headers: {
                         "Content-Type": "application/json; charset=UTF-8",
