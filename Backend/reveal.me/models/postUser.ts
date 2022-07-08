@@ -39,6 +39,12 @@ const userSchema = new mongoose.Schema({
       ref: "user",
     },
   ],
+  swipedLeftUsers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+    },
+  ],
   userDetail: {
     is_online: {
       type: Boolean,
