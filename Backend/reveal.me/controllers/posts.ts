@@ -290,11 +290,6 @@ export const updateOneUserProfile = async (req: Request, res: Response) => {
         return res.status(403).send(`Gender Type ${gender} is not valid`);
       }
 
-      // var parsedGenderInterest
-      // for(var i = 0 ; i < gender_interest.length ; i++){
-
-      // }
-
       const updateUserDetail = {
         _id: user.id,
         userDetail: {
@@ -356,7 +351,34 @@ export const updateMatchedUser = async (req: Request, res: Response) => {
   }
 };
 
-//PUT - update oneSideMatch when swiped right
+//PUT - update oneSideMatch when both swiped right
+export const removeMatchedUser = async (req: Request, res: Response) => {
+  checkToken(req, res, () => {
+    authSuccess = true;
+  });
+
+  if (authSuccess) {
+    const { id, matchedUserId } = req.params;
+
+    try {
+      const user = await User.findById( id );
+      const matchedUser = await User.findById( matchedUserId );
+
+      const updateMatch = {
+        $pull: { oneSideMatch: matchedUser._id },
+      };
+
+      await User.findByIdAndUpdate(user._id, updateMatch);
+
+      res.status(200).json(user.oneSideMatch);
+    } catch (error) {
+      res.status(404).json({ message: error });
+    }
+    authSuccess = false;
+  }
+};
+
+//PUT - update oneSideMatch when swiped right using id
 export const updateMatchedUserById = async (req: Request, res: Response) => {
   checkToken(req, res, () => {
     authSuccess = true;
@@ -370,7 +392,7 @@ export const updateMatchedUserById = async (req: Request, res: Response) => {
       const matchedUser = await User.findById( matchedUserId );
 
       const updateMatch = {
-        $push: { oneSideMatch: user._id },
+        $addToSet: { oneSideMatch: user._id },
       };
 
       await User.findByIdAndUpdate(matchedUser._id, updateMatch);
@@ -383,11 +405,55 @@ export const updateMatchedUserById = async (req: Request, res: Response) => {
   }
 };
 
-//GET - /test/alluser # return all User
+//PUT - update swipedLeftUsers when swiped right
+export const updateSwipedLeftUsers = async (req: Request, res: Response) => {
+  checkToken(req, res, () => {
+    authSuccess = true;
+  });
+
+  if (authSuccess) {
+    const { id, matchedUserId } = req.params;
+
+    try {
+      const user = await User.findById( id );
+      const matchedUser = await User.findById( matchedUserId );
+
+      const updateMatch = {
+        $addToSet: { swipedLeftUsers: matchedUser._id },
+      };
+
+      await User.findByIdAndUpdate(user._id, updateMatch);
+
+      res.status(200).json(user);
+    } catch (error) {
+      res.status(404).json({ message: error });
+    }
+    authSuccess = false;
+  }
+};
+
+//DELETE - /user/:userId
+export const deleteUser = async (req: Request, res: Response) => {
+  checkToken(req, res, () => {
+    authSuccess = true;
+  });
+
+  if (authSuccess) {
+    const { id } = req.params;
+    try {
+      const user = await User.findByIdAndDelete(id);
+      res.status(201).json(user);
+    } catch (error) {
+      res.status(404).json({ message: error });
+    }
+    authSuccess = false;
+  }
+};
+
+//GET - /alluser # return all User
 export const getAllUser = async (req: Request, res: Response) => {
   checkToken(req, res, () => {
     authSuccess = true;
-    // return res.status(200).send({data: "success"});
   });
 
   if (authSuccess) {
@@ -401,7 +467,7 @@ export const getAllUser = async (req: Request, res: Response) => {
   }
 };
 
-//GET - /test/singleuser/:id # return User with {id}
+//GET - /singleuser/:id # return User with {id}
 export const getOneUserDetailwithId = async (req: Request, res: Response) => {
   checkToken(req, res, () => {
     authSuccess = true;
@@ -420,11 +486,10 @@ export const getOneUserDetailwithId = async (req: Request, res: Response) => {
   }
 };
 
-//GET - /test/filtereduser # return all User from gender interest
+//GET - /filtereduser # return all User from gender interest
 export const getAllFilteredUser = async (req: Request, res: Response) => {
   checkToken(req, res, () => {
     authSuccess = true;
-    // return res.status(200).send({data: "success"});
   });
 
   if (authSuccess) {
@@ -485,13 +550,39 @@ export const getAllFilteredUserById = async (req: Request, res: Response) => {
       const gender = user.userDetail.gender
       const gender_interest = user.userDetail.gender_interest
       const interest = user.userDetail.hobbies
+      const swipedLeftUsers = user.swipedLeftUsers
 
       const other_users = await User.find({_id:{ $ne: id }})
+      
+      const userConversation = await Conversation.find({members:{$all:[
+        id
+      ]}})
+      
+      var matchedUsers = []
+
+      for(let temp_members of userConversation){
+        if(temp_members.members[0] !== id){
+          matchedUsers.push(temp_members.members[0].toString())
+        }  else {
+          matchedUsers.push(temp_members.members[1].toString())
+        }
+      }
+
+      //Users that has not been swiped left
+      var remainingUsers = []
+
+      for(var not_user of other_users) {
+        if((matchedUsers.includes(not_user._id.valueOf())) || (swipedLeftUsers.includes(not_user._id.valueOf()))){
+          continue
+        } else{
+            remainingUsers.push(not_user)
+        }                    
+      }
 
       var gendered_users = []
 
       for (var interested_gender of gender_interest) {
-        for (var temp_user of other_users) {
+        for (let temp_user of remainingUsers) {
           if(temp_user.userDetail.gender == interested_gender
             && temp_user.userDetail.gender_interest.includes(gender)) {
             gendered_users.push(temp_user)
@@ -509,7 +600,7 @@ export const getAllFilteredUserById = async (req: Request, res: Response) => {
             }
         }
       }
-
+      
       res.status(200).json(returnedUsers);
     } catch (error) {
       res.status(404).json({ message: error });
@@ -743,12 +834,6 @@ export const getTotalMessage = async (req: Request, res: Response) => {
         userId2,
       ]}});
 
-      // const total1 = await Messages.aggregate([{$project: {
-        
-      //   count: { $size:"$messages"}}}])
-      
-      //const total = await Messages.find().count()
-
       const messages = oneConversation.messages
 
       var totalMessages = []
@@ -779,11 +864,13 @@ export const getTotalMessages = async (req: Request, res: Response) => {
   });
 
   if (authSuccess) {
-    const { userId1, userId2 } = req.params;
+    const { conversationId } = req.params;
     
     try {
-      const total_user_1 = await Message.find({sender: userId1}).count()
-      const total_user_2 = await Message.find({sender: userId2}).count()
+      const conversation = await Conversation.findById(conversationId)
+
+      const total_user_1 = await Message.find({sender: conversation.members.at(0), conversationId: conversationId}).count()
+      const total_user_2 = await Message.find({sender: conversation.members.at(1), conversationId: conversationId}).count()
 
       var totalMessages = []
 
@@ -797,72 +884,5 @@ export const getTotalMessages = async (req: Request, res: Response) => {
     authSuccess = false;
   }
 };
-
-// //POST - /recipe # insert a new Recipe
-// export const createNewRecipe = async (req: Request, res: Response) => {
-//   const { title, description, selectedFile, instruction, ingredient } =
-//     req.body;
-
-//   const newPostMessage = new PostMessage({
-//     title,
-//     description,
-//     selectedFile,
-//     instruction,
-//     ingredient,
-//   });
-
-//   try {
-//     await newPostMessage.save();
-
-//     res.status(201).json(newPostMessage);
-//   } catch (error) {
-//     res.status(409).json({ message: error });
-//   }
-// };
-
-// //PUT - /recipe/:{id} # update exist recipe with {id nr}
-// export const updateRecipe = async (req: Request, res: Response) => {
-//   const { id } = req.params;
-//   const { title, description, ingredient, instruction } = req.body;
-
-//   if (!mongoose.Types.ObjectId.isValid(id))
-//     return res.status(404).send(`No post with id: ${id}`);
-
-//   const updatedPost = { title, description, ingredient, instruction, _id: id };
-
-//   await PostMessage.findByIdAndUpdate(id, updatedPost, { new: true });
-
-//   res.json(updatedPost);
-// };
-
-// //DELETE - /recipe/:{id} # delete recipe with {id nr}
-// export const deleteRecipe = async (req: Request, res: Response) => {
-//   const { id } = req.params;
-
-//   if (!mongoose.Types.ObjectId.isValid(id))
-//     return res.status(404).send(`No post with id: ${id}`);
-
-//   await PostMessage.findByIdAndRemove(id);
-
-//   res.json({ message: "Post deleted successfully." });
-// };
-
-// //PUT - /recipe/:{id}/likeRecipe # update exist recipe like value with {id nr}
-// export const likeRecipe = async (req: Request, res: Response) => {
-//   const { id } = req.params;
-
-//   if (!mongoose.Types.ObjectId.isValid(id))
-//     return res.status(404).send(`No post with id: ${id}`);
-
-//   const post = await PostMessage.findById(id);
-
-//   const updatedPost = await PostMessage.findByIdAndUpdate(
-//     id,
-//     { likeCount: post.likeCount + 1 },
-//     { new: true }
-//   );
-
-//   res.json(updatedPost);
-// };
 
 export default router;
