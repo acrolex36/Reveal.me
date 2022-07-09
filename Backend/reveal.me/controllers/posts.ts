@@ -89,11 +89,8 @@ export const register = async (req: Request, res: Response) => {
       { $set: { user_id: user._id } }
     );
 
-    // console.log("User created successfully", response)
-
     return res.status(201).json({
       userId: response._id,
-      // "email": response.email,
       token: token,
     });
   } catch (error: any) {
@@ -137,7 +134,6 @@ export const login = async (req: Request, res: Response) => {
         });
         return res.status(201).json({
           userId: user._id,
-          // "email": user.email,
           token: token,
         });
       } else {
@@ -192,7 +188,15 @@ export const forgetpassword = async (req: Request, res: Response) => {
       { $set: { password: newPassword, lastPasswordReset: Date.now() } }
     );
 
-    return res.status(201).json(user);
+    var token = jwt.sign({ id: user._id, email: user.email }, JWT_SECRET, {
+              expiresIn: "24h",
+            });
+
+    return res.status(201).json({
+      userId: user._id,
+      token: token,
+    });
+
   } catch (error) {
     return res
       .status(400)
