@@ -120,24 +120,22 @@ const ChatContainer = () => {
     e.preventDefault();
     let sendMessage;
     const receiverId = currentChat.members.find((member) => member !== id);
-    if(sendImage === "" && textArea !== "")
-    {
+    if (sendImage === "" && textArea !== "") {
       console.log(textArea);
       socket.current.emit("sendMessage", {
         senderId: id,
         receiverId,
         text: textArea,
       });
-      sendMessage = textArea
-    }
-    else if(sendImage !== "" && textArea === ""){
+      sendMessage = textArea;
+    } else if (sendImage !== "" && textArea === "") {
       console.log(sendImage);
       socket.current.emit("sendMessage", {
         senderId: id,
         receiverId,
         text: sendImage,
       });
-      sendMessage = sendImage
+      sendMessage = sendImage;
     }
 
     try {
@@ -157,7 +155,7 @@ const ChatContainer = () => {
       const newMessage = response.data;
       setMessages([...messages, newMessage]);
       setTextArea("");
-      setSendImage("")
+      setSendImage("");
     } catch (error) {
       console.log(error);
     }
@@ -251,7 +249,7 @@ const ChatContainer = () => {
       }
     };
     reader.readAsDataURL(e.target.files[0]);
-  }
+  };
 
   useEffect(() => {
     getUserConversation();
@@ -356,11 +354,11 @@ const ChatContainer = () => {
                           onChange={(e) => setTextArea(e.target.value)}
                         />
                       ) : (
-                          <img
-                            src={sendImage}
-                            className="w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-600 pl-3 bg-gray-200 rounded-md py-3 pr-36 h-auto box-border overflow-y-hidden scrollbar-thumb-blue scrolling-touch"
-                            onClick={(e) =>setSendImage("")}
-                          ></img>
+                        <img
+                          src={sendImage}
+                          className="w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-600 pl-3 bg-gray-200 rounded-md py-3 pr-36 h-auto box-border overflow-y-hidden scrollbar-thumb-blue scrolling-touch"
+                          onClick={(e) => setSendImage("")}
+                        ></img>
                       )}
                       <div className="absolute right-0 items-center inset-y-0 hidden sm:flex">
                         <label>
