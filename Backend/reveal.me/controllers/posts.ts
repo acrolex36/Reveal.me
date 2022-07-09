@@ -207,7 +207,7 @@ export const forgetpassword = async (req: Request, res: Response) => {
 
 var authSuccess: boolean;
 
-//PUT - /user/profile # update User profile
+//PUT - /user/profile/head/:email # update User profile
 export const updateOneUser = async (req: Request, res: Response) => {
   checkToken(req, res, () => {
     authSuccess = true;
@@ -245,7 +245,7 @@ export const updateOneUser = async (req: Request, res: Response) => {
   }
 };
 
-//PUT - /user/profile # update User profile
+//PUT - /user/profile/body/:email # update User profile
 export const updateOneUserProfile = async (req: Request, res: Response) => {
   checkToken(req, res, () => {
     authSuccess = true;
@@ -290,11 +290,6 @@ export const updateOneUserProfile = async (req: Request, res: Response) => {
         return res.status(403).send(`Gender Type ${gender} is not valid`);
       }
 
-      // var parsedGenderInterest
-      // for(var i = 0 ; i < gender_interest.length ; i++){
-
-      // }
-
       const updateUserDetail = {
         _id: user.id,
         userDetail: {
@@ -329,7 +324,7 @@ export const updateOneUserProfile = async (req: Request, res: Response) => {
   }
 };
 
-//PUT - update oneSideMatch when swiped right By using Id
+//PUT - /user/profile/:email/:matchedUserEmail # update oneSideMatch when swiped right By using Id
 export const updateMatchedUser = async (req: Request, res: Response) => {
   checkToken(req, res, () => {
     authSuccess = true;
