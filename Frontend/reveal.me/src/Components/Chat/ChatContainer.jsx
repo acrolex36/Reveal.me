@@ -257,10 +257,11 @@ const ChatContainer = () => {
 
   useEffect(() => {
     const matchId = currentChat?.members?.find((m) => m !== id);
-    getMessages(matchId);
     getMatchAccount(matchId);
     getUserAccount();
     checkTotalMessage(currentChat);
+    setMessages("")
+    getMessages(matchId);
 
     if (
       accountData.length > 0 &&
@@ -313,13 +314,13 @@ const ChatContainer = () => {
           <div className="hidden lg:col-span-2 lg:block">
             <div className="w-full max-h-4/5">
               <div className="flex-1 p:2 sm:p-4 justify-between flex flex-col h-4/5">
-                {messages && (
+                {messages ? (
                   <Chat
                     messages={messages}
                     currentChat={currentChat}
                     totalMessage={totalMessage}
                   ></Chat>
-                )}
+                ) : (<div>Fetching your messages...</div>)}
                 <div
                   id="messages"
                   className="position:static flex flex-col space-y-3 p-4 overflow-y-auto scrollbar-thumb-blue scrollbar-w-2 scrolling-touch h-[648px] max-h-[1200px]"
