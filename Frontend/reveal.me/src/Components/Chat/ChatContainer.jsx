@@ -25,8 +25,8 @@ const ChatContainer = () => {
   const [userData, setUserData] = useState([]);
   const [totalMessage, setTotalMessage] = useState([]);
   const [isShown, setIsShown] = useState(false);
+  const [sendImage, setSendImage] = useState("");
   const scrollRef = useRef(null);
-  let count = 0;
 
   useEffect(() => {
     socket.current = io("ws://localhost:8900");
@@ -40,7 +40,7 @@ const ChatContainer = () => {
   }, []);
 
   useEffect(() => {
-    const check = async (receiverId) => {
+    const check = async () => {
       try {
         const response = await axios.get(
           `http://localhost:5000/api/message/total/${currentChat._id}`,
@@ -78,7 +78,7 @@ const ChatContainer = () => {
     // });
   }, [id]);
 
-  const checkTotalMessage = async (receiverId) => {
+  const checkTotalMessage = async (currentChat) => {
     try {
       const response = await axios.get(
         `http://localhost:5000/api/message/total/${currentChat._id}`,
@@ -91,7 +91,6 @@ const ChatContainer = () => {
       );
       const data = await response.data;
       setTotalMessage(data);
-      // console.log(totalMessage);
     } catch (error) {
       console.log(error);
     }
@@ -110,7 +109,6 @@ const ChatContainer = () => {
       );
       const data = await response.data;
       setConversation(data);
-      //setIdMatch(conversation.members.find(m=>m!==id))
       if (allConversation && allConversation.length > 0) setLoading(false);
       else setLoading(true);
     } catch (error) {
@@ -120,21 +118,34 @@ const ChatContainer = () => {
 
   const sendMessage = async (e) => {
     e.preventDefault();
-
+    let sendMessage;
     const receiverId = currentChat.members.find((member) => member !== id);
-
-    socket.current.emit("sendMessage", {
-      senderId: id,
-      receiverId,
-      text: textArea,
-    });
+    if(sendImage === "" && textArea !== "")
+    {
+      console.log(textArea);
+      socket.current.emit("sendMessage", {
+        senderId: id,
+        receiverId,
+        text: textArea,
+      });
+      sendMessage = textArea
+    }
+    else if(sendImage !== "" && textArea === ""){
+      console.log(sendImage);
+      socket.current.emit("sendMessage", {
+        senderId: id,
+        receiverId,
+        text: sendImage,
+      });
+      sendMessage = sendImage
+    }
 
     try {
       const response = await axios.post(
         `http://localhost:5000/api/message/${currentChat?._id}`,
         {
           userId: id,
-          message: textArea,
+          message: sendMessage,
         },
         {
           headers: {
@@ -146,10 +157,11 @@ const ChatContainer = () => {
       const newMessage = response.data;
       setMessages([...messages, newMessage]);
       setTextArea("");
+      setSendImage("")
     } catch (error) {
       console.log(error);
     }
-    const check = async (receiverId) => {
+    const check = async () => {
       try {
         const response = await axios.get(
           `http://localhost:5000/api/message/total/${currentChat._id}`,
@@ -162,29 +174,20 @@ const ChatContainer = () => {
         );
         const data = await response.data;
         setTotalMessage(data);
-        console.log(data);
         if (data.at(0) >= 5 && data.at(1) >= 5 && !isShown) {
           setIsShown(true);
           alert(
             "CONGRATS! You've reached the total message to reveal each other"
           );
         }
-        // console.log(totalMessage);
       } catch (error) {
         console.log(error);
       }
     };
-    check(receiverId);
-    console.log(totalMessage);
+    check();
   };
 
-  // const handleKeypress = e =>{
-  //   if(e.key === "Enter"){
-  //     sendMessage(e);
-  //   }
-  // }
-
-  const getMessages = async (matchId) => {
+  const getMessages = async () => {
     try {
       const res = await axios.get(
         `http://localhost:5000/api/message/all/${currentChat?._id}`,
@@ -240,13 +243,22 @@ const ChatContainer = () => {
     }
   };
 
+  const setPicture = (e) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setSendImage(reader.result);
+      }
+    };
+    reader.readAsDataURL(e.target.files[0]);
+  }
+
   useEffect(() => {
     getUserConversation();
   }, [loading, cookies]);
 
   useEffect(() => {
     const matchId = currentChat?.members?.find((m) => m !== id);
-    // console.log(matchId);
     getMessages(matchId);
     getMatchAccount(matchId);
     getUserAccount();
@@ -355,59 +367,81 @@ const ChatContainer = () => {
                     ))}
                 </div>
 
-                <div className="border-t-2 border-gray-200 px-4 pt-4 mb-2 sm:mb-0">
-                  <div className="relative flex">
-                    <input
-                      type="text"
-                      value={textArea}
-                      placeholder="Write your message!"
-                      className="w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-600 pl-3 bg-gray-200 rounded-md py-3 pr-36 max-h-28 box-border overflow-y-hidden scrollbar-thumb-blue scrolling-touch"
-                      onChange={(e) => setTextArea(e.target.value)}
-                    />
-                    <div className="absolute right-0 items-center inset-y-0 hidden sm:flex">
-                      <button
-                        type="button"
-                        className="inline-flex items-center justify-center rounded-full h-10 w-10 transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:outline-none"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          className="h-6 w-6 text-gray-600"
+                <form onSubmit={sendMessage}>
+                  <div className="border-t-2 border-gray-200 px-4 pt-4 mb-2 sm:mb-0">
+                    <div className="relative flex">
+                      {sendImage === "" ? (
+                        <input
+                          type="text"
+                          value={textArea}
+                          placeholder="Write your message!"
+                          className="w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-600 pl-3 bg-gray-200 rounded-md py-3 pr-36 max-h-28 box-border overflow-y-hidden scrollbar-thumb-blue scrolling-touch"
+                          onChange={(e) => setTextArea(e.target.value)}
+                        />
+                      ) : (
+                        <img
+                          src={sendImage}
+                          className="w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-600 pl-3 bg-gray-200 rounded-md py-3 pr-36 h-auto box-border overflow-y-hidden scrollbar-thumb-blue scrolling-touch"
+                        ></img>
+                      )}
+                      <div className="absolute right-0 items-center inset-y-0 hidden sm:flex">
+                        <label>
+                          <span
+                            className="inline-flex items-center justify-center rounded-full h-10 w-10 transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:outline-none"
+                            htmlFor="image-upload"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              className="h-6 w-6 text-gray-600"
+                              htmlFor="image-upload"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+                                htmlFor="image-upload"
+                              ></path>
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+                                htmlFor="image-upload"
+                              ></path>
+                            </svg>
+                          </span>
+                          <input
+                            type="file"
+                            multiple={false}
+                            accept="image/*"
+                            name="image-upload"
+                            id="image-upload"
+                            onChange={setPicture}
+                            className="hidden"
+                          />
+                        </label>
+                        <button
+                          type="submit"
+                          className="inline-flex items-center justify-center rounded-lg px-4 py-3 transition duration-500 ease-in-out text-white bg-blue-500 hover:bg-blue-400 focus:outline-none"
                         >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
-                          ></path>
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
-                          ></path>
-                        </svg>
-                      </button>
-                      <button
-                        onClick={sendMessage}
-                        type="button"
-                        className="inline-flex items-center justify-center rounded-lg px-4 py-3 transition duration-500 ease-in-out text-white bg-blue-500 hover:bg-blue-400 focus:outline-none"
-                      >
-                        <span className="font-bold">Send</span>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                          className="h-6 w-6 ml-2 transform rotate-90"
-                        >
-                          <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
-                        </svg>
-                      </button>
+                          <span className="font-bold">Send</span>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            className="h-6 w-6 ml-2 transform rotate-90"
+                          >
+                            <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
+                          </svg>
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </form>
               </div>
             </div>
           </div>

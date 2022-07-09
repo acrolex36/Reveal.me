@@ -21,16 +21,28 @@ const ChatBubble = ({ msg, userData, accountData, totalMessage }) => {
             }`}
           >
             <div>
-              <span
-                className={` 
+              {msg.message.length < 200 ? (
+                <span
+                  className={` 
                         ${
                           msg.sender === id
                             ? "px-4 py-2 rounded-lg inline-block rounded-br-none bg-gray-300 text-gray-600"
                             : "px-4 py-2 rounded-lg inline-block rounded-bl-none bg-pink-100 text-white"
                         }`}
-              >
-                {msg.message}
-              </span>
+                >
+                  {msg.message}
+                </span>
+              ) : (
+                <img
+                  src={msg.message}
+                  className={` 
+                        ${
+                          msg.sender === id
+                            ? "px-4 py-2 rounded-lg inline-block rounded-br-none bg-gray-300 text-gray-600"
+                            : "px-4 py-2 rounded-lg inline-block rounded-bl-none bg-pink-100 text-white"
+                        }`}
+                ></img>
+              )}
             </div>
           </div>
           <img
