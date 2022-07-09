@@ -77,50 +77,94 @@ function TinderContainer() {
     };
 
 
+    const createConversation = async (swipedId) => {
+        const response = await axios.post(
+            `http://localhost:5000/api/conversation/message/${myUserId}/${swipedId}`,
+            {},
+            {
+                headers: {
+                    "Content-Type": "application/json; charset=UTF-8",
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        if (response.status === 201) {
+            console.log("conversation made made")
+        } else {
+            console.log("error making convo");
+        }
+    }
+
+    const removeMatchedUser = async (swipedId) => {
+        const response = await axios.put(
+            `http://localhost:5000/api/user/profile/remove/id/${myUserId}/${swipedId}`,
+            {},
+            {
+                headers: {
+                    "Content-Type": "application/json; charset=UTF-8",
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        if (response.status === 200) {
+            console.log("matched user removed from myuser onematchlist")
+        } else {
+            console.log("error making convo");
+        }
+    }
+
+    const updateSwipedUser = async (swipedId) => {
+        const response = await axios.put(
+            `http://localhost:5000/api/user/profile/id/${cookies.UserId}/${swipedId}`,
+            {
+                oneSideMatch: cookies.UserId,
+            },
+            {
+                headers: {
+                    "Content-Type": "application/json; charset=UTF-8",
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        if (response.status === 200) {
+            console.log(response.data);
+        } else {
+            console.log("error updating");
+        }
+    }
+
+    const removeRejectedUser = async (swipedId) => {
+        const response = await axios.put(
+            `http://localhost:5000/api/user/profile/swipedLeft/id/${myUserId}/${swipedId}`,
+            {},
+            {
+                headers: {
+                    "Content-Type": "application/json; charset=UTF-8",
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        if (response.status === 200) {
+            console.log("rejected user removed from myuser potential list")
+        } else {
+            console.log("error removing rejected user ");
+        }
+    }
+
     const outOfFrame = async (dir, name, idx, swipedId) => {
         console.log(`${name} (${idx}) left the screen!`, currentIndexRef.current);
         if (dir === "right") {
             if (userData.at(0).oneSideMatch.includes(swipedId)) {
                 alert("IT'S A MATCH! ");
-                const response = await axios.post(
-                    `http://localhost:5000/api/conversation/message/${myUserId}/${swipedId}`,
-                    {},
-                    {
-                        headers: {
-                            "Content-Type": "application/json; charset=UTF-8",
-                            Authorization: `Bearer ${token}`,
-                        },
-                    }
-                );
-                if (response.status === 201) {
-                    console.log(response.data);
-                    console.log("convo made")
-                } else {
-                    console.log("error making convo");
-                }
+                await createConversation(swipedId);
+                await removeMatchedUser(swipedId);
             } else {
-                const response = await axios.put(
-                    `http://localhost:5000/api/user/profile/id/${cookies.UserId}/${swipedId}`,
-                    {
-                        oneSideMatch: cookies.UserId,
-                    },
-                    {
-                        headers: {
-                            "Content-Type": "application/json; charset=UTF-8",
-                            Authorization: `Bearer ${token}`,
-                        },
-                    }
-                );
-                if (response.status === 200) {
-                    console.log(response.data);
-                } else {
-                    console.log("error updating");
-                }
+                await updateSwipedUser(swipedId);
             }
         }
-
-        // handle the case in which go back is pressed before card goes outOfFrame
-        // currentIndexRef.current >= idx && childRefs[idx].current.restoreCard();
+        if(dir === "left"){
+            await removeRejectedUser(swipedId);
+        }
     };
 
     const swipe = async (dir) => {
