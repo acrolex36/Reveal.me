@@ -364,9 +364,9 @@ export const removeMatchedUser = async (req: Request, res: Response) => {
         $pull: { oneSideMatch: matchedUser._id },
       };
 
-      await User.findByIdAndUpdate(user._id, updateMatch);
+      const response = await User.findByIdAndUpdate(user._id, updateMatch, { new: true });
 
-      res.status(200).json(user.oneSideMatch);
+      res.status(200).json(response);
     } catch (error) {
       res.status(404).json({ message: error });
     }
@@ -391,9 +391,9 @@ export const updateMatchedUserById = async (req: Request, res: Response) => {
         $addToSet: { oneSideMatch: user._id },
       };
 
-      await User.findByIdAndUpdate(matchedUser._id, updateMatch);
+      const response = await User.findByIdAndUpdate(matchedUser._id, updateMatch, { new: true });
 
-      res.status(200).json(matchedUser);
+      res.status(200).json(response);
     } catch (error) {
       res.status(404).json({ message: error });
     }
@@ -615,11 +615,6 @@ export const getOneUserDetail = async (req: Request, res: Response) => {
     const { email } = req.params;
     try {
       const user = await User.findOne({ email });
-      // const user = await User.findOne({email}).lean() //without userDetail
-
-      //  if(user === null){
-      //   res.status(410).json("lol");
-      //   }
 
       res.status(200).json(user);
     } catch (error) {

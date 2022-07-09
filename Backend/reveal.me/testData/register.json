@@ -10,5 +10,12 @@
         "last_name": "f2",
         "email": "trial@test.com",
         "plainTextPassword": "test"
+    },
+    "anotherUser": {
+        "first_name": "f3",
+        "last_name": "f4",
+        "email": "testing@testing.com",
+        "plainTextPassword": "test123"
     }
+    
 }

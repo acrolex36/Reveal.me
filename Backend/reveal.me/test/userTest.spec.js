@@ -27,11 +27,13 @@ const fullHeaderData = require('../testData/updateData.json').fullHeaderData;
 const missingHeaderData = require('../testData/updateData.json').missingHeaderData;
 const fullBodyData = require('../testData/updateData.json').fullBodyData;
 const missingBodyData = require('../testData/updateData.json').missingBodyData;
+const anotherUser = require('../testData/register.json').anotherUser;
 
 
 describe('Reveal.me API Tests', () => {
     const baseurl = 'http://localhost:5000/api'
     var userId
+    var anotherUserId
     var token
     var email = correctCredential.email
 
@@ -235,18 +237,63 @@ describe('Reveal.me API Tests', () => {
             });
     });
 
-    // it("should successfully delete user", (done) => {
-    //     request(baseurl)
-    //         .delete("/user/" + userId)
-    //         .set("Authorization", "Bearer " + token)
-    //         .end(function(err,res) {
-    //             expect(res.statusCode).to.be.equal(201);
-    //             if (err) {
-    //                 throw err;
-    //             }
-    //             done();
-    //         })
-    // })
+    it('should successfully create another user', (done) => {
+        request(baseurl)
+            .post('/auth/register')
+            .send(anotherUser)
+            .set('Accept', 'application/json')
+            .set('Content-Type', 'application/json')
+            .end(function(err, res) {
+                expect(res.statusCode).to.be.equal(201);
+                expect(res.body.userId).not.to.be.null;
+                anotherUserId = res.body.userId;
+                if (err) {
+                    throw err;
+                }
+                done();
+            });
+    });
+
+    it("should successfully update oneMatchUser", (done) => {
+        request(baseurl)
+            .put(`/user/profile/id/${userId}/${anotherUserId}`)
+            .set("Authorization", "Bearer " + token)
+            .end(function(err, res) {
+                expect(res.statusCode).to.be.equal(200);
+                expect(res.body.oneSideMatch).to.have.members([userId]);
+                if (err) {
+                    throw err;
+                }
+                done();
+            });
+    })
+
+    it("should successfully remove UserId from oneMatchUser", (done) => {
+        request(baseurl)
+            .put(`/user/profile/remove/id/${userId}/${anotherUserId}`)
+            .set("Authorization", "Bearer " + token)
+            .end(function(err, res) {
+                expect(res.statusCode).to.be.equal(200);
+                expect(res.body.oneSideMatch).to.have.members([]);
+                if (err) {
+                    throw err;
+                }
+                done();
+            });
+    });
+
+    it("should successfully delete user", (done) => {
+        request(baseurl)
+            .delete("/user/" + anotherUserId)
+            .set("Authorization", "Bearer " + token)
+            .end(function(err,res) {
+                expect(res.statusCode).to.be.equal(201);
+                if (err) {
+                    throw err;
+                }
+                done();
+            })
+    })
 });
 
 
