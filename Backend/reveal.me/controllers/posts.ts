@@ -324,34 +324,34 @@ export const updateOneUserProfile = async (req: Request, res: Response) => {
   }
 };
 
-//PUT - /user/profile/:email/:matchedUserEmail # update oneSideMatch when swiped right By using Id
-export const updateMatchedUser = async (req: Request, res: Response) => {
-  checkToken(req, res, () => {
-    authSuccess = true;
-  });
+// //PUT - /user/profile/:email/:matchedUserEmail # update oneSideMatch when swiped right
+// export const updateMatchedUser = async (req: Request, res: Response) => {
+//   checkToken(req, res, () => {
+//     authSuccess = true;
+//   });
 
-  if (authSuccess) {
-    const { email, matchedUserEmail } = req.params;
+//   if (authSuccess) {
+//     const { email, matchedUserEmail } = req.params;
 
-    try {
-      const user = await User.findOne({ email });
-      const matchedUser = await User.findOne({ email: matchedUserEmail });
+//     try {
+//       const user = await User.findOne({ email });
+//       const matchedUser = await User.findOne({ email: matchedUserEmail });
 
-      const updateMatch = {
-        $push: { oneSideMatch: user._id },
-      };
+//       const updateMatch = {
+//         $push: { oneSideMatch: user._id },
+//       };
 
-      await User.findByIdAndUpdate(matchedUser._id, updateMatch);
+//       await User.findByIdAndUpdate(matchedUser._id, updateMatch);
 
-      res.status(200).json(matchedUser);
-    } catch (error) {
-      res.status(404).json({ message: error });
-    }
-    authSuccess = false;
-  }
-};
+//       res.status(200).json(matchedUser);
+//     } catch (error) {
+//       res.status(404).json({ message: error });
+//     }
+//     authSuccess = false;
+//   }
+// };
 
-//PUT - update oneSideMatch when swiped right
+//PUT - /user/profile/id/:id/:matchedUserId # update oneSideMatch when swiped right By using Id
 export const updateMatchedUserById = async (req: Request, res: Response) => {
   checkToken(req, res, () => {
     authSuccess = true;
@@ -433,55 +433,55 @@ export const getOneUserDetailwithId = async (req: Request, res: Response) => {
   }
 };
 
-//GET - /filtereduser # return all User from gender interest
-export const getAllFilteredUser = async (req: Request, res: Response) => {
-  checkToken(req, res, () => {
-    authSuccess = true;
-    // return res.status(200).send({data: "success"});
-  });
+// //GET - /filtereduser # return all User from gender interest
+// export const getAllFilteredUser = async (req: Request, res: Response) => {
+//   checkToken(req, res, () => {
+//     authSuccess = true;
+//     // return res.status(200).send({data: "success"});
+//   });
 
-  if (authSuccess) {
-    const { email } = req.params;
+//   if (authSuccess) {
+//     const { email } = req.params;
 
-    try {
-      const user = await User.findOne({ email });
+//     try {
+//       const user = await User.findOne({ email });
 
-      const gender = user.userDetail.gender;
-      const gender_interest = user.userDetail.gender_interest;
-      const hobbies = user.userDetail.hobbies;
+//       const gender = user.userDetail.gender;
+//       const gender_interest = user.userDetail.gender_interest;
+//       const hobbies = user.userDetail.hobbies;
 
-      const other_users = await User.find({ email: { $ne: email } });
+//       const other_users = await User.find({ email: { $ne: email } });
 
-      var gendered_users = [];
+//       var gendered_users = [];
 
-      for (var interested_gender of gender_interest) {
-        for (var temp_user of other_users) {
-          if (
-            temp_user.userDetail.gender === interested_gender &&
-            temp_user.userDetail.gender_interest.includes(gender)
-          ) {
-            gendered_users.push(temp_user);
-          }
-        }
-      }
+//       for (var interested_gender of gender_interest) {
+//         for (var temp_user of other_users) {
+//           if (
+//             temp_user.userDetail.gender === interested_gender &&
+//             temp_user.userDetail.gender_interest.includes(gender)
+//           ) {
+//             gendered_users.push(temp_user);
+//           }
+//         }
+//       }
 
-      var returnedUsers = [];
+//       var returnedUsers = [];
 
-      for (let filter of gendered_users) {
-        for (let user_interest of hobbies) {
-          if (filter.userDetail.hobbies.includes(user_interest)) {
-            returnedUsers.push(filter);
-            break;
-          }
-        }
-      }
-      res.status(200).json(returnedUsers);
-    } catch (error) {
-      res.status(404).json({ message: error });
-    }
-    authSuccess = false;
-  }
-};
+//       for (let filter of gendered_users) {
+//         for (let user_interest of hobbies) {
+//           if (filter.userDetail.hobbies.includes(user_interest)) {
+//             returnedUsers.push(filter);
+//             break;
+//           }
+//         }
+//       }
+//       res.status(200).json(returnedUsers);
+//     } catch (error) {
+//       res.status(404).json({ message: error });
+//     }
+//     authSuccess = false;
+//   }
+// };
 
 //GET - /filtereduser/id/:id # return all User from gender interest by Id
 export const getAllFilteredUserById = async (req: Request, res: Response) => {
@@ -531,25 +531,25 @@ export const getAllFilteredUserById = async (req: Request, res: Response) => {
   }
 };
 
-//GET - /singleuser/:email # return User with {email}
-export const getOneUserDetail = async (req: Request, res: Response) => {
-  checkToken(req, res, () => {
-    authSuccess = true;
-  });
+// //GET - /singleuser/:email # return User with {email}
+// export const getOneUserDetail = async (req: Request, res: Response) => {
+//   checkToken(req, res, () => {
+//     authSuccess = true;
+//   });
 
-  if (authSuccess) {
-    const { email } = req.params;
-    try {
-      const user = await User.findOne({ email });
-      // const user = await User.findOne({email}).lean() //without userDetail
+//   if (authSuccess) {
+//     const { email } = req.params;
+//     try {
+//       const user = await User.findOne({ email });
+//       // const user = await User.findOne({email}).lean() //without userDetail
 
-      res.status(200).json(user);
-    } catch (error) {
-      res.status(404).json({ message: error });
-    }
-    authSuccess = false;
-  }
-};
+//       res.status(200).json(user);
+//     } catch (error) {
+//       res.status(404).json({ message: error });
+//     }
+//     authSuccess = false;
+//   }
+// };
 
 //POST - /message/conversation/:userId1/:userId2 # create new Conversation 
 export const createConversation = async (req: Request, res: Response) => {
@@ -576,34 +576,34 @@ export const createConversation = async (req: Request, res: Response) => {
   }
 };
 
-//PUT - /conversation/message/ # update messages
-export const updateMessages = async (req: Request, res: Response) => {
-  checkToken(req, res, () => {
-    authSuccess = true;
-  });
+// //PUT - /conversation/message/ # update messages
+// export const updateMessages = async (req: Request, res: Response) => {
+//   checkToken(req, res, () => {
+//     authSuccess = true;
+//   });
 
-  if (authSuccess) {
-  const { id } = req.params
-  const { userId, message} = req.body
+//   if (authSuccess) {
+//   const { id } = req.params
+//   const { userId, message} = req.body
   
-    try {
-      const conversation = await Conversation.findById(id);
+//     try {
+//       const conversation = await Conversation.findById(id);
 
-      conversation.messages.push({
+//       conversation.messages.push({
 
-        sender: userId,
-        message: message
+//         sender: userId,
+//         message: message
 
-      })
+//       })
 
-      await conversation.save()
-      res.status(200).json(conversation);
-    } catch (error) {
-      res.status(404).json({ message: error });
-    }
-  authSuccess = false;
-  }
-};
+//       await conversation.save()
+//       res.status(200).json(conversation);
+//     } catch (error) {
+//       res.status(404).json({ message: error });
+//     }
+//   authSuccess = false;
+//   }
+// };
 
 //POST -  #post new message from one conversation
 export const updateMessage = async (req: Request, res: Response) => {
@@ -673,47 +673,47 @@ export const getAllConversation = async (req: Request, res: Response) => {
 
 };
 
-//GET - /oneconversation/:userId1/:userId2 # find one conversation between 2 user
-export const getOneConversation = async (req: Request, res: Response) => {
-  checkToken(req, res, () => {
-    authSuccess = true;
-  });
+// //GET - /oneconversation/:userId1/:userId2 # find one conversation between 2 user
+// export const getOneConversation = async (req: Request, res: Response) => {
+//   checkToken(req, res, () => {
+//     authSuccess = true;
+//   });
 
-  if (authSuccess) {
-    const { userId1, userId2 } = req.params;
+//   if (authSuccess) {
+//     const { userId1, userId2 } = req.params;
     
-    try {
-      const oneConversation = await Conversation.findOne({members:{$all:[
-        userId1,
-        userId2,
-      ]}});
-      res.status(200).json(oneConversation);
-    } catch (error) {
-      res.status(404).json({ message: error });
-    }
-    authSuccess = false;
-  }
-};
+//     try {
+//       const oneConversation = await Conversation.findOne({members:{$all:[
+//         userId1,
+//         userId2,
+//       ]}});
+//       res.status(200).json(oneConversation);
+//     } catch (error) {
+//       res.status(404).json({ message: error });
+//     }
+//     authSuccess = false;
+//   }
+// };
 
-//GET - /oneconversation/:userId1/:userId2 # find one conversation between 2 user
-export const getOneConversationById = async (req: Request, res: Response) => {
-  checkToken(req, res, () => {
-    authSuccess = true;
-  });
+// //GET - /oneconversation/:userId1/:userId2 # find one conversation between 2 user
+// export const getOneConversationById = async (req: Request, res: Response) => {
+//   checkToken(req, res, () => {
+//     authSuccess = true;
+//   });
 
-  if (authSuccess) {
-    const { id } = req.params;
+//   if (authSuccess) {
+//     const { id } = req.params;
     
-    try {
-      const oneConversationId = await Conversation.findById(id);
+//     try {
+//       const oneConversationId = await Conversation.findById(id);
 
-      res.status(200).json(oneConversationId);
-    } catch (error) {
-      res.status(404).json({ message: error });
-    }
-    authSuccess = false;
-  }
-};
+//       res.status(200).json(oneConversationId);
+//     } catch (error) {
+//       res.status(404).json({ message: error });
+//     }
+//     authSuccess = false;
+//   }
+// };
 
 
 //GET - /oneconversation/:userId1/:userId2 # find one conversation between 2 user
@@ -736,50 +736,44 @@ export const getAllMessages = async (req: Request, res: Response) => {
   }
 };
 
-//GET - /oneconversation/:userId1/:userId2 # find one conversation between 2 user
-export const getTotalMessage = async (req: Request, res: Response) => {
-  checkToken(req, res, () => {
-    authSuccess = true;
-  });
+// //GET - /oneconversation/:userId1/:userId2 # find one conversation between 2 user
+// export const getTotalMessage = async (req: Request, res: Response) => {
+//   checkToken(req, res, () => {
+//     authSuccess = true;
+//   });
 
-  if (authSuccess) {
-    const { userId1, userId2 } = req.params;
+//   if (authSuccess) {
+//     const { userId1, userId2 } = req.params;
     
-    try {
-      const oneConversation = await Conversation.findOne({members:{$all:[
-        userId1,
-        userId2,
-      ]}});
+//     try {
+//       const oneConversation = await Conversation.findOne({members:{$all:[
+//         userId1,
+//         userId2,
+//       ]}});
 
-      // const total1 = await Messages.aggregate([{$project: {
-        
-      //   count: { $size:"$messages"}}}])
-      
-      //const total = await Messages.find().count()
+//       const messages = oneConversation.messages
 
-      const messages = oneConversation.messages
+//       var totalMessages = []
 
-      var totalMessages = []
+//       var totalUser1 = 0
+//       for(let i of messages) {
+//         if (i.sender === userId1) totalUser1++
+//       }
+//       totalMessages.push(totalUser1)
 
-      var totalUser1 = 0
-      for(let i of messages) {
-        if (i.sender === userId1) totalUser1++
-      }
-      totalMessages.push(totalUser1)
+//       var totalUser2 = 0
+//       for(let i of messages) {
+//         if (i.sender === userId2) totalUser2++
+//       }
+//       totalMessages.push(totalUser2)
 
-      var totalUser2 = 0
-      for(let i of messages) {
-        if (i.sender === userId2) totalUser2++
-      }
-      totalMessages.push(totalUser2)
-
-      res.status(200).json(totalMessages);
-    } catch (error) {
-      res.status(404).json({ message: error });
-    }
-    authSuccess = false;
-  }
-};
+//       res.status(200).json(totalMessages);
+//     } catch (error) {
+//       res.status(404).json({ message: error });
+//     }
+//     authSuccess = false;
+//   }
+// };
 
 export const getTotalMessages = async (req: Request, res: Response) => {
   checkToken(req, res, () => {
