@@ -3,9 +3,10 @@ module.exports = {
   theme: {
     extend: {
       spacing: {
-        '128': '32rem', // following the standard of 128 / 4 = 32
-        '148': '40rem',
-        '188': '47rem',
+        '128': '32em', // following the standard of 128 / 4 = 32
+        '136': '34em',
+        '148': '40em',
+        '188': '47em',
       }
     },
     colors:{
