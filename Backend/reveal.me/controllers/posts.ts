@@ -396,7 +396,7 @@ export const deleteUser = async (req: Request, res: Response) => {
   }
 };
 
-//GET - /test/alluser # return all User
+//GET - /alluser # return all User
 export const getAllUser = async (req: Request, res: Response) => {
   checkToken(req, res, () => {
     authSuccess = true;
@@ -414,7 +414,7 @@ export const getAllUser = async (req: Request, res: Response) => {
   }
 };
 
-//GET - /test/singleuser/:id # return User with {id}
+//GET - /singleuser/:id # return User with {id}
 export const getOneUserDetailwithId = async (req: Request, res: Response) => {
   checkToken(req, res, () => {
     authSuccess = true;
@@ -433,7 +433,7 @@ export const getOneUserDetailwithId = async (req: Request, res: Response) => {
   }
 };
 
-//GET - /test/filtereduser # return all User from gender interest
+//GET - /filtereduser # return all User from gender interest
 export const getAllFilteredUser = async (req: Request, res: Response) => {
   checkToken(req, res, () => {
     authSuccess = true;
@@ -483,7 +483,7 @@ export const getAllFilteredUser = async (req: Request, res: Response) => {
   }
 };
 
-//GET - /test/filtereduser/id/:id # return all User from gender interest by Id
+//GET - /filtereduser/id/:id # return all User from gender interest by Id
 export const getAllFilteredUserById = async (req: Request, res: Response) => {
   checkToken(req, res, () => {
     authSuccess = true;
@@ -531,7 +531,7 @@ export const getAllFilteredUserById = async (req: Request, res: Response) => {
   }
 };
 
-//GET - /test/singleuser/:email # return User with {email}
+//GET - /singleuser/:email # return User with {email}
 export const getOneUserDetail = async (req: Request, res: Response) => {
   checkToken(req, res, () => {
     authSuccess = true;
@@ -543,10 +543,6 @@ export const getOneUserDetail = async (req: Request, res: Response) => {
       const user = await User.findOne({ email });
       // const user = await User.findOne({email}).lean() //without userDetail
 
-      //  if(user === null){
-      //   res.status(410).json("lol");
-      //   }
-
       res.status(200).json(user);
     } catch (error) {
       res.status(404).json({ message: error });
@@ -554,7 +550,6 @@ export const getOneUserDetail = async (req: Request, res: Response) => {
     authSuccess = false;
   }
 };
-
 
 //POST - /message/conversation/:userId1/:userId2 # create new Conversation 
 export const createConversation = async (req: Request, res: Response) => {
