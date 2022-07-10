@@ -5,11 +5,13 @@ import RegisterPage from "./pages/RegisterPage";
 import Homepage from "./pages/Homepage";
 import CreateProfilePage from "./pages/CreateProfilePage";
 import ChatPage from "./pages/ChatPage";
+import LandingPage from "./pages/LandingPage";
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Homepage />}></Route>
+        <Route path="/" element={<LandingPage />}></Route>
+        <Route path="/homepage" element={<Homepage />}></Route>
         <Route path="/login" element={<LoginPage />}></Route>
         <Route
           path="/login/forgot_password"
