@@ -253,6 +253,16 @@
               }
             }
           },
+          "403": {
+            "description": "BadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          },
           "404": {
             "description": "BadRequest",
             "content": {
@@ -281,7 +291,7 @@
         "tags": [
           "User"
         ],
-        "summary": "update user match",
+        "summary": "update user like",
         "parameters": [
           {
             "in": "path",
@@ -327,6 +337,171 @@
             }
           },
           "409": {
+            "description": "BadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/profile/remove/id/{id}/{matchedUserId}": {
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "summary": "undo user like",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "matchedUserId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "BadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/profile/swipedleft/id/{id}/{matchedUserId}": {
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "summary": "update user dislike",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "matchedUserId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "BadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/profile/swipedleft/remove/id/{id}": {
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "summary": "undo user dislike",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "_id": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          },
+          "404": {
             "description": "BadRequest",
             "content": {
               "application/json": {
@@ -512,7 +687,7 @@
     "/conversation/message/{userId1}/{userId2}": {
       "post": {
         "tags": [
-          "Chat"
+          "Conversation"
         ],
         "summary": "create new Conversation",
         "parameters": [
@@ -562,10 +737,225 @@
         }
       }
     },
+    "/conversation/isblurred/{conversationId}": {
+      "put": {
+        "tags": [
+          "Conversation"
+        ],
+        "summary": "blurred user picture",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "conversationId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "BadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/allconversation": {
+      "get": {
+        "tags": [
+          "Conversation"
+        ],
+        "summary": "get all Conversation",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "BadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/allconversation/{userId}": {
+      "get": {
+        "tags": [
+          "Conversation"
+        ],
+        "summary": "get all Conversation from one User",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "BadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/message/total/{conversationId}": {
+      "get": {
+        "tags": [
+          "Conversation"
+        ],
+        "summary": "count each user message history from one Conversation",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "conversationId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CountArray"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "BadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/conversation/remove/{conversationId}": {
+      "delete": {
+        "tags": [
+          "Conversation"
+        ],
+        "summary": "delete conversation with its messages",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "conversationId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CountArray"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "BadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/message/{conversationId}": {
       "post": {
         "tags": [
-          "Chat"
+          "Message"
         ],
         "summary": "new message from one conversation",
         "parameters": [
@@ -616,90 +1006,10 @@
         }
       }
     },
-    "/allconversation": {
-      "get": {
-        "tags": [
-          "Chat"
-        ],
-        "summary": "get all Conversation",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ConversationResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "BadRequest",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/allconversation/{userId}": {
-      "get": {
-        "tags": [
-          "Chat"
-        ],
-        "summary": "get all Conversation from one User",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ConversationResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "BadRequest",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/message/all/{conversationId}": {
       "get": {
         "tags": [
-          "Chat"
+          "Message"
         ],
         "summary": "get all message history from one Conversation",
         "parameters": [
@@ -724,51 +1034,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/MessageResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "BadRequest",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/message/total/{conversationId}": {
-      "get": {
-        "tags": [
-          "Chat"
-        ],
-        "summary": "count each user message history from one Conversation",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "conversationId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CountArray"
                 }
               }
             }
@@ -944,6 +1209,10 @@
       "ConversationResponse": {
         "type": "object",
         "properties": {
+          "id": {
+            "description": "The auto generated id of the User",
+            "type": "string"
+          },
           "time": {
             "description": "The time of the User login",
             "type": "string",
@@ -952,12 +1221,11 @@
           "members": {
             "$ref": "#/components/schemas/Array"
           },
-          "_id": {
-            "description": "The auto generated id of the User",
-            "type": "string"
-          },
           "__v": {
             "type": "integer"
+          },
+          "isBlurred": {
+            "type": "boolean"
           }
         }
       },
