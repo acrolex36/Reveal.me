@@ -1,40 +1,41 @@
 import express from "express";
 import {
-  register,
-  login,
-  forgetpassword,
+    register,
+    login,
+    forgetpassword,
 
-  updateOneUser,
-  updateOneUserProfile,
-  updateMatchedUserById,
-  removeMatchedUser,
-  updateSwipedLeftUsers,
-  removeOneSwipedLeftUsers,
-  
-  getAllUser,
-  getOneUserDetailwithId,
-  getAllFilteredUserById,
+    updateOneUser,
+    updateOneUserProfile,
+    updateMatchedUserById,
+    removeMatchedUser,
+    updateSwipedLeftUsers,
+    removeOneSwipedLeftUsers,
 
-  deleteUser,
+    getAllUser,
+    getOneUserDetailwithId,
+    getAllFilteredUserById,
+    getAllGenderedUserById,
+
+    deleteUser,
 
 } from "../controllers/postsUser";
 
 import {
-  createConversation,
+    createConversation,
 
-  updateIsBlurred,
+    updateIsBlurred,
 
-  getAllConversation,
-  getAllConversationFromOneUser,
-  getTotalMessages,
+    getAllConversation,
+    getAllConversationFromOneUser,
+    getTotalMessages,
 
-  deleteConversation,
+    deleteConversation,
 
 } from "../controllers/postsConversation"
 
 import {
-  getAllMessages,
-  createMessage,
+    getAllMessages,
+    createMessage,
 
 } from "../controllers/postsMessage"
 
@@ -57,6 +58,8 @@ router.delete("/user/:id", deleteUser)
 router.get("/alluser", getAllUser);
 router.get("/singleuser/id/:id", getOneUserDetailwithId);
 router.get("/filtereduser/id/:id", getAllFilteredUserById);
+router.get("/gendereduser/id/:id", getAllGenderedUserById);
+
 
 //Conversation
 router.post("/conversation/message/:userId1/:userId2", createConversation);

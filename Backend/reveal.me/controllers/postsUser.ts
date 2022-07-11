@@ -1,4 +1,4 @@
-import express, { Request, response, Response } from "express";
+import express, { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -23,7 +23,7 @@ const checkToken = (req: Request, res: Response, next: any) => {
   }
 
   if (TOKEN) {
-    jwt.verify(TOKEN, JWT_SECRET, (err, decoded) => {
+    jwt.verify(TOKEN, JWT_SECRET, (err) => {
       if (err) {
         return res.json({
           message: "Token is not right...",
@@ -274,7 +274,7 @@ export const updateOneUserProfile = async (req: Request, res: Response) => {
       ) {
         valid = true;
       }
-      if (valid === false) {
+      if (!valid) {
         return res.status(403).send(`Gender Type ${gender} is not valid`);
       }
 
@@ -461,6 +461,67 @@ export const getOneUserDetailwithId = async (req: Request, res: Response) => {
       const user = await User.findById(id);
 
       res.status(200).json(user);
+    } catch (error) {
+      res.status(404).json({ message: error });
+    }
+    authSuccess = false;
+  }
+};
+
+//GET - /gendereduser/id/:id # return all User that has been filtered with gender interest
+export const getAllGenderedUserById = async (req: Request, res: Response) => {
+  checkToken(req, res, () => {
+    authSuccess = true;
+  });
+
+  if(authSuccess){
+    const { id } = req.params;
+
+    try {
+      const user = await User.findById(id);
+
+      const gender = user.userDetail.gender
+      const gender_interest = user.userDetail.gender_interest
+      const swipedLeftUsers = user.swipedLeftUsers
+
+      const other_users = await User.find({_id:{ $ne: id }})
+
+      const userConversation = await Conversation.find({members:{$all:[
+            id
+          ]}})
+
+      var matchedUsers = []
+
+      for(let temp_members of userConversation){
+        if(temp_members.members[0] !== id){
+          matchedUsers.push(temp_members.members[0].toString())
+        }  else {
+          matchedUsers.push(temp_members.members[1].toString())
+        }
+      }
+
+      //Users that has not been swiped left
+      var remainingUsers = []
+
+      for(var not_user of other_users) {
+        if((matchedUsers.includes(not_user._id.valueOf())) || (swipedLeftUsers.includes(not_user._id.valueOf()))){
+          continue
+        } else{
+          remainingUsers.push(not_user)
+        }
+      }
+
+      var gendered_users = []
+
+      for (var interested_gender of gender_interest) {
+        for (let temp_user of remainingUsers) {
+          if(temp_user.userDetail.gender == interested_gender
+              && temp_user.userDetail.gender_interest.includes(gender)) {
+            gendered_users.push(temp_user)
+          }
+        }
+      }
+      res.status(200).json(gendered_users);
     } catch (error) {
       res.status(404).json({ message: error });
     }
