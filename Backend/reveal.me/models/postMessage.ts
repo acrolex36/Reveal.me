@@ -19,7 +19,7 @@ const messagesSchema = new mongoose.Schema({
     has_been_seen: {
         type: Boolean,
         default: false,
-    }
+    },
 });
 
 var Message = mongoose.model("messages", messagesSchema);

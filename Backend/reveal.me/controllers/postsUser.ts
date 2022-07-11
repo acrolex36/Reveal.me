@@ -1,11 +1,9 @@
 import express, { Request, response, Response } from "express";
-import mongoose, { ObjectId } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 import User, { GenderTypes } from "../models/postUser";
 import Conversation from "../models/postConversation";
-import Message from "../models/postMessage";
 
 
 const router = express.Router();
@@ -31,7 +29,6 @@ const checkToken = (req: Request, res: Response, next: any) => {
           message: "Token is not right...",
         });
       } else {
-        // console.log(decoded);
         next();
       }
     });
@@ -99,7 +96,6 @@ export const register = async (req: Request, res: Response) => {
         .status(405)
         .json({ status: "error", error: "Email already exist" });
     } else {
-      // res.status(409).json({ message: error });
       throw error;
     }
   }
@@ -188,15 +184,7 @@ export const forgetpassword = async (req: Request, res: Response) => {
       { $set: { password: newPassword, lastPasswordReset: Date.now() } }
     );
 
-    var token = jwt.sign({ id: user._id, email: user.email }, JWT_SECRET, {
-              expiresIn: "24h",
-            });
-
-    return res.status(201).json({
-      userId: user._id,
-      token: token,
-    });
-
+    return res.status(201).json(user);
   } catch (error) {
     return res
       .status(400)
@@ -207,7 +195,7 @@ export const forgetpassword = async (req: Request, res: Response) => {
 
 var authSuccess: boolean;
 
-//PUT - /user/profile # update User profile
+//PUT - /user/profile/head/:email # update User profile
 export const updateOneUser = async (req: Request, res: Response) => {
   checkToken(req, res, () => {
     authSuccess = true;
@@ -245,7 +233,7 @@ export const updateOneUser = async (req: Request, res: Response) => {
   }
 };
 
-//PUT - /user/profile # update User profile
+//PUT - /user/profile/body/:email # update User profile
 export const updateOneUserProfile = async (req: Request, res: Response) => {
   checkToken(req, res, () => {
     authSuccess = true;
@@ -324,61 +312,7 @@ export const updateOneUserProfile = async (req: Request, res: Response) => {
   }
 };
 
-//PUT - update oneSideMatch when swiped right By using Id
-export const updateMatchedUser = async (req: Request, res: Response) => {
-  checkToken(req, res, () => {
-    authSuccess = true;
-  });
-
-  if (authSuccess) {
-    const { email, matchedUserEmail } = req.params;
-
-    try {
-      const user = await User.findOne({ email });
-      const matchedUser = await User.findOne({ email: matchedUserEmail });
-
-      const updateMatch = {
-        $push: { oneSideMatch: user._id },
-      };
-
-      await User.findByIdAndUpdate(matchedUser._id, updateMatch);
-
-      res.status(200).json(matchedUser);
-    } catch (error) {
-      res.status(404).json({ message: error });
-    }
-    authSuccess = false;
-  }
-};
-
-//PUT - update oneSideMatch when both swiped right
-export const removeMatchedUser = async (req: Request, res: Response) => {
-  checkToken(req, res, () => {
-    authSuccess = true;
-  });
-
-  if (authSuccess) {
-    const { id, matchedUserId } = req.params;
-
-    try {
-      const user = await User.findById( id );
-      const matchedUser = await User.findById( matchedUserId );
-
-      const updateMatch = {
-        $pull: { oneSideMatch: matchedUser._id },
-      };
-
-      await User.findByIdAndUpdate(user._id, updateMatch);
-
-      res.status(200).json(user.oneSideMatch);
-    } catch (error) {
-      res.status(404).json({ message: error });
-    }
-    authSuccess = false;
-  }
-};
-
-//PUT - update oneSideMatch when swiped right using id
+//PUT - /user/profile/id/:id/:matchedUserId # update oneSideMatch when swiped right By using Id
 export const updateMatchedUserById = async (req: Request, res: Response) => {
   checkToken(req, res, () => {
     authSuccess = true;
@@ -395,9 +329,9 @@ export const updateMatchedUserById = async (req: Request, res: Response) => {
         $addToSet: { oneSideMatch: user._id },
       };
 
-      await User.findByIdAndUpdate(matchedUser._id, updateMatch);
+      const response = await User.findByIdAndUpdate(matchedUser._id, updateMatch, { new: true });
 
-      res.status(200).json(matchedUser);
+      res.status(200).json(response);
     } catch (error) {
       res.status(404).json({ message: error });
     }
@@ -405,7 +339,34 @@ export const updateMatchedUserById = async (req: Request, res: Response) => {
   }
 };
 
-//PUT - update swipedLeftUsers when swiped right
+//PUT - /user/profile/remove/id/:id/:matchedUserId # remove user from OneSideMatch when both of them matched
+export const removeMatchedUser = async (req: Request, res: Response) => {
+  checkToken(req, res, () => {
+    authSuccess = true;
+  });
+
+  if (authSuccess) {
+    const { id, matchedUserId } = req.params;
+
+    try {
+      const user = await User.findById( id );
+      const matchedUser = await User.findById( matchedUserId );
+
+      const updateMatch = {
+        $pull: { oneSideMatch: matchedUser._id },
+      };
+
+      const response = await User.findByIdAndUpdate(user._id, updateMatch, { new: true });
+
+      res.status(200).json(response);
+    } catch (error) {
+      res.status(404).json({ message: error });
+    }
+    authSuccess = false;
+  }
+};
+
+//PUT - /user/profile/swipedleft/id/:id/:matchedUserId # update swipedLeftUsers when user swiped left
 export const updateSwipedLeftUsers = async (req: Request, res: Response) => {
   checkToken(req, res, () => {
     authSuccess = true;
@@ -422,9 +383,9 @@ export const updateSwipedLeftUsers = async (req: Request, res: Response) => {
         $addToSet: { swipedLeftUsers: matchedUser._id },
       };
 
-      await User.findByIdAndUpdate(user._id, updateMatch);
+      const response = await User.findByIdAndUpdate(user._id, updateMatch, { new: true });
 
-      res.status(200).json(user);
+      res.status(200).json(response);
     } catch (error) {
       res.status(404).json({ message: error });
     }
@@ -432,17 +393,38 @@ export const updateSwipedLeftUsers = async (req: Request, res: Response) => {
   }
 };
 
-//DELETE - /user/:userId
-export const deleteUser = async (req: Request, res: Response) => {
+//PUT - /user/profile/swipedleft/remove/id/:id # update swipedLeftUsers when undo Button pressed
+export const removeOneSwipedLeftUsers = async (req: Request, res: Response) => {
   checkToken(req, res, () => {
     authSuccess = true;
   });
 
   if (authSuccess) {
     const { id } = req.params;
+
     try {
-      const user = await User.findByIdAndDelete(id);
-      res.status(201).json(user);
+      const user = await User.findById( id );
+
+      if(user.swipedLeftUsers.length === 0) {
+        return res
+          .status(400)
+          .json({
+            status: "error",
+            error: "There is no user",
+          });
+      }
+
+      const size = user.swipedLeftUsers.length - 1
+      const lastUser = user.swipedLeftUsers[size]
+
+
+      const updateSwipedLeftUser = {
+        $pull: { swipedLeftUsers: lastUser},
+      };
+
+      await User.findByIdAndUpdate(user._id, updateSwipedLeftUser, { new: true });
+
+      res.status(200).json(lastUser);
     } catch (error) {
       res.status(404).json({ message: error });
     }
@@ -486,56 +468,7 @@ export const getOneUserDetailwithId = async (req: Request, res: Response) => {
   }
 };
 
-//GET - /filtereduser # return all User from gender interest
-export const getAllFilteredUser = async (req: Request, res: Response) => {
-  checkToken(req, res, () => {
-    authSuccess = true;
-  });
-
-  if (authSuccess) {
-    const { email } = req.params;
-
-    try {
-      const user = await User.findOne({ email });
-
-      const gender = user.userDetail.gender;
-      const gender_interest = user.userDetail.gender_interest;
-      const hobbies = user.userDetail.hobbies;
-
-      const other_users = await User.find({ email: { $ne: email } });
-
-      var gendered_users = [];
-
-      for (var interested_gender of gender_interest) {
-        for (var temp_user of other_users) {
-          if (
-            temp_user.userDetail.gender === interested_gender &&
-            temp_user.userDetail.gender_interest.includes(gender)
-          ) {
-            gendered_users.push(temp_user);
-          }
-        }
-      }
-
-      var returnedUsers = [];
-
-      for (let filter of gendered_users) {
-        for (let user_interest of hobbies) {
-          if (filter.userDetail.hobbies.includes(user_interest)) {
-            returnedUsers.push(filter);
-            break;
-          }
-        }
-      }
-      res.status(200).json(returnedUsers);
-    } catch (error) {
-      res.status(404).json({ message: error });
-    }
-    authSuccess = false;
-  }
-};
-
-//GET - /test/filtereduser/id/:id # return all User from gender interest by Id
+//GET - /filtereduser/id/:id # return all User that has been filtered
 export const getAllFilteredUserById = async (req: Request, res: Response) => {
   checkToken(req, res, () => {
     authSuccess = true;
@@ -609,275 +542,17 @@ export const getAllFilteredUserById = async (req: Request, res: Response) => {
   }
 };
 
-//GET - /test/singleuser/:email # return User with {email}
-export const getOneUserDetail = async (req: Request, res: Response) => {
-  checkToken(req, res, () => {
-    authSuccess = true;
-  });
-
-  if (authSuccess) {
-    const { email } = req.params;
-    try {
-      const user = await User.findOne({ email });
-      // const user = await User.findOne({email}).lean() //without userDetail
-
-      //  if(user === null){
-      //   res.status(410).json("lol");
-      //   }
-
-      res.status(200).json(user);
-    } catch (error) {
-      res.status(404).json({ message: error });
-    }
-    authSuccess = false;
-  }
-};
-
-
-//POST - /message/conversation/:userId1/:userId2 # create new Conversation 
-export const createConversation = async (req: Request, res: Response) => {
-  checkToken(req, res, () => {
-    authSuccess = true;
-  });
-
-  if (authSuccess) {
-  const { userId1, userId2 } = req.params;
-  
-  const members = [userId1, userId2]
-
-  const message = await new Conversation({
-    members
-  });
-    try {
-      await message.save();
-
-      res.status(201).json(message);
-    } catch (error) {
-      res.status(400).json({ message: error});
-    }
-    authSuccess = false
-  }
-};
-
-//PUT - /conversation/message/ # update messages
-export const updateMessages = async (req: Request, res: Response) => {
-  checkToken(req, res, () => {
-    authSuccess = true;
-  });
-
-  if (authSuccess) {
-  const { id } = req.params
-  const { userId, message} = req.body
-  
-    try {
-      const conversation = await Conversation.findById(id);
-
-      conversation.messages.push({
-
-        sender: userId,
-        message: message
-
-      })
-
-      await conversation.save()
-      res.status(200).json(conversation);
-    } catch (error) {
-      res.status(404).json({ message: error });
-    }
-  authSuccess = false;
-  }
-};
-
-//POST -  #post new message from one conversation
-export const updateMessage = async (req: Request, res: Response) => {
-  checkToken(req, res, () => {
-    authSuccess = true;
-  });
-
-  if (authSuccess) {
-  const { conversationId } = req.params
-  const { userId, message} = req.body
-  
-    try {
-      const messages = await new Message({
-        conversationId: conversationId,
-        sender: userId,
-        message: message
-
-      });
-
-      await messages.save()
-      res.status(200).json(messages);
-    } catch (error) {
-      res.status(404).json({ message: error });
-    }
-  authSuccess = false;
-  }
-};
-
-//GET - /allconversation/:userId # find all messages from one particular user
-export const getAllConversationFromOneUser = async (req: Request, res: Response) => {
-  checkToken(req, res, () => {
-    authSuccess = true;
-  });
-
-  if (authSuccess) {
-    const { userId } = req.params;  
-    
-    try {
-        const allConversation = await Conversation.find({members:{$all:[
-          userId,
-        ]}});
-        
-        res.status(200).json(allConversation);
-      } catch (error) {
-        res.status(404).json({ message: error });
-      }
-      authSuccess = false;
-  }
-  
-};
-
-//GET - /test/allconversation # find all messages
-export const getAllConversation = async (req: Request, res: Response) => {
-  checkToken(req, res, () => {
-    authSuccess = true;
-  });
-
-  if (authSuccess) {
-    try {
-      const allConversation = await Conversation.find();
-      res.status(200).json(allConversation);
-    } catch (error) {
-      res.status(404).json({ message: error });
-    }
-    authSuccess = false;
-  }
-
-};
-
-//GET - /oneconversation/:userId1/:userId2 # find one conversation between 2 user
-export const getOneConversation = async (req: Request, res: Response) => {
-  checkToken(req, res, () => {
-    authSuccess = true;
-  });
-
-  if (authSuccess) {
-    const { userId1, userId2 } = req.params;
-    
-    try {
-      const oneConversation = await Conversation.findOne({members:{$all:[
-        userId1,
-        userId2,
-      ]}});
-      res.status(200).json(oneConversation);
-    } catch (error) {
-      res.status(404).json({ message: error });
-    }
-    authSuccess = false;
-  }
-};
-
-//GET - /oneconversation/:userId1/:userId2 # find one conversation between 2 user
-export const getOneConversationById = async (req: Request, res: Response) => {
+//DELETE - /user/:userId # delete user
+export const deleteUser = async (req: Request, res: Response) => {
   checkToken(req, res, () => {
     authSuccess = true;
   });
 
   if (authSuccess) {
     const { id } = req.params;
-    
     try {
-      const oneConversationId = await Conversation.findById(id);
-
-      res.status(200).json(oneConversationId);
-    } catch (error) {
-      res.status(404).json({ message: error });
-    }
-    authSuccess = false;
-  }
-};
-
-
-//GET - /oneconversation/:userId1/:userId2 # find one conversation between 2 user
-export const getAllMessages = async (req: Request, res: Response) => {
-  checkToken(req, res, () => {
-    authSuccess = true;
-  });
-
-  if (authSuccess) {
-    const { conversationId } = req.params;
-    
-    try {
-      const oneConversationId = await Message.find({conversationId: conversationId});
-
-      res.status(200).json(oneConversationId);
-    } catch (error) {
-      res.status(404).json({ message: error });
-    }
-    authSuccess = false;
-  }
-};
-
-//GET - /oneconversation/:userId1/:userId2 # find one conversation between 2 user
-export const getTotalMessage = async (req: Request, res: Response) => {
-  checkToken(req, res, () => {
-    authSuccess = true;
-  });
-
-  if (authSuccess) {
-    const { userId1, userId2 } = req.params;
-    
-    try {
-      const oneConversation = await Conversation.findOne({members:{$all:[
-        userId1,
-        userId2,
-      ]}});
-
-      const messages = oneConversation.messages
-
-      var totalMessages = []
-
-      var totalUser1 = 0
-      for(let i of messages) {
-        if (i.sender === userId1) totalUser1++
-      }
-      totalMessages.push(totalUser1)
-
-      var totalUser2 = 0
-      for(let i of messages) {
-        if (i.sender === userId2) totalUser2++
-      }
-      totalMessages.push(totalUser2)
-
-      res.status(200).json(totalMessages);
-    } catch (error) {
-      res.status(404).json({ message: error });
-    }
-    authSuccess = false;
-  }
-};
-
-export const getTotalMessages = async (req: Request, res: Response) => {
-  checkToken(req, res, () => {
-    authSuccess = true;
-  });
-
-  if (authSuccess) {
-    const { conversationId } = req.params;
-    
-    try {
-      const conversation = await Conversation.findById(conversationId)
-
-      const total_user_1 = await Message.find({sender: conversation.members.at(0), conversationId: conversationId}).count()
-      const total_user_2 = await Message.find({sender: conversation.members.at(1), conversationId: conversationId}).count()
-
-      var totalMessages = []
-
-      totalMessages.push(total_user_1)
-      totalMessages.push(total_user_2)
-
-      res.status(200).json(totalMessages);
+      const user = await User.findByIdAndDelete(id);
+      res.status(201).json(user);
     } catch (error) {
       res.status(404).json({ message: error });
     }
