@@ -583,7 +583,7 @@ paths:
   /message/{conversationId}:
     post:
       tags:
-        - Chat
+        - Message
       summary: new message from one conversation
       parameters:
         - in: path
@@ -616,7 +616,7 @@ paths:
   /message/all/{conversationId}:
     get:
       tags:
-        - Chat
+        - Message
       summary: get all message history from one Conversation
       parameters:
         - in: path

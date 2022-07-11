@@ -955,7 +955,7 @@
     "/message/{conversationId}": {
       "post": {
         "tags": [
-          "Chat"
+          "Message"
         ],
         "summary": "new message from one conversation",
         "parameters": [
@@ -1009,7 +1009,7 @@
     "/message/all/{conversationId}": {
       "get": {
         "tags": [
-          "Chat"
+          "Message"
         ],
         "summary": "get all message history from one Conversation",
         "parameters": [
