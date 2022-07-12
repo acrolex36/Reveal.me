@@ -8,7 +8,7 @@ import ProfileModal from "../Components/Profile/ProfileModal";
 import {Hobbies} from "../utils/Hobby";
 
 const ExplorePage = () => {
-    const [filteredUsers, setFilteredUsers] = useState([]);
+    const [genderedUsers, setGenderedUsers] = useState([]);
     const [userData, setUserData] = useState([]);
     const [cookies] = useCookies(null);
     const [hobbyFilter, setHobbyFilter] = useState(null);
@@ -29,9 +29,9 @@ const ExplorePage = () => {
             setUserData((userData) => [...userData, response.data]);
         };
 
-        const getFilteredUsers = async () => {
+        const getGenderedUsers = async () => {
             const response = await axios.get(
-                `http://localhost:5000/api/filtereduser/id/${myUserId}`,
+                `http://localhost:5000/api/gendereduser/id/${myUserId}`,
                 {
                     headers: {
                         "Content-Type": "application/json; charset=UTF-8",
@@ -39,10 +39,10 @@ const ExplorePage = () => {
                     },
                 }
             );
-            setFilteredUsers((filteredUsers) => [...filteredUsers, ...response.data]);
+            setGenderedUsers((genderedUsers) => [...genderedUsers, ...response.data]);
         };
         if (cookies) {
-            getFilteredUsers();
+            getGenderedUsers();
             getUserData();
         }
     }, []);
@@ -72,8 +72,8 @@ const ExplorePage = () => {
                         </section>
 
                         <section className="mt-10 grid place-items-center grid-cols-3 gap-x-96">
-                            {filteredUsers.length > 0 && userData.length > 0 && hobbyFilter !== null && (
-                                filteredUsers.filter(person => person.userDetail.hobbies.includes(hobbyFilter)).map(person => (
+                            {genderedUsers.length > 0 && userData.length > 0 && hobbyFilter !== null && (
+                                genderedUsers.filter(person => person.userDetail.hobbies.includes(hobbyFilter)).map(person => (
                                     <div className="">
                                         <ProfileModal
                                             popup={<ProfileCard person={person}></ProfileCard>}></ProfileModal>
