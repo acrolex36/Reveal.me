@@ -14,7 +14,9 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Homepage />}></Route>
         <Route path="/login" element={<LoginPage />}></Route>
-        <Route
+          <Route path="/explore" element={<ExplorePage />}></Route>
+
+          <Route
           path="/login/forgot_password"
           element={<ForgotPasswordPage />}
         ></Route>
