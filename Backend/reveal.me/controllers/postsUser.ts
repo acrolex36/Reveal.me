@@ -500,11 +500,13 @@ export const getAllGenderedUserById = async (req: Request, res: Response) => {
         }
       }
 
-      //Users that has not been swiped left
+      //Users that has not been swiped left and matched and also not in one
       var remainingUsers = []
 
       for(var not_user of other_users) {
-        if((matchedUsers.includes(not_user._id.valueOf())) || (swipedLeftUsers.includes(not_user._id.valueOf()))){
+        if((matchedUsers.includes(not_user._id.valueOf())) 
+        || (swipedLeftUsers.includes(not_user._id.valueOf())) 
+        || not_user.oneSideMatch.includes(id)){
           continue
         } else{
           remainingUsers.push(not_user)
@@ -562,15 +564,18 @@ export const getAllFilteredUserById = async (req: Request, res: Response) => {
         }
       }
 
-      //Users that has not been swiped left
+      //Users that has not been swiped left and matched and also not in one and not in OnesideMatch of other users
       var remainingUsers = []
 
       for(var not_user of other_users) {
-        if((matchedUsers.includes(not_user._id.valueOf())) || (swipedLeftUsers.includes(not_user._id.valueOf()))){
+        if((matchedUsers.includes(not_user._id.valueOf())) 
+        || (swipedLeftUsers.includes(not_user._id.valueOf())) 
+        || not_user.oneSideMatch.includes(id)
+        ){
           continue
         } else{
-            remainingUsers.push(not_user)
-        }                    
+          remainingUsers.push(not_user)
+        }
       }
 
       var gendered_users = []
