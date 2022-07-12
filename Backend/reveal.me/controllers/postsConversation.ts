@@ -174,7 +174,7 @@ export const deleteConversation = async (req: Request, res: Response) => {
           await Message.findByIdAndDelete(message._id)
         }
   
-        res.status(201).json(conversation);
+        res.status(200).json(conversation);
       } catch (error) {
         res.status(404).json({ message: error });
       }
