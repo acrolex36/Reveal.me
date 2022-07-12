@@ -8,7 +8,7 @@ const Header = () => {
                 src={Logo}
                 alt="Logo"
             />
-            <a href="/" className="my-auto btn btn-ghost normal-case font-mono text-2xl">Reveal.Me</a>
+            <a href="/homepage" className="my-auto btn btn-ghost normal-case font-mono text-2xl">Reveal.Me</a>
         </div>
     );
 };
