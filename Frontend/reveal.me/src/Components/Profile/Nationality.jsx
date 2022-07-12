@@ -1,7 +1,5 @@
-import React, { useState } from 'react'
-import ProfileFields from './ProfileFields'
+import React from 'react'
 const Nationality = props => {
-
   const {inputValue , passData} = props
 
   return (

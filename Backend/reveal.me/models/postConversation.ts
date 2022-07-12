@@ -12,24 +12,10 @@ const conversationSchema = new mongoose.Schema({
       ref: "user",
     },
   ],
-  // messages: [
-  //   {
-  //     sender: {
-  //       type: String,
-  //     },
-  //     message: {
-  //       type: String,
-  //     },
-  //     timestamp: {
-  //       type: Date,
-  //       default: new Date(),
-  //     },
-  //     has_been_seen: {
-  //       type: Boolean,
-  //       default: false,
-  //     },
-  //   },
-  // ],
+  isBlurred: {
+    type: Boolean,
+    default: true,
+  }
 });
 
 var Conversation = mongoose.model("conversation", conversationSchema);

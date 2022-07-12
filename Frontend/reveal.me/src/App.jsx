@@ -6,6 +6,7 @@ import Homepage from "./pages/Homepage";
 import CreateProfilePage from "./pages/CreateProfilePage";
 import ChatPage from "./pages/ChatPage";
 import LandingPage from "./pages/LandingPage";
+import './index.css'
 const App = () => {
   return (
     <BrowserRouter>

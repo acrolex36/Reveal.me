@@ -1,5 +1,6 @@
 const ProfileCard = ({person}) => {
     const details = person.userDetail;
+    const languages = details.languages.join(", ");
     const renderDetail = (detail, extraText) => {
         return (<li className="flex space-x-3">
             <svg
@@ -43,6 +44,7 @@ const ProfileCard = ({person}) => {
                     <ul role="list" className=" space-y-3">
                         {details.nationality ? renderDetail(details.nationality) : null}
                         {details.height ? renderDetail(details.height, "cm") : null}
+                        {details.languages ? renderDetail(languages) : null}
                     </ul>
                     <p className="whitespace-normal my-5 text-gray-700 dark:text-gray-400">
                         {details.description ? details.description : null}
