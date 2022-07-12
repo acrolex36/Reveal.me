@@ -7,14 +7,18 @@ module.exports = {
         '136': '34em',
         '148': '40em',
         '188': '47em',
+      },
+      backgroundImage: {
+        'revealme-pattern': "url('./src/images/background.png')"
       }
     },
-    colors:{
+    colors: {
       current: 'currentColor',
       pink: {
         0: '#FFFFFF',
-        50: '#FFF5F5', 
-        100: '#FFE2E2'},
+        50: '#FFF5F5',
+        100: '#FFE2E2'
+      },
       'darker-pink': '#CA5E5E',
       gray: {
         0: '#FFFFFF',

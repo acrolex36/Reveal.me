@@ -35,7 +35,7 @@ const LoginPage = () => {
             setCookie("UserId", response.data.userId);
             setCookie("Token", response.data.token);
 
-            navigate("/");
+            navigate("/homepage");
             // navigate ('/create_profile');
           }
         })
