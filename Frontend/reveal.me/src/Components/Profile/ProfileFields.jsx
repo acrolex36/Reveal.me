@@ -240,7 +240,7 @@ const ProfileFields = () => {
         )
         .then(function (response) {
           if (response.status === 200) {
-            navigate("/");
+            navigate("/homepage");
           }
         })
         .catch(function (res) {
