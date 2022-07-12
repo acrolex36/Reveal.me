@@ -6,16 +6,26 @@ import reject_button from "../images/reject_button.png";
 import back_button from "../images/back_button.png";
 import axios from "axios";
 import {useCookies} from "react-cookie";
-
+import {
+    deleteOneMatch,
+    updateSwipedUser,
+    removeMatchedUser,
+    removeRejectedUser,
+    undoRejectUser,
+    createConversation,
+    getAllConversation,
+    deleteConversation
+} from "../utils/ApiActions"
 
 function TinderContainer() {
     const [filteredUsers, setFilteredUsers] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [userData, setUserData] = useState([]);
     const [cookies] = useCookies(null);
+    const [userData, setUserData] = useState([]);
+    const [lastSwipedUsers, setLastSwipedUsers] = useState([]);
+    const [lastSwipeDirection, setLastSwipeDirection] = useState([]);
     const token = cookies.Token;
     const myUserId = cookies.UserId;
-
 
     // used for outOfFrame closure
     const currentIndexRef = useRef(currentIndex);
@@ -34,7 +44,6 @@ function TinderContainer() {
             );
             setUserData((userData) => [...userData, response.data]);
         };
-
         const getFilteredUsers = async () => {
             const response = await axios.get(
                 `http://localhost:5000/api/filtereduser/id/${myUserId}`,
@@ -53,8 +62,8 @@ function TinderContainer() {
         }
     }, []);
 
-    useEffect(() => setCurrentIndex(filteredUsers?.length - 1), [filteredUsers])
 
+    useEffect(() => setCurrentIndex(filteredUsers?.length - 1), [filteredUsers])
     const childRefs = useMemo(
         () =>
             Array(filteredUsers.length)
@@ -73,55 +82,26 @@ function TinderContainer() {
     const canSwipe = currentIndex >= 0;
 
     // set last direction and decrease current index
-    const swiped = (direction, nameToDelete, index) => {
+    const swiped = (direction, swipedId, index) => {
         updateCurrentIndex(index - 1);
     };
 
 
     const outOfFrame = async (dir, name, idx, swipedId) => {
-        console.log(`${name} (${idx}) left the screen!`, currentIndexRef.current);
+        setLastSwipedUsers(lastSwipedUsers => [...lastSwipedUsers, swipedId]);
+        setLastSwipeDirection(lastSwipeDirection => [...lastSwipeDirection, dir]);
         if (dir === "right") {
             if (userData.at(0).oneSideMatch.includes(swipedId)) {
-                alert("IT'S A MATCH! ");
-                const response = await axios.post(
-                    `http://localhost:5000/api/conversation/message/${myUserId}/${swipedId}`,
-                    {},
-                    {
-                        headers: {
-                            "Content-Type": "application/json; charset=UTF-8",
-                            Authorization: `Bearer ${token}`,
-                        },
-                    }
-                );
-                if (response.status === 201) {
-                    console.log(response.data);
-                    console.log("convo made")
-                } else {
-                    console.log("error making convo");
-                }
+                alert("IT'S A MATCH!");
+                await createConversation(myUserId, swipedId, token);
+                await removeMatchedUser(myUserId, swipedId, token);
             } else {
-                const response = await axios.put(
-                    `http://localhost:5000/api/user/profile/id/${cookies.UserId}/${swipedId}`,
-                    {
-                        oneSideMatch: cookies.UserId,
-                    },
-                    {
-                        headers: {
-                            "Content-Type": "application/json; charset=UTF-8",
-                            Authorization: `Bearer ${token}`,
-                        },
-                    }
-                );
-                if (response.status === 200) {
-                    console.log(response.data);
-                } else {
-                    console.log("error updating");
-                }
+                await updateSwipedUser(myUserId, swipedId, token);
             }
         }
-
-        // handle the case in which go back is pressed before card goes outOfFrame
-        // currentIndexRef.current >= idx && childRefs[idx].current.restoreCard();
+        if (dir === "left") {
+            await removeRejectedUser(myUserId, swipedId, token);
+        }
     };
 
     const swipe = async (dir) => {
@@ -130,12 +110,48 @@ function TinderContainer() {
         }
     };
 
+    const undoSwipeRight = async (myUserId, swipedId) => {
+        let allConversation = await getAllConversation(myUserId, token);
+        // if a new conversation is made, then delete
+        for (const conversation of allConversation) {
+            if (conversation.members.includes(swipedId)) {
+                await deleteConversation(conversation._id, token);
+                return;
+            }
+        }
+        //else delete onematch
+        await deleteOneMatch(myUserId, swipedId, token);
+    }
+
     // increase current index and show card
     const goBack = async () => {
         if (!canGoBack) return;
         const newIndex = currentIndex + 1;
         updateCurrentIndex(newIndex);
         await childRefs[newIndex].current.restoreCard();
+
+        let lastDirection = lastSwipeDirection.at(lastSwipeDirection.length - 1);
+        let lastSwiped = lastSwipedUsers.at(lastSwipedUsers.length - 1);
+
+        if (lastDirection === "left") {
+            await undoRejectUser(myUserId, token);
+        }
+        if (lastDirection === "right") {
+            await undoSwipeRight(myUserId, lastSwiped);
+        }
+        //Remove last element of array state
+        setLastSwipedUsers(lastSwipedUsers => {
+            const next = [...lastSwipedUsers];
+            next.pop();
+            return next;
+        })
+        setLastSwipeDirection(lastSwipeDirection => {
+            const next = [...lastSwipeDirection];
+            next.pop();
+            return next;
+        })
+
+
     };
 
     useEffect(() => {
@@ -158,12 +174,13 @@ function TinderContainer() {
         <div>
             {filteredUsers.length > 0 && userData.length > 0 && (
                 <>
-                    <div className="absolute top-60 left-148 flex justify-center">
+                    <div className="absolute top-64 left-188 flex justify-center">
                         {filteredUsers.map((person, index) => (
                             <TinderCard
                                 preventSwipe={["up", "down"]}
                                 ref={childRefs[index]}
-                                onSwipe={(dir) => swiped(dir, person.first_name, index)}
+
+                                onSwipe={(dir) => swiped(dir, person._id, index)}
                                 onCardLeftScreen={(dir) =>
                                     outOfFrame(dir, person.first_name, index, person._id)
                                 }
@@ -175,11 +192,12 @@ function TinderContainer() {
                         ))}
                     </div>
                     <div
-                        className="absolute top-136 left-148 w-1/2 flex flex-row justify-evenly w-2/5">
+                        className="absolute top-128 left-148 w-1/2 flex flex-row justify-evenly ">
                         <button
+                            className="sm:py-24 sm:px-6 lg:max-w-5xl "
                             onClick={() => swipe("left")}
                         >
-                            <div className="w-full aspect-w-1 aspect-h-1  xl:aspect-w-7 xl:aspect-h-8">
+                            <div className="w-full aspect-w-1 aspect-h-1  overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
                                 <img
                                     className="scale-50 hover:scale-75 ease-in duration-150"
                                     src={reject_button}
@@ -188,9 +206,10 @@ function TinderContainer() {
                             </div>
                         </button>
                         <button
+                            className="sm:py-24 sm:px-6 lg:max-w-5xl "
                             onClick={() => goBack()}
                         >
-                            <div className="w-full aspect-w-1 aspect-h-1 xl:aspect-w-7 xl:aspect-h-8">
+                            <div className="w-full aspect-w-1 aspect-h-1  overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
                                 <img
                                     className="scale-50 hover:scale-75 ease-in duration-150"
                                     src={back_button}
@@ -199,6 +218,7 @@ function TinderContainer() {
                             </div>
                         </button>
                         <button
+                            className="sm:py-24 sm:px-6 lg:max-w-5xl "
                             onClick={() => swipe("right")}
                         >
                             <div className="w-full aspect-w-1 aspect-h-1 overflow-hidden xl:aspect-w-7 xl:aspect-h-8">

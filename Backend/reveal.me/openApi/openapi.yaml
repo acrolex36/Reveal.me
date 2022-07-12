@@ -1,0 +1,912 @@
+openapi: 3.0.1
+
+servers:
+  - url: http://localhost:5000/api
+
+info:
+  title: Reveal Me API
+  version: 0.0.1
+  
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: create a new User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref:  '#/components/schemas/RegisterUserRequestBody'
+      responses:
+        '201':
+          description: Succcessful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthToken'
+        '405':
+          description: User Exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '409':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+                
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: login as a user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref:  '#/components/schemas/LoginUserRequestBody'
+      responses:
+        '201':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthToken'
+        '400':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+                
+  /auth/login/forgetpassword:
+    post:
+      tags:
+        - Authentication
+      summary: reset user password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref:  '#/components/schemas/ForgetPasswordRequestBody'
+      responses:
+        '201':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthToken'
+        '400':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '409':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+                
+ #####################################################################################
+ 
+  /user/profile/head/{email}:
+    put:
+      tags:
+        - User
+      summary: update user
+      parameters:
+        - in: path
+          name: email
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref:  '#/components/schemas/UpdateUserHeadRequestBody'
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '409':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'  
+  
+  /user/profile/body/{email}:
+    put:
+      tags:
+        - User
+      summary: update user detail
+      parameters:
+        - in: path
+          name: email
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref:  '#/components/schemas/UpdateUserBodyRequestBody'
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '403':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'        
+        '404':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '409':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'  
+                
+  /user/profile/{id}/{matchedUserId}:
+    put:
+      tags:
+        - User
+      summary: update user like
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: matchedUserId
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '409':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'   
+                
+  /user/profile/remove/id/{id}/{matchedUserId}:
+    put:
+      tags:
+        - User
+      summary: undo user like
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: matchedUserId
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+                
+  /user/profile/swipedleft/id/{id}/{matchedUserId}:
+    put:
+      tags:
+        - User
+      summary: update user dislike
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: matchedUserId
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+                
+  /user/profile/swipedleft/remove/id/{id}:
+    put:
+      tags:
+        - User
+      summary: undo user dislike
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                properties:
+                  _id:
+                    type: string
+        '400':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'                   
+        '404':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'               
+                
+  /alluser:
+    get:
+      tags:
+        - User
+      summary: get all user
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+                
+  /singleuser/{id}:
+    get:
+      tags:
+        - User
+      summary: get single user
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError' 
+                
+  /filtereduser/id/{id}:
+    get:
+      tags:
+        - User
+      summary: all User from gender interest
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError' 
+                
+  /user/{id}:
+    delete:
+      tags:
+        - User
+      summary: update user match
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+                
+######################################################################################                
+  /conversation/message/{userId1}/{userId2}:
+    post:
+      tags:
+        - Conversation
+      summary: create new Conversation
+      parameters:
+        - in: path
+          name: userId1
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: userId2
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversationResponse' 
+        '404':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'  
+                
+  /conversation/isblurred/{conversationId}:
+    put:
+      tags:
+        - Conversation
+      summary: blurred user picture
+      parameters:
+        - in: path
+          name: conversationId
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversationResponse' 
+        '404':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'      
+
+  /allconversation:
+    get:
+      tags:
+        - Conversation
+      summary: get all Conversation
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversationResponse'
+        '404':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'                 
+
+  /allconversation/{userId}:
+    get:
+      tags:
+        - Conversation
+      summary: get all Conversation from one User
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversationResponse'
+        '404':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError' 
+                
+  /message/total/{conversationId}:
+    get:
+      tags:
+        - Conversation
+      summary: count each user message history from one Conversation
+      parameters:
+        - in: path
+          name: conversationId
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CountArray'
+        '404':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+
+  /conversation/remove/{conversationId}:
+    delete:
+      tags:
+        - Conversation
+      summary: delete conversation with its messages
+      parameters:
+        - in: path
+          name: conversationId
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CountArray'
+        '404':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+                
+#######################################################################################
+                
+  /message/{conversationId}:
+    post:
+      tags:
+        - Message
+      summary: new message from one conversation
+      parameters:
+        - in: path
+          name: conversationId
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostMessage' 
+      responses:
+        '201':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse' 
+        '404':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'    
+                
+
+  /message/all/{conversationId}:
+    get:
+      tags:
+        - Message
+      summary: get all message history from one Conversation
+      parameters:
+        - in: path
+          name: conversationId
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '404':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'   
+                
+######################################################################################
+
+components:
+  schemas:
+    RegisterUserRequestBody:
+      type: object
+      required:
+          - first_name
+          - last_name
+          - email
+          - plainTextPassword
+          - confirmPlainPassword
+      properties:
+        first_name:
+          description: The first name of the User
+          type: string
+        last_name:
+          description: The first name of the User
+          type: string
+        email:
+          description: The email of the User
+          type: string  
+          format: email
+        plainTextPassword:
+          description: The password of the User
+          type: string 
+        confirmPlainPassword:
+          description: The password of the User
+          type: string 
+                
+    LoginUserRequestBody:
+      type: object
+      required:
+        - email
+        - plainTextPassword
+      properties:
+        email:
+          description: The Email of the User
+          type: string
+          format: email
+        plainTextPassword:
+          description: The Password of the User
+          type: string
+    
+    ForgetPasswordRequestBody:
+      type: object
+      required:
+        - email
+        - newPlainPassword
+        - confirmNewPlainPassword
+      properties:
+        email:
+          description: The Email of the User
+          type: string
+          format: email
+        newPlainPassword:
+          description: The Password of the User
+          type: string
+        confirmNewPlainPassword:
+          description: The password of the User
+          type: string 
+  
+    UpdateUserHeadRequestBody:
+      type: object
+      required:
+        - first_name
+        - last_name
+      properties:
+        first_name:
+          description: The First Name of the User
+          type: string
+        last_name:
+          description: The Last Name of the User
+          type: string
+  
+    UpdateUserBodyRequestBody:
+      type: object
+      required:
+        - email
+        - newPlainPassword
+        - confirmNewPlainPassword
+      properties:
+        gender:
+          type: string
+        gender_interest:
+          $ref: '#/components/schemas/Array'
+        age:
+          type: integer
+        profile_picture:
+          type: string
+        dob_date:
+          type: integer
+        dob_month:
+          type: integer
+        dob_year: 
+          type: integer
+        height: 
+          type: integer
+        nationality:
+          type: string
+        occupation: 
+          type: string
+        hobbies:
+          $ref: '#/components/schemas/Array'
+        languages:
+          $ref: '#/components/schemas/Array'
+          
+    PostMessage:
+      type: object
+      required:
+        - userId
+        - message
+      properties:
+        userId:
+          type: string
+        message:
+          type: string
+          
+    ConversationResponse:
+      type: object
+      properties:
+        id:
+          description: The auto generated id of the User
+          type: string
+        time:
+          description: The time of the User login
+          type: string
+          format: date-time
+        members:
+          $ref: '#/components/schemas/Array'
+        __v:
+          type: integer
+        isBlurred:
+          type: boolean
+    
+    MessageResponse:
+      type: object
+      properties:
+        conversationId:
+          description: The auto generated id of the Conversation
+          type: string
+        sender:
+          description: The auto generated id of the Conversation
+          type: string
+        message:
+          description: The message of the Conversation
+          type: string  
+        timestamp:
+          description: The time of the User update conversation
+          type: string
+          format: date-time
+        has_been_seen:
+          type: boolean
+        _id:
+          description: The auto generated id of the User
+          type: string
+        __v:
+          type: integer 
+          
+    AuthToken:
+      type: object
+      required:
+        - token
+      properties:
+        userId:
+          type: string
+        token:
+          description: The AccessToken of a User
+          type: string
+          format: base64
+          
+    User:
+      type: object
+      properties:
+        user_detail:
+          $ref: '#/components/schemas/UserDetail'  
+        _id:
+          description: The auto generated id of the User
+          type: string
+        first_name:
+          description: The First Name of the User
+          type: string
+        last_name:
+          description: The Last Name of the User
+          type: string
+        email:
+          description: The Email of the User
+          type: string
+          format: email
+        Password:
+          description: The Password of the User
+          type: string
+        lastLogin:
+          description: The time of the User login
+          type: string
+          format: date-time
+        lastPasswordReset:
+          description: The password of the User
+          type: string
+          format: date-time
+        oneSideMatch:
+          $ref: '#/components/schemas/Array'
+    
+    UserDetail:
+      type: object
+      description: User detail
+      properties:
+        is_online:
+          type: boolean
+        gender:
+          type: string
+        gender_interest:
+          $ref: '#/components/schemas/Array'
+        age:
+          type: integer
+        profile_picture:
+          type: string
+        dob_date:
+          type: integer
+        dob_month:
+          type: integer
+        dob_year: 
+          type: integer
+        height: 
+          type: integer
+        nationality:
+          type: string
+        occupation: 
+          type: string
+        hobbies:
+          $ref: '#/components/schemas/Array'
+        languages:
+          $ref: '#/components/schemas/Array'
+    
+    Array:
+      type: array
+      items:
+        type: string
+    
+    CountArray:
+      type: array
+      items:
+        type: integer
+    
+    ValidationError:
+      type: object
+      required:
+        - errors
+      properties:
+        errors:
+          description: All Errors for this request
+          type: array
+          items:
+            type: string
+            
+#######################################################################################
+
+  securitySchemes:
+    bearerAuth:       
+      type: http
+      scheme: bearer
+      bearerFormat: JWT  
+      
+  ####################################################################################
+  
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid
+
+        

@@ -1,15 +1,15 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect  } from "react";
 import { useNavigate } from "react-router-dom";
+import {useCookies } from "react-cookie";
 import Nationality from "./Nationality";
 import Interest from "../Interest";
 import { Languages } from "../../utils/Language";
 import axios from "axios";
-import { Cookies, useCookies } from "react-cookie";
+
 
 const ProfileFields = () => {
   const [error, setError] = useState(null);
-  const [cookies, setCookie, removeCookie] = useCookies(null);
+  const [cookies] = useCookies(null);
   const [accountData, setAccountData] = useState({
     email: "",
     password: "",
@@ -38,7 +38,7 @@ const ProfileFields = () => {
       const id = cookies.UserId;
       const token = cookies.Token;
       const response = await axios.get(
-        `http://localhost:5000/api/test/singleuser/id/${id}`,
+        `http://localhost:5000/api/singleuser/id/${id}`,
         {
           headers: {
             "Content-Type": "application/json; charset=UTF-8",
