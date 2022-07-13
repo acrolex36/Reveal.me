@@ -4,7 +4,7 @@ const ChatProfile = (props) => {
   const { accountData, totalMessage } = props;
 
   return (
-    <div class="card w-full bg-base-100 shadow-xl h-full">
+    <div class="card w-full bg-base-100 border h-full">
       <figure>
         <img
           src={
@@ -15,12 +15,12 @@ const ChatProfile = (props) => {
           alt="profile picture"
           className={`w-96 ${
             totalMessage.at(0) >= 5 && totalMessage.at(1) >= 5 ? "" : "blur"
-          }`}
+          } mt-5`}
         />
       </figure>
       <div class="card-body">
-        <h1 class="card-title">{`${accountData.first_name} ${accountData.last_name}, ${accountData.userDetail.age}`}</h1>
-        <h2 className="mb-[30px]">{`${accountData.userDetail.occupation}`}</h2>
+        <h1 class="card-title text-3xl">{`${accountData.first_name} ${accountData.last_name}, ${accountData.userDetail.age}`}</h1>
+        <h2 className="mb-[30px] text-xl">{`${accountData.userDetail.occupation}`}</h2>
         <p>{`${accountData.userDetail.description}`}</p>
       </div>
     </div>

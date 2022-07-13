@@ -7,7 +7,7 @@ const ChatConversations = (props) => {
   const { conversation, currentUser } = props;
   const [user, setUser] = useState(null);
   const [loadingMatch, setLoadingMatch] = useState(false);
-  const [cookies, setCookie, removeCookie] = useCookies(null);
+  const [cookies] = useCookies(null);
   const [totalMessage, setTotalMessage] = useState([]);
   const token = cookies.Token;
   const id = cookies.UserId;
@@ -59,7 +59,7 @@ const ChatConversations = (props) => {
       {totalMessage && user && user.userDetail && (
         <div
           key={user._id}
-          className="flex items-center px-3 py-2 text-sm transition duration-150 ease-in-out border-b border-gray-300 cursor-pointer hover:bg-gray-100 focus:outline-none"
+          className="flex items-center px-3 py-2 my-3 text-sm transition duration-150 ease-in-out border-b border-gray-300 cursor-pointer hover:bg-gray-100 focus:outline-none"
         >
           <img
             className={`object-cover w-10 h-10 rounded-full ${
@@ -70,7 +70,7 @@ const ChatConversations = (props) => {
           />
           <div className="w-full pb-2" onLoad={() => setLoading(false)}>
             <div className="flex justify-between">
-              <span className="block ml-2 font-semibold text-gray-600">{`${user.first_name} ${user.last_name}`}</span>
+              <span className="block ml-4 text-s font-semibold text-gray-600">{`${user.first_name} ${user.last_name}`}</span>
             </div>
           </div>
         </div>
