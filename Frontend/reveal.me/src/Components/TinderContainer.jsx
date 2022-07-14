@@ -158,7 +158,7 @@ function TinderContainer() {
                         <TinderCard
                             preventSwipe={["up", "down"]}
                             ref={childRefs[index]}
-
+                            key={person._id}
                             onSwipe={(dir) => swiped(dir, person._id, index)}
                             onCardLeftScreen={(dir) =>
                                 outOfFrame(dir, person.first_name, index, person._id)
