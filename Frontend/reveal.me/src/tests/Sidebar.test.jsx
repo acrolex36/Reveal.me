@@ -2,6 +2,7 @@ import {describe, it} from 'vitest';
 import {render, screen} from '@testing-library/react';
 import Sidebar from '../Components/Sidebar'
 
+
 describe("Sidebar test", () => {
     it("Should show all sidebar menu", () => {
         render(<Sidebar></Sidebar>);

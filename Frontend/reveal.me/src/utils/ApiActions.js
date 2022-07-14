@@ -1,6 +1,34 @@
 import axios from "axios";
 
+const BASE_URL = "http://localhost:5000/api"
+
 //User
+export const getUserData = async (myUserId, token) => {
+    const response = await axios.get(
+        `${BASE_URL}/singleuser/id/${myUserId}`,
+        {
+            headers: {
+                "Content-Type": "application/json; charset=UTF-8",
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+    // setUserData((userData) => [...userData, response.data]);
+    return response.data;
+};
+
+export const getFilteredUsers = async (myUserId, token) => {
+    const response = await axios.get(
+        `http://localhost:5000/api/filtereduser/id/${myUserId}`,
+        {
+            headers: {
+                "Content-Type": "application/json; charset=UTF-8",
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+    return response.data;
+};
 
 export const deleteOneMatch = async (myUserId, swipedId, token) => {
     const response = await axios.put(
@@ -61,7 +89,7 @@ export const removeMatchedUser = async (myUserId, swipedId, token) => {
 
 export const removeRejectedUser = async (myUserId, swipedId, token) => {
     const response = await axios.put(
-        `http://localhost:5000/api/user/profile/swipedLeft/id/${myUserId}/${swipedId}`,
+        `${BASE_URL}/user/profile/swipedLeft/id/${myUserId}/${swipedId}`,
         {},
         {
             headers: {

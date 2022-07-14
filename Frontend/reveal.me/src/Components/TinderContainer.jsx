@@ -4,7 +4,6 @@ import ProfileCard from "./Profile/ProfileCard";
 import love_button from "../images/love_button.png";
 import reject_button from "../images/reject_button.png";
 import back_button from "../images/back_button.png";
-import axios from "axios";
 import {useCookies} from "react-cookie";
 import {
     deleteOneMatch,
@@ -14,7 +13,9 @@ import {
     undoRejectUser,
     createConversation,
     getAllConversation,
-    deleteConversation
+    deleteConversation,
+    getFilteredUsers,
+    getUserData
 } from "../utils/ApiActions"
 
 function TinderContainer() {
@@ -30,36 +31,17 @@ function TinderContainer() {
     // used for outOfFrame closure
     const currentIndexRef = useRef(currentIndex);
 
-    // Fetch data
+    const fetchPosts = async () => {
+        const user = await getUserData(myUserId, token);
+        console.log(user);
+        setUserData((userData) => [...userData, user]);
+        const list = await getFilteredUsers(myUserId, token);
+        setFilteredUsers((filteredUsers) => [...filteredUsers, ...list]);
+        console.log(filteredUsers);
+    }
+
     useEffect(() => {
-        const getUserData = async () => {
-            const response = await axios.get(
-                `http://localhost:5000/api/singleuser/id/${myUserId}`,
-                {
-                    headers: {
-                        "Content-Type": "application/json; charset=UTF-8",
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-            setUserData((userData) => [...userData, response.data]);
-        };
-        const getFilteredUsers = async () => {
-            const response = await axios.get(
-                `http://localhost:5000/api/filtereduser/id/${myUserId}`,
-                {
-                    headers: {
-                        "Content-Type": "application/json; charset=UTF-8",
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-            setFilteredUsers((filteredUsers) => [...filteredUsers, ...response.data]);
-        };
-        if (cookies) {
-            getFilteredUsers();
-            getUserData();
-        }
+        fetchPosts();
     }, []);
 
 
@@ -172,66 +154,67 @@ function TinderContainer() {
 
     return (
         <div>
-            {filteredUsers.length > 0 && userData.length > 0 && (
-                <>
-                    <div className="absolute top-64 left-188 flex justify-center">
-                        {filteredUsers.map((person, index) => (
-                            <TinderCard
-                                preventSwipe={["up", "down"]}
-                                ref={childRefs[index]}
+            <button onClick={fetchPosts}> test</button>
 
-                                onSwipe={(dir) => swiped(dir, person._id, index)}
-                                onCardLeftScreen={(dir) =>
-                                    outOfFrame(dir, person.first_name, index, person._id)
-                                }
-                            >
-                                <div className="absolute">
-                                    <ProfileCard person={person}></ProfileCard>
-                                </div>
-                            </TinderCard>
-                        ))}
-                    </div>
-                    <div
-                        className="absolute top-128 left-148 w-1/2 flex flex-row justify-evenly ">
-                        <button
-                            className="sm:py-24 sm:px-6 lg:max-w-5xl "
-                            onClick={() => swipe("left")}
+            {filteredUsers.length > 0 && userData.length > 0 && (
+                <div className="absolute top-64 left-188 flex justify-center">
+                    {filteredUsers.map((person, index) => (
+                        <TinderCard
+                            preventSwipe={["up", "down"]}
+                            ref={childRefs[index]}
+
+                            onSwipe={(dir) => swiped(dir, person._id, index)}
+                            onCardLeftScreen={(dir) =>
+                                outOfFrame(dir, person.first_name, index, person._id)
+                            }
                         >
-                            <div className="w-full aspect-w-1 aspect-h-1  overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
-                                <img
-                                    className="scale-50 hover:scale-75 ease-in duration-150"
-                                    src={reject_button}
-                                    alt="reject button"
-                                />
+                            <div className="absolute">
+                                <ProfileCard person={person}></ProfileCard>
                             </div>
-                        </button>
-                        <button
-                            className="sm:py-24 sm:px-6 lg:max-w-5xl "
-                            onClick={() => goBack()}
-                        >
-                            <div className="w-full aspect-w-1 aspect-h-1  overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
-                                <img
-                                    className="scale-50 hover:scale-75 ease-in duration-150"
-                                    src={back_button}
-                                    alt="back button"
-                                />
-                            </div>
-                        </button>
-                        <button
-                            className="sm:py-24 sm:px-6 lg:max-w-5xl "
-                            onClick={() => swipe("right")}
-                        >
-                            <div className="w-full aspect-w-1 aspect-h-1 overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
-                                <img
-                                    className="scale-50 hover:scale-75 ease-in duration-75"
-                                    src={love_button}
-                                    alt="love button"
-                                />
-                            </div>
-                        </button>
-                    </div>
-                </>
+                        </TinderCard>
+                    ))}
+                </div>
             )}
+            <div
+                className="absolute top-128 left-148 w-1/2 flex flex-row justify-evenly ">
+                <button
+                    data-testid="swipeLeftButton"
+                    className="sm:py-24 sm:px-6 lg:max-w-5xl "
+                    onClick={() => swipe("left")}
+                >
+                    <div className="w-full aspect-w-1 aspect-h-1  overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
+                        <img
+                            className="scale-50 hover:scale-75 ease-in duration-150"
+                            src={reject_button}
+                            alt="reject button"
+                        />
+                    </div>
+                </button>
+                <button
+                    className="sm:py-24 sm:px-6 lg:max-w-5xl "
+                    onClick={() => goBack()}
+                >
+                    <div className="w-full aspect-w-1 aspect-h-1  overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
+                        <img
+                            className="scale-50 hover:scale-75 ease-in duration-150"
+                            src={back_button}
+                            alt="back button"
+                        />
+                    </div>
+                </button>
+                <button
+                    className="sm:py-24 sm:px-6 lg:max-w-5xl "
+                    onClick={() => swipe("right")}
+                >
+                    <div className="w-full aspect-w-1 aspect-h-1 overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
+                        <img
+                            className="scale-50 hover:scale-75 ease-in duration-75"
+                            src={love_button}
+                            alt="love button"
+                        />
+                    </div>
+                </button>
+            </div>
         </div>
     );
 }
