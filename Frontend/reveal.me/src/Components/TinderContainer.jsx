@@ -31,17 +31,15 @@ function TinderContainer() {
     // used for outOfFrame closure
     const currentIndexRef = useRef(currentIndex);
 
-    const fetchPosts = async () => {
+    const fetchData = async () => {
         const user = await getUserData(myUserId, token);
-        console.log(user);
         setUserData((userData) => [...userData, user]);
         const list = await getFilteredUsers(myUserId, token);
         setFilteredUsers((filteredUsers) => [...filteredUsers, ...list]);
-        console.log(filteredUsers);
     }
 
     useEffect(() => {
-        fetchPosts();
+        fetchData();
     }, []);
 
 
@@ -154,8 +152,6 @@ function TinderContainer() {
 
     return (
         <div>
-            <button onClick={fetchPosts}> test</button>
-
             {filteredUsers.length > 0 && userData.length > 0 && (
                 <div className="absolute top-64 left-188 flex justify-center">
                     {filteredUsers.map((person, index) => (

@@ -1,6 +1,6 @@
 import {describe, test} from 'vitest';
 import {render, screen} from '@testing-library/react';
-import Header from './Header'
+import Header from '../Components/Header'
 
 describe("Header test", () => {
     test("Should show website name", () => {

@@ -1,51 +1,37 @@
 import {rest} from 'msw'
 import UserData from './UserData.json'
+import FilteredUsers from './FilteredUsers.json'
 
 const BASE_URL = "http://localhost:5000/api"
-// Mock Data
-export const posts = [
-    {
-        userId: 1,
-        id: 1,
-        title: 'first post title',
-        body: 'first post body',
-    },
-    {
-        userId: 2,
-        id: 5,
-        title: 'second post title',
-        body: 'second post body',
-    },
-    {
-        userId: 3,
-        id: 6,
-        title: 'third post title',
-        body: 'third post body',
-    },
-]
-let myUserId = "1";
-let swipedId = "2";
 
 // Define handlers that catch the corresponding requests and returns the mock data.
 export const handlers = [
-    rest.get(`${BASE_URL}/filtereduser/id/:${myUserId}`,
+
+    rest.post(`${BASE_URL}/auth/login`,
+        (req, res, ctx) => {
+            return res(ctx.status(200),
+                ctx.json(UserData),
+                ctx.cookie('UserId', "1"),
+                ctx.cookie('Token', "3"))
+        }),
+
+    rest.get(`${BASE_URL}/singleuser/id/:id`,
         (req, res, ctx) => {
             return res(ctx.status(200),
                 ctx.json(UserData))
         }),
 
-    rest.put(`${BASE_URL}/user/profile/swipedLeft/id/${myUserId}/${swipedId}`,
+    rest.get(`${BASE_URL}/filtereduser/id/:id`,
         (req, res, ctx) => {
             return res(ctx.status(200),
-                ctx.json(UserData))
+                ctx.json(FilteredUsers))
         }),
 
-    /*    jsonPlaceHolder.query('posts', (req, res, ctx) => {
-            return res(
-                ctx.data({
-                    posts,
-                }),
-            )
-        }),*/
+    rest.put(`${BASE_URL}/user/profile/swipedleft/id/:id/:swipedid`,
+        (req, res, ctx) => {
+            return res(ctx.status(200),
+                ctx.json(FilteredUsers))
+        }),
+
 
 ]
