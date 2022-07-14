@@ -1,11 +1,12 @@
 import {useEffect, useState,} from "react";
 import {useCookies} from "react-cookie";
 import axios from "axios";
+import {Hobbies} from "../utils/Hobby";
 import Sidebar from "../Components/Sidebar";
 import Header from "../Components/Header";
 import ProfileCard from "../Components/Profile/ProfileCard";
 import ProfileModal from "../Components/Profile/ProfileModal";
-import {Hobbies} from "../utils/Hobby";
+import {createConversation, removeMatchedUser, updateSwipedUser} from "../utils/ApiActions";
 
 const ExplorePage = () => {
     const [genderedUsers, setGenderedUsers] = useState([]);
@@ -47,6 +48,15 @@ const ExplorePage = () => {
         }
     }, []);
 
+    const handleMatch = async (matchedId) => {
+        if (userData.at(0).oneSideMatch.includes(matchedId)) {
+            alert("IT'S A MATCH!");
+            await createConversation(myUserId, matchedId, token);
+            await removeMatchedUser(myUserId, matchedId, token);
+        } else {
+            await updateSwipedUser(myUserId, matchedId, token);
+        }
+    }
 
     const hobbyFilterHandler = e => {
         const value = e.target.value
@@ -70,12 +80,12 @@ const ExplorePage = () => {
                                 }
                             </select>
                         </section>
-
                         <section className="mt-10 grid place-items-center grid-cols-3 gap-x-96">
                             {genderedUsers.length > 0 && userData.length > 0 && hobbyFilter !== null && (
                                 genderedUsers.filter(person => person.userDetail.hobbies.includes(hobbyFilter)).map(person => (
-                                    <div className="">
+                                    <div className="m-auto">
                                         <ProfileModal
+                                            handleMatch={handleMatch}
                                             popup={<ProfileCard person={person}></ProfileCard>}></ProfileModal>
                                     </div>))
                             )}
