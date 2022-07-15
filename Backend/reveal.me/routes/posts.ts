@@ -66,11 +66,12 @@ router.get("/gendereduser/id/:id", getAllGenderedUserById);
 //Conversation
 router.post("/conversation/message/:userId1/:userId2", createConversation);
 
-router.put("/conversation/isblurred/:conversationId", updateIsBlurred);
+router.put("/conversation/isblurred/:conversationId", updateIsBlurred);//notu´use
 
 router.get("/allconversation", getAllConversation);
 router.get("/allconversation/:userId", getAllConversationFromOneUser);
-router.get("/message/total/:conversationId", getTotalMessages);
+
+router.get("/message/total/:conversationId", getTotalMessages);//not use
 
 router.get("/conversation/user/picture/:conversationId/:userId", getPicture)
 

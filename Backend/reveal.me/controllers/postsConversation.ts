@@ -193,39 +193,28 @@ export const getPicture = async (req: Request, res: Response) => {
 
       var result = await Jimp.read(imageData)
 
+      var total_user_1_2 = total_user_1 + total_user_2;
+
       if (total_user_1 >= 5 && total_user_2 >= 5) {
         if (total_user_1 < 10 || total_user_2 < 10) {
-          //full blur one of the user not yet reach 10
-          result.blur(100);
-          // .write('test1.png')
-        } else {
           //   //level 1 unblur
           result.blur(80);
           // .write('80%Blur.png')
         }
       }
-      if (total_user_1 >= 10 && total_user_2 >= 10) {
+      else if (total_user_1 >= 10 && total_user_2 >= 10) {
         if (total_user_1 < 15 || total_user_2 < 15) {
-          //level 1 unblur, one of the user not yet reach 15
-          result.blur(80);
-          // .write('test1.png')
-        } else {
           //level 2 unblur
           result.blur(50);
           // .write('50%Blur.png')
         }
       }
-      if (total_user_1 >= 15 && total_user_2 >= 15) {
-        if (total_user_1 < 20 || total_user_2 < 20) {
-          //level 1 unblur, one of the user not yet reach 15
-          result.blur(50);
-          //  .write('test50.png')
-        } else {
+      else if (total_user_1 >= 15 && total_user_2 >= 15) {
           //original
           result.blur(0);
           // .write('test2.png')
-        }
-      } else {
+      } 
+      else {
         // max level blur
         result.blur(100);
         // .write('FullBlur.png')
