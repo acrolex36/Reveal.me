@@ -1,5 +1,7 @@
 import TinderContainer from "../Components/TinderContainer";
-import {fireEvent, getByTestId, render, screen} from '@testing-library/react';
+import {fireEvent, render, screen} from '@testing-library/react';
+import '@testing-library/jest-dom';
+
 import {FilteredUsers} from "../mocks/FilteredUsers.json"
 import {UserData} from "../mocks/UserData.json"
 
@@ -18,6 +20,11 @@ describe('TinderContainer test', () => {
         fireEvent.click(rejectButton);
     });
 
+    // test('should call fetchData', () => {
+    //     const fetchDataSpy = vi.spyOn(TinderContainer.prototype, 'fetchData');
+    //     render(<TinderContainer/>);
+    //     expect(fetchDataSpy).toHaveBeenCalledTimes(1)
+    // });
 
 
 })
