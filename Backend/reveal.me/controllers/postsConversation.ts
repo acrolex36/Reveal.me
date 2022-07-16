@@ -192,31 +192,35 @@ export const getPicture = async (req: Request, res: Response) => {
       var imageData = Buffer.from(pictureData[1], "base64");
 
       var result = await Jimp.read(imageData)
+      
+      // var total_user_1_2 = total_user_1 + total_user_2;
 
-      var total_user_1_2 = total_user_1 + total_user_2;
-
-      if (total_user_1 >= 5 && total_user_2 >= 5) {
-        if (total_user_1 < 10 || total_user_2 < 10) {
-          //   //level 1 unblur
-          result.blur(80);
-          // .write('80%Blur.png')
-        }
-      }
+      if (total_user_1 >= 15 && total_user_2 >= 15) {
+          //original
+          // console.log("third")
+          result.blur(0)
+          // .write('test2.png')
+      } 
       else if (total_user_1 >= 10 && total_user_2 >= 10) {
         if (total_user_1 < 15 || total_user_2 < 15) {
+          // console.log("second")
           //level 2 unblur
-          result.blur(50);
+          result.blur(50)
           // .write('50%Blur.png')
         }
       }
-      else if (total_user_1 >= 15 && total_user_2 >= 15) {
-          //original
-          result.blur(0);
-          // .write('test2.png')
-      } 
-      else {
+      else if (total_user_1 >= 5 && total_user_2 >= 5) {
+        if (total_user_1 < 10 || total_user_2 < 10) {
+          //   //level 1 unblur
+          // console.log("first")
+          result.blur(80)
+          // .write('80%Blur.png')
+        }
+      }
+      else{
         // max level blur
-        result.blur(100);
+        // console.log("last")
+        result.blur(100)
         // .write('FullBlur.png')
       }
 

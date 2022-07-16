@@ -53,7 +53,7 @@ const Chat = (props) => {
           </div>
         </div>
       ) : (
-        <div>fetching...</div>
+        <div>Setting up...</div>
       )}
     </>
   );

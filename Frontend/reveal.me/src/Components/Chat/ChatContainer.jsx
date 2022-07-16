@@ -24,6 +24,26 @@ const ChatContainer = () => {
   const [image, setImage] = useState("");
   const scrollRef = useRef(null);
 
+  const getImage = async (currentChat) => {
+    try {
+      if (currentChat) {
+        const response = await axios.get(
+          `http://localhost:5000/api/conversation/user/picture/${currentChat?._id}/${id}`,
+          {
+            headers: {
+              "Content-Type": "application/json; charset=UTF-8",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data = response.data;
+        setImage(data);
+      }
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
   useEffect(() => {
     socket.current = io("ws://localhost:8900");
     socket.current.on("getMessage", (data) => {
@@ -36,8 +56,8 @@ const ChatContainer = () => {
   }, []);
 
   useEffect(() => {
-    getImage(currentChat)
-    arrivalMessage &&
+    getImage(currentChat);
+    arrivalMessage && image &&
       currentChat?.members?.includes(arrivalMessage.sender) &&
       setMessages((prev) => [...prev, arrivalMessage]);
   }, [arrivalMessage, currentChat]);
@@ -64,26 +84,6 @@ const ChatContainer = () => {
     }
   };
 
-      const getImage = async (currentChat) => {
-        try {
-          if (currentChat) {
-            const response = await axios.get(
-              `http://localhost:5000/api/conversation/user/picture/${currentChat?._id}/${id}`,
-              {
-                headers: {
-                  "Content-Type": "application/json; charset=UTF-8",
-                  Authorization: `Bearer ${token}`,
-                },
-              }
-            );
-            const data = response.data;
-            setImage(data);
-          }
-        } catch (err) {
-          console.error(err.message);
-        }
-      };
-
   const sendMessage = async (e) => {
     e.preventDefault();
     let sendMessage;
@@ -104,6 +104,8 @@ const ChatContainer = () => {
       sendMessage = sendImage;
     }
 
+    setTextArea("");
+    setSendImage("");
     try {
       const response = await axios.post(
         `http://localhost:5000/api/message/${currentChat?._id}`,
@@ -120,10 +122,7 @@ const ChatContainer = () => {
       );
       const newMessage = response.data;
       setMessages([...messages, newMessage]);
-      setTextArea("");
-      setSendImage("");
       getImage(currentChat);
-      
     } catch (error) {
       console.log(error);
     }
@@ -131,19 +130,19 @@ const ChatContainer = () => {
 
   const getMessages = async () => {
     try {
-    if(currentChat){
-      const res = await axios.get(
-        `http://localhost:5000/api/message/all/${currentChat?._id}`,
-        {
-          headers: {
-            "Content-Type": "application/json; charset=UTF-8",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const data = res.data;
-      setMessages(data);
-    }
+      if (currentChat) {
+        const res = await axios.get(
+          `http://localhost:5000/api/message/all/${currentChat?._id}`,
+          {
+            headers: {
+              "Content-Type": "application/json; charset=UTF-8",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data = res.data;
+        setMessages(data);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -165,18 +164,19 @@ const ChatContainer = () => {
 
   const getMatchAccount = async (matchId) => {
     try {
-        if(matchId){
-      const response = await axios.get(
-        `http://localhost:5000/api/singleuser/id/${matchId}`,
-        {
-          headers: {
-            "Content-Type": "application/json; charset=UTF-8",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const dataMatch = response.data;
-      setAccountData(dataMatch);}
+      if (matchId) {
+        const response = await axios.get(
+          `http://localhost:5000/api/singleuser/id/${matchId}`,
+          {
+            headers: {
+              "Content-Type": "application/json; charset=UTF-8",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const dataMatch = response.data;
+        setAccountData(dataMatch);
+      }
     } catch (err) {
       console.error(err.message);
     }
@@ -229,10 +229,7 @@ const ChatContainer = () => {
             </h2>
             {allConversation && allConversation.length > 0 ? (
               allConversation.map((convo, index) => (
-                <li
-                  key={index}
-                  onClick={() => setCurrentChat(convo)}
-                >
+                <li key={index} onClick={() => setCurrentChat(convo)}>
                   <ChatConversations
                     conversation={convo}
                     currentUser={id}
@@ -265,8 +262,7 @@ const ChatContainer = () => {
                     accountData?.userDetail &&
                     userData?.userDetail &&
                     messages.map((m, index) => (
-                      <div key={index}
-                      ref={scrollRef}>
+                      <div key={index} ref={scrollRef}>
                         <ChatBubble
                           msg={m}
                           userData={userData}
