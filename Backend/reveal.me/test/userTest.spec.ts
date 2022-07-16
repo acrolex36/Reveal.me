@@ -1,5 +1,11 @@
-const request = require('supertest');
+import request  from 'supertest';
+import chai from "chai"
 const expect = require('chai').expect;
+const server = require("../index.ts")
+const chaiHttp = require("chai-http");
+
+chai.use(chaiHttp)
+
 const correctCredential = require('../testData/login.json').correctCredential;
 const falseCredential = require('../testData/login.json').falseCredential;
 const successfulRegister = require('../testData/register.json').successfulRegister;
@@ -16,10 +22,10 @@ const anotherUser = require('../testData/register.json').anotherUser;
 
 describe('Reveal.me API Tests', () => {
     const baseurl = 'http://localhost:5000/api'
-    var userId
-    var anotherUserId
-    var token
-    var conversationId
+    var userId :any
+    var anotherUserId : any
+    var token : any
+    var conversationId : any
     var email = correctCredential.email
 
     after(function(done) {
@@ -443,7 +449,7 @@ describe('Reveal.me API Tests', () => {
             .delete(`/conversation/remove/${conversationId}`)
             .set("Authorization", "Bearer " + token)
             .end(function(err,res) {
-                expect(res.statusCode).to.be.equal(201);
+                expect(res.statusCode).to.be.equal(200);
                 if (err) {
                     throw err;
                 }

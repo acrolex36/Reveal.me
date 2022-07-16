@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.ts",
-    "test": "mocha test/userTest.spec.js"
+    "test": "mocha -r ts-node/register test/*.spec.ts --reporter mochawesome --reporter-options reportDir=test-results --exit"
   },
   "author": "",
   "license": "ISC",
