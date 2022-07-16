@@ -13,7 +13,7 @@ const ChatPage = () => {
         <aside className="hidden sm:block">
           <Sidebar></Sidebar>
         </aside>
-        <div class="px-4 w-full h-4/5">
+        <div className="px-4 w-full h-4/5">
           <ChatContainer></ChatContainer>
         </div>
       </div>
