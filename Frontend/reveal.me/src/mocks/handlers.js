@@ -16,29 +16,22 @@ export const handlers = [
             return res(ctx.status(201),
             ctx.json(Login))
         }),
-    
-    rest.get(`${BASE_URL}/singleuser/id/test1`,
-        (req, res, ctx) => {
-            return res(ctx.status(200),
-                ctx.json(Register))
-    }),
-
-    rest.get(`${BASE_URL}/singleuser/id/test2`,
-        (req, res, ctx) => {
-            return res(ctx.status(200),
-                ctx.json(CreateProfile))
-        }),
-    
-    rest.get(`${BASE_URL}/singleuser/id/62b6fccd182ddbe9be312d62`,
-        (req, res, ctx) => {
-            return res(ctx.status(200),
-                ctx.json(ConversationDetail))
-        }),
 
     rest.get(`${BASE_URL}/singleuser/id/:id`,
         (req, res, ctx) => {
-            return res(ctx.status(200),
-                ctx.json(UserData))
+            if (req.params.id == "test"){
+                return res(ctx.status(200),
+                    ctx.json(UserData))
+            }
+            else if (req.params.id == "test1"){
+                return res(ctx.status(200),
+                    ctx.json(CreateProfile))
+            }
+            else if (req.params.id == "test2"){
+                return res(ctx.status(200),
+                    ctx.json(CreateProfile))
+            }
+            
         }),
 
     rest.get(`${BASE_URL}/filtereduser/id/:id`,
@@ -66,14 +59,14 @@ export const handlers = [
         }),
 
     rest.put(
-        `${BASE_URL}/user/profile/head/frontendEmail@test.com`,
+        `${BASE_URL}/user/profile/head/:email`,
         (req, res, ctx) => {
             return res(ctx.status(200)
             )
         }),
     
     rest.put(
-        `${BASE_URL}/user/profile/body/frontendEmail@test.com`,
+        `${BASE_URL}/user/profile/body/:email`,
         (req, res, ctx) => {
             return res(ctx.status(200)
             )
@@ -88,13 +81,20 @@ export const handlers = [
     }),
 
     rest.get(
-        `${BASE_URL}/conversation/user/picture/62d325eb9eedf39daa06ead3`,
+        `${BASE_URL}/conversation/user/picture/:conversationId/:id`,
         (req, res, ctx) => {
             return res(ctx.status(200),
                 ctx.json(Image)
             )
-        })
-
+        }),
+    
+    rest.get(
+        `${BASE_URL}/message/all/:conversationId`,
+        (req, res, ctx) => {
+            return res(ctx.status(200),
+                
+            )
+    }),
 
 
 ]

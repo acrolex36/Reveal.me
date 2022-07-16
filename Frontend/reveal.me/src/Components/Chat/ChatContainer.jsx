@@ -229,7 +229,7 @@ const ChatContainer = () => {
             </h2>
             {allConversation && allConversation.length > 0 ? (
               allConversation.map((convo, index) => (
-                <li key={index} onClick={() => setCurrentChat(convo)}>
+                <li id='convoList' key={index} onClick={() => setCurrentChat(convo)}>
                   <ChatConversations
                     conversation={convo}
                     currentUser={id}
@@ -255,7 +255,7 @@ const ChatContainer = () => {
                   id="messages"
                   className="position:static flex flex-col space-y-3 p-4 overflow-y-auto scrollbar-thumb-blue scrollbar-w-2 scrolling-touch h-[648px] max-h-[1200px]"
                 >
-                  {totalMessage &&
+                  {
                     messages &&
                     accountData &&
                     userData &&
@@ -356,7 +356,7 @@ const ChatContainer = () => {
         )}
         <div className="hidden lg:col-span-1 lg:block w-full">
           <div className="h-full">
-            {totalMessage &&
+            {
               currentChat &&
               accountData &&
               accountData.userDetail && (
