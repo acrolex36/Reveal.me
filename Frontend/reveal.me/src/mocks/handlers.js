@@ -2,7 +2,8 @@ import {rest} from 'msw'
 import UserData from './UserData.json'
 import FilteredUsers from './FilteredUsers.json'
 import Login from './Login.json'
-
+import CreateProfile from './CreateProfile.json'
+import Register from './Register.json'
 const BASE_URL = "http://localhost:5000/api"
 
 // Define handlers that catch the corresponding requests and returns the mock data.
@@ -31,6 +32,20 @@ export const handlers = [
             return res(ctx.status(200),
                 ctx.json(FilteredUsers))
         }),
+
+    rest.post(`${BASE_URL}/auth/register`,
+        (req, res, ctx) => {
+            return res(ctx.status(201),
+                ctx.json(
+                    {
+                        "UserId": "test1",
+                        "Token": "testToken1"
+                    }
+                )
+            )
+        }),
+
+
 
 
 ]
