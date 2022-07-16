@@ -4,6 +4,8 @@ import FilteredUsers from '../../cypress/fixtures/FilteredUsers.json'
 import Login from '../../cypress/fixtures/Login.json'
 import CreateProfile from '../../cypress/fixtures/CreateProfile.json'
 import Register from '../../cypress/fixtures/Register.json'
+import Conversation from '../../cypress/fixtures/Conversation.json'
+import Image from '../../cypress/fixtures/getImage.json'
 const BASE_URL = "http://localhost:5000/api"
 
 // Define handlers that catch the corresponding requests and returns the mock data.
@@ -25,6 +27,12 @@ export const handlers = [
         (req, res, ctx) => {
             return res(ctx.status(200),
                 ctx.json(CreateProfile))
+        }),
+    
+    rest.get(`${BASE_URL}/singleuser/id/62b6fccd182ddbe9be312d62`,
+        (req, res, ctx) => {
+            return res(ctx.status(200),
+                ctx.json(ConversationDetail))
         }),
 
     rest.get(`${BASE_URL}/singleuser/id/:id`,
@@ -72,12 +80,20 @@ export const handlers = [
         }),
 
     rest.get(
-        `${BASE_URL}/allconversation/62bc5577073b704e972c4186`,
+        `${BASE_URL}/allconversation/:id`,
         (req, res, ctx) => {
             return res(ctx.status(200),
-                ctx.json()
+                ctx.json(Conversation)
             )
-    })
+    }),
+
+    rest.get(
+        `${BASE_URL}/conversation/user/picture/62d325eb9eedf39daa06ead3`,
+        (req, res, ctx) => {
+            return res(ctx.status(200),
+                ctx.json(Image)
+            )
+        })
 
 
 

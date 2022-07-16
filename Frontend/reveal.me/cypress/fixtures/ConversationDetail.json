@@ -1,0 +1,39 @@
+{
+  "userDetail": {
+    "is_online": true,
+    "gender": "male",
+    "gender_interest": [
+      "male",
+      "diverse",
+      "female"
+    ],
+    "age": 20,
+    "dob_date": 1,
+    "dob_month": 1,
+    "dob_year": 2002,
+    "height": 170,
+    "nationality": "indonesian",
+    "occupation": "Fontend tester in Hochschule Darmstadt",
+    "hobbies": [
+      "Photography",
+      "Traveling"
+    ],
+    "languages": [
+      "English"
+    ],
+    "description": "test hello"
+  },
+  "_id": "62bc5577073b704e972c4186",
+  "first_name": "bryan",
+  "last_name": "hadiyanto",
+  "email": "bryan@test.com",
+  "password": "$2b$10$hXG9eeyizteSkDMf6rcOcuQq1VCOKsSAgaXgWMG7M.XqaSYtIih4K",
+  "lastLogin": "2022-07-12T21:22:16.763Z",
+  "lastPasswordReset": "2022-07-05T18:42:11.762Z",
+  "oneSideMatch": [
+    "62bc552fc9e91bd9bfeadf9a",
+    "62bc62568c3bdbb268b66873"
+  ],
+  "__v": 0,
+  "swipedLeftUsers": []
+}

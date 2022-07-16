@@ -29,6 +29,8 @@ import {
     getAllConversationFromOneUser,
     getTotalMessages,
 
+    getPicture,
+
     deleteConversation,
 
 } from "../controllers/postsConversation"
@@ -64,17 +66,20 @@ router.get("/gendereduser/id/:id", getAllGenderedUserById);
 //Conversation
 router.post("/conversation/message/:userId1/:userId2", createConversation);
 
-router.put("/conversation/isblurred/:conversationId", updateIsBlurred);
+router.put("/conversation/isblurred/:conversationId", updateIsBlurred);//notu´use
 
 router.get("/allconversation", getAllConversation);
 router.get("/allconversation/:userId", getAllConversationFromOneUser);
-router.get("/message/total/:conversationId", getTotalMessages)
 
-router.delete("/conversation/remove/:conversationId", deleteConversation)
+router.get("/message/total/:conversationId", getTotalMessages);//not use
+
+router.get("/conversation/user/picture/:conversationId/:userId", getPicture)
+
+router.delete("/conversation/remove/:conversationId", deleteConversation);
 
 //Message
-router.post("/message/:conversationId", createMessage)
+router.post("/message/:conversationId", createMessage);
 
-router.get("/message/all/:conversationId", getAllMessages)
+router.get("/message/all/:conversationId", getAllMessages);
 
 export default router;

@@ -4,7 +4,7 @@ describe('Chat page', () => {
         cy.visit('http://localhost:3000/login')
         cy.findByLabelText(/Email address/i)
             .clear()
-            .type('frontend@test.com');
+            .type('frontend@test3.com');
         cy.findByLabelText(/Password/i)
             .clear()
             .type('test123');
