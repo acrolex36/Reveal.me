@@ -1,9 +1,9 @@
 import {rest} from 'msw'
-import UserData from './UserData.json'
-import FilteredUsers from './FilteredUsers.json'
-import Login from './Login.json'
-import CreateProfile from './CreateProfile.json'
-import Register from './Register.json'
+import UserData from '../../cypress/fixtures/UserData.json'
+import FilteredUsers from '../../cypress/fixtures/FilteredUsers.json'
+import Login from '../../cypress/fixtures/Login.json'
+import CreateProfile from '../../cypress/fixtures/CreateProfile.json'
+import Register from '../../cypress/fixtures/Register.json'
 const BASE_URL = "http://localhost:5000/api"
 
 // Define handlers that catch the corresponding requests and returns the mock data.
