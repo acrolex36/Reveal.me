@@ -69,7 +69,15 @@ export const handlers = [
         (req, res, ctx) => {
             return res(ctx.status(200)
             )
-        })
+        }),
+
+    rest.get(
+        `${BASE_URL}/allconversation/62bc5577073b704e972c4186`,
+        (req, res, ctx) => {
+            return res(ctx.status(200),
+                ctx.json()
+            )
+    })
 
 
 
