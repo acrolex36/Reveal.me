@@ -11,15 +11,10 @@ describe('Logout', () => {
 
         cy.contains('Sign in').click();
 
-        // cy.getCookie('Token', {timeout: 10000})
-        //     .should('have.property', 'value', 'testToken')
-        // cy.getCookie('UserId')
-        //     .should('have.property', 'value', 'test')
     })
 
     it('Sucessfully logs out and emptie cookies ', () => {
         cy.get('#logout').click();
-        cy.wait(5000)
 
         cy.getCookie('Token').should('have.property', 'value', '')
         cy.getCookie('UserId').should('have.property', 'value', '')

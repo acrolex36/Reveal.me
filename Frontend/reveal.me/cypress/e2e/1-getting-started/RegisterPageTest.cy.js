@@ -19,10 +19,7 @@ describe('Register', () => {
         cy.get('#confirmPassword')
             .type('test123');
         cy.contains('Create an Account').click();
-
-        cy.setCookie('Token', 'testToken1')
-        cy.setCookie('UserId', 'test1')
-
+        
         cy.getCookie('UserId')
             .should('have.property', 'value', 'test1')
         cy.getCookie('Token')

@@ -2,8 +2,8 @@ import {rest} from 'msw'
 import UserData from './UserData.json'
 import FilteredUsers from './FilteredUsers.json'
 import Login from './Login.json'
-import CreateProfile from './CreateProfile.json'
 import Register from './Register.json'
+import CreateProfile from './CreateProfile.json'
 const BASE_URL = "http://localhost:5000/api"
 
 // Define handlers that catch the corresponding requests and returns the mock data.
@@ -13,6 +13,18 @@ export const handlers = [
         (req, res, ctx) => {
             return res(ctx.status(201),
             ctx.json(Login))
+        }),
+    
+    rest.get(`${BASE_URL}/singleuser/id/test1`,
+        (req, res, ctx) => {
+            return res(ctx.status(200),
+                ctx.json(Register))
+    }),
+
+    rest.get(`${BASE_URL}/singleuser/id/test2`,
+        (req, res, ctx) => {
+            return res(ctx.status(200),
+                ctx.json(CreateProfile))
         }),
 
     rest.get(`${BASE_URL}/singleuser/id/:id`,
@@ -38,13 +50,26 @@ export const handlers = [
             return res(ctx.status(201),
                 ctx.json(
                     {
-                        "UserId": "test1",
-                        "Token": "testToken1"
+                        "userId": "test1",
+                        "token": "testToken1"
                     }
                 )
             )
         }),
 
+    rest.put(
+        `${BASE_URL}/user/profile/head/frontendEmail@test.com`,
+        (req, res, ctx) => {
+            return res(ctx.status(200)
+            )
+        }),
+    
+    rest.put(
+        `${BASE_URL}/user/profile/body/frontendEmail@test.com`,
+        (req, res, ctx) => {
+            return res(ctx.status(200)
+            )
+        })
 
 
 
