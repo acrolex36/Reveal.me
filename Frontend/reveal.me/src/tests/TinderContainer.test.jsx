@@ -2,8 +2,8 @@ import TinderContainer from "../Components/TinderContainer";
 import {fireEvent, render, screen} from '@testing-library/react';
 import '@testing-library/jest-dom';
 
-import {FilteredUsers} from "../mocks/FilteredUsers.json"
-import {UserData} from "../mocks/UserData.json"
+import {FilteredUsers} from "../../cypress/fixtures/FilteredUsers.json"
+import {UserData} from "../../cypress/fixtures/UserData.json"
 
 describe('TinderContainer test', () => {
 
