@@ -1,6 +1,7 @@
 import {rest} from 'msw'
 import UserData from './UserData.json'
 import FilteredUsers from './FilteredUsers.json'
+import Login from './Login.json'
 
 const BASE_URL = "http://localhost:5000/api"
 
@@ -9,10 +10,8 @@ export const handlers = [
 
     rest.post(`${BASE_URL}/auth/login`,
         (req, res, ctx) => {
-            return res(ctx.status(200),
-                ctx.json(UserData),
-                ctx.cookie('UserId', "1"),
-                ctx.cookie('Token', "3"))
+            return res(ctx.status(201),
+            ctx.json(Login))
         }),
 
     rest.get(`${BASE_URL}/singleuser/id/:id`,
