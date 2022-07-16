@@ -191,27 +191,24 @@ export const getPicture = async (req: Request, res: Response) => {
       const pictureData = pictureUser.split(",");
       var imageData = Buffer.from(pictureData[1], "base64");
 
-      var result = await Jimp.read(imageData)
-      
-      // var total_user_1_2 = total_user_1 + total_user_2;
+      var result = await Jimp.read(imageData);
 
       if (total_user_1 >= 15 && total_user_2 >= 15) {
           //original
           // console.log("third")
-          result.blur(0)
-          // .write('test2.png')
+          // result.write('original.png')
       } 
       else if (total_user_1 >= 10 && total_user_2 >= 10) {
         if (total_user_1 < 15 || total_user_2 < 15) {
-          // console.log("second")
           //level 2 unblur
+          // console.log("second")
           result.blur(50)
           // .write('50%Blur.png')
         }
       }
       else if (total_user_1 >= 5 && total_user_2 >= 5) {
         if (total_user_1 < 10 || total_user_2 < 10) {
-          //   //level 1 unblur
+            //level 1 unblur
           // console.log("first")
           result.blur(80)
           // .write('80%Blur.png')
@@ -226,6 +223,8 @@ export const getPicture = async (req: Request, res: Response) => {
 
       var newImage = result.getBase64Async(result.getMIME());
 
+      // fs.writeFileSync("document.txt", await newImage);
+      
       res.status(200).json(await newImage);
     } catch (error) {
       res.status(404).json({ message: error });
