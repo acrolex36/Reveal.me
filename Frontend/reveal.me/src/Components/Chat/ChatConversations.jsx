@@ -1,60 +1,46 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useCookies } from "react-cookie";
+import { getPicture, getSingleUser } from "../../utils/ApiActions";
 
 const ChatConversations = (props) => {
   const { conversation, currentUser } = props;
   const [user, setUser] = useState(null);
   const [cookies] = useCookies(null);
-  const [image, setImage] = useState('')
+  const [image, setImage] = useState("");
   const token = cookies.Token;
   useEffect(() => {
     const matchId = conversation.members.find((m) => m !== currentUser);
-    
+
+    //get blurred/unblurred image from backend
     const getImage = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:5000/api/conversation/user/picture/${conversation._id}/${currentUser}`,
-          {
-            headers: {
-              "Content-Type": "application/json; charset=UTF-8",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await getPicture(conversation._id, currentUser, token);
         const data = response.data;
         setImage(data);
-        
       } catch (err) {
         console.error(err.message);
       }
     };
+
+    //get account from match
     const getUser = async (matchId) => {
       try {
-        const response = await axios.get(
-          `http://localhost:5000/api/singleuser/id/${matchId}`,
-          {
-            headers: {
-              "Content-Type": "application/json; charset=UTF-8",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await getSingleUser(matchId, token);
         const dataMatch = response.data;
         setUser(dataMatch);
       } catch (err) {
         console.error(err.message);
       }
     };
-      
+
     getImage();
     getUser(matchId);
   }, [props]);
 
   return (
     <div>
-      { image && user && user?.userDetail ? (
+      {image && user && user?.userDetail ? (
         <div
           key={user._id}
           className="flex items-center px-3 py-2 my-3 text-sm transition duration-150 ease-in-out border-b border-gray-300 cursor-pointer hover:bg-gray-100 focus:outline-none"
@@ -70,7 +56,9 @@ const ChatConversations = (props) => {
             </div>
           </div>
         </div>
-      ): (<div>fetching...</div>)}
+      ) : (
+        <div>fetching...</div>
+      )}
     </div>
   );
 };
