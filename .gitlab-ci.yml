@@ -3,6 +3,12 @@ stages:
   - staging
   - production
 
+before_script:
+  - cd Backend/reveal.me && npm install
+  - apt-get update -qy
+  - apt-get install -y ruby-dev
+  - gem install dpl
+
 staging:
   type: deploy
   stage: staging
@@ -25,8 +31,6 @@ production:
 backend_tests:
   image: node:18.6-buster-slim
   stage: test
-  before_script:
-    - cd Backend/reveal.me && npm install
   script:
     - npm test
  
