@@ -505,14 +505,14 @@ export const getAllGenderedUserById = async (req: Request, res: Response) => {
         }
       }
 
-      //Users that has not been swiped left and matched and also not in one
+      //Users that has not been swiped left and matched and also not in one and not in OnesideMatch of other users
       var remainingUsers = [];
 
       for (var not_user of other_users) {
         if (
-          matchedUsers.includes(not_user._id.valueOf()) ||
-          swipedLeftUsers.includes(not_user._id.valueOf()) ||
-          not_user.oneSideMatch.includes(id)
+            matchedUsers.includes(not_user._id.valueOf()) ||
+            swipedLeftUsers.includes(not_user._id.valueOf()) ||
+            not_user.oneSideMatch.includes(id)
         ) {
           continue;
         } else {
@@ -525,13 +525,14 @@ export const getAllGenderedUserById = async (req: Request, res: Response) => {
       for (var interested_gender of gender_interest) {
         for (let temp_user of remainingUsers) {
           if (
-            temp_user.userDetail.gender == interested_gender &&
-            temp_user.userDetail.gender_interest.includes(gender)
+              temp_user.userDetail.gender == interested_gender &&
+              temp_user.userDetail.gender_interest.includes(gender)
           ) {
             gendered_users.push(temp_user);
           }
         }
       }
+
       res.status(200).json(gendered_users);
     } catch (error) {
       res.status(404).json({ message: error });
