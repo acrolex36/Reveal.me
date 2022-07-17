@@ -11,6 +11,7 @@ import { getSingleUser } from "../../utils/ApiActions";
 const ProfileDetails = () => {
   const [error, setError] = useState(null);
   const [cookies] = useCookies(null);
+  const [DOB, setDOB] = useState("")
   const [accountData, setAccountData] = useState({
     email: "",
     password: "",
@@ -41,6 +42,7 @@ const ProfileDetails = () => {
       const response = await getSingleUser(id, token);
       console.log(response);
       setAccountData(response.data);
+      setDateBirth(response.data);
     } catch (err) {
       console.error(err.message);
     }
@@ -103,6 +105,28 @@ const ProfileDetails = () => {
       userDetail: { ...accountData.userDetail, languages: [] },
     }));
   };
+
+  const setDateBirth = () => {
+    let date =" "
+    let month =""
+    if(accountData.userDetail){
+if (accountData.userDetail.dob_date.length < 2) {
+  date = "0" + accountData.userDetail.dob_date;
+  console.log(accountData.userDetail.dob_date);
+} else {
+  date = accountData.userDetail.dob_date;
+}
+if (accountData.userDetail.dob_month.length < 2) {
+  month = "0" + accountData.userDetail.dob_month;
+} else month = accountData.userDetail.dob_month;
+
+let year = accountData.userDetail.dob_year;
+let dob = year + "-" + month + "-" + date;
+setDOB(dob);
+console.log(DOB);
+    }
+    
+  }
 
   //set DOB
   const parseDOBandCalculateAge = (eventData) => {
@@ -569,6 +593,7 @@ const ProfileDetails = () => {
                         </label>
                         <input
                           type="date"
+                          value={setDateBirth}
                           onChange={(e) =>
                             parseDOBandCalculateAge(e.target.value)
                           }
@@ -608,7 +633,7 @@ const ProfileDetails = () => {
             </div>
           </div>
         </div>
-        
+
         {/*Personal Interests*/}
         <div>
           <Interest
