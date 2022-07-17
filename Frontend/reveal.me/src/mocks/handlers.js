@@ -10,6 +10,7 @@ import ConversationDetail from '../../cypress/fixtures/ConversationDetail.json'
 import Image from '../../cypress/fixtures/getImage.json'
 import Messages from '../../cypress/fixtures/Messages.json'
 import NewMessage from '../../cypress/fixtures/NewMessage.json'
+import NewMessageImage from '../../cypress/fixtures/NewMessageImage.json'
 const BASE_URL = "http://localhost:5000/api"
 
 // Define handlers that catch the corresponding requests and returns the mock data.
@@ -106,8 +107,16 @@ export const handlers = [
 
     rest.post(`${BASE_URL}/message/:conversationId`,
     (req, res, ctx) => {
-        return res(ctx.status(201))
-        // ctx.json(NewMessage)
+        if(req.body.message.length <200){
+            return res(ctx.status(201),
+            ctx.json(NewMessage)
+            )
+        }
+        else{
+            return res(ctx.status(201),
+                ctx.json(newMessageImage)
+            )
+        }
     }),
     
 

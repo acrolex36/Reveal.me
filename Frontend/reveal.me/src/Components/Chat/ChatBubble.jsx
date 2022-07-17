@@ -21,7 +21,7 @@ const ChatBubble = ({ msg, userData, image }) => {
             >
               <div>
                 {msg.message.length < 200 ? (
-                  <span
+                  <span id={msg._id}
                     className={` 
                         ${
                           msg.sender === id
