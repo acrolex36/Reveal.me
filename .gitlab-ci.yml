@@ -2,5 +2,29 @@ backend_tests:
   image: node:18.6-buster-slim
   before_script:
     - cd Backend/reveal.me && npm install
-  script:
-    - npm test
+
+  stages:
+    - test
+    - staging
+    - production
+
+  test:
+    type: deploy
+    script:
+      - npm test
+
+  staging:
+    type: deploy
+    stage: staging
+    script:
+      - dpl --provider=heroku --app=$HEROKU_APP_STAGING --api-key=$HEROKU_API_KEY
+    only:
+      - staging
+
+  production:
+    type: deploy
+    stage: production
+    script:
+      - dpl --provider=heroku --app=$HEROKU_APP_PRODUCTION --api-key=$HEROKU_API_KEY
+    only:
+      - master
