@@ -36,3 +36,6 @@ cypress/integration/_generated/*
 cypress/data/migration/generated/*.csv
 cypress/fixtures/example.json
 cypress/build/*
+
+# Backend
+Backend/reveal.me/test-result

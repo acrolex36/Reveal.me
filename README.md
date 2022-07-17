@@ -1,8 +1,5 @@
-<H1 align="center">
-Reveal.me
-</H1>
-<p style="text-align: center;">reveal you, reveal us!</p>
-
+# Reveal.me
+reveal you, reveal us!
 
 <p style="text-align: center;">
 <img alt="logo" src="./readme_images/Logo.png" height="200" />
@@ -56,7 +53,6 @@ Scripts:
 - Backend : start_backend.sh
 - Frontend : start_frontend.sh
 - Realtime chatting: start_realtime_chat.sh
-
 - Backend test : backend_test.sh
 - Frontend test: frontend_test.sh
 - Frontend test with Cypress GUI: frontend_test_gui.sh
@@ -65,7 +61,7 @@ Scripts:
 
 - To start reveal.me, simply run the start_backend.sh and start_frontend.sh scripts
 - Optionally, realtime chatting can be started with start_realtime.sh
-
+- To visit the website, enter this url: http://localhost:3000 and  will direct you to the landing page, to login or register a user
 - To run the automatic tests:
 - Run the respective test scripts for frontend and backend. - **(Make sure that both start scripts are running first!)**
 - A postman collection can be used for testing the individual api calls
@@ -78,15 +74,15 @@ Frontend:
 
 - Automated testing for frontend is done using Cypress. Each page is tested automatically to cover all functionality.
 
-![cypress gui](./readme_images/cypress.png)\
-![cypress](./readme_images/cypressTest.PNG)
-
+![cypress gui](./readme_images/cypress.png)![cypress](./readme_images/cypressTest.PNG)
 
 - Network requests to servers are intercepted using Mock service worker and return predefined data
 
 Backend:
 
 - Automatic testing is done using Mocha, Supertest, and Chai.
+- Tests are shown in the picture below
+  ![Backend Test](./readme_images/BackendTest.png)
 
 ## Functionality
 
@@ -97,6 +93,7 @@ Backend:
 ![Create profile](./readme_images/Create Profile.png)
 ![Create profile](./readme_images/Create Profile 2.png)
 ![Homepage](./readme_images/Homepage.png)
+
 - In this page the user can swipe potential matches.
 - The matching algorithm uses the shared interest to match users.
   ![Message](./readme_images/Message Page.png)
@@ -107,7 +104,7 @@ Backend:
 
 ## REST API ROUTES
 
-For a more detailed documentation see in **_openApiSpec.yml_** file
+For a more detailed documentation see in [](./Backend/reveal.me/openapi/openapi.yaml)
 Base URL for API : http://localhost:5000
 
 ## Authors
