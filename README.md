@@ -85,22 +85,30 @@ Backend:
   ![Backend Test](./readme_images/BackendTest.png)
 
 ## Functionality
-
+- Landing Page
 ![Landing page](./readme_images/Landing page.png)
+    - in this page the user can select whether to Sign in or create a new account
+- Register Page
 ![Register age](./readme_images/Register page.png)
+    - user can create a new account here
+- Login Page
 ![Login page](./readme_images/LoginPage.png)
+- Forgot Password Page
 ![Forget password page](./readme_images/Forget Password page.png)
+- Create Profile Page
 ![Create profile](./readme_images/Create Profile.png)
 ![Create profile](./readme_images/Create Profile 2.png)
+- Homepage 
 ![Homepage](./readme_images/Homepage.png)
-
-- In this page the user can swipe potential matches.
-- The matching algorithm uses the shared interest to match users.
+    - In this page the user can swipe potential matches.
+    - The matching algorithm uses the shared interest to match users.
+- Messages Page
   ![Message](./readme_images/Message Page.png)
-- In this page the user can message with all of their matches. After a certain amount of chats from both users, the
+    - In this page the user can message with all of their matches. After a certain amount of chats from both users, the
   profile picture of the chat partner will be unblurred
+- Explore Users Page
   ![Explore](./readme_images/Explore Users.png)
-- In this page the user can find other users by hobbies and match with them
+    - In this page the user can find other users by hobbies and match with them
 
 ## REST API ROUTES
 
