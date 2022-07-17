@@ -92,6 +92,19 @@ export const handlers = [
 
 
 
+    rest.put(
+        `${BASE_URL}/user/profile/head/frontendEmail@test.com`,
+        (req, res, ctx) => {
+            return res(ctx.status(200)
+            )
+        }),
+
+    rest.put(
+        `${BASE_URL}/user/profile/body/frontendEmail@test.com`,
+        (req, res, ctx) => {
+            return res(ctx.status(200)
+            )
+        })
 
 
 
