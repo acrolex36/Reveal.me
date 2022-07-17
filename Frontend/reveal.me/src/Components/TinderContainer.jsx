@@ -139,22 +139,24 @@ function TinderContainer() {
 
     };
 
+
     useEffect(() => {
         const handleKey = (e) => {
             if (e.keyCode === 37) {
-                console.log("left");
-                () => swipe("left");
+                swipe("left");
             } else if (e.keyCode === 39) {
-                () => swipe("right");
+                console.log("Right");
+                swipe("right");
             } else if (e.keyCode === 40) {
-                () => goBack();
+                console.log("goBack");
+                goBack();
             }
         };
         window.addEventListener("keydown", handleKey);
         return () => {
             window.removeEventListener("keydown", handleKey);
         };
-    }, []);
+    });
 
     return (
         <div>
