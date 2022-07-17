@@ -24,5 +24,5 @@ build_image:
   before_script: 
     - docker login -u "revealme" -p "Indonesia"
   script:
-    - docker build -t revealme/reveal.me2022:node_project .
-    - docker push revealme/reveal.me2022:node_project
+    - systemctl docker build -t revealme/reveal.me2022:node_project .
+    - systemctl docker push revealme/reveal.me2022:node_project
