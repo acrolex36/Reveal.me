@@ -13,7 +13,7 @@ frontend_tests:
   script:
     # - dpl --provider=heroku --app=$HEROKU_APP_STAGING --api-key=$HEROKU_API_KEY
     # - npm run cypress:headless
-    - npm ci
+    - npm ci --legacy-peer-deps
     - npm run start:ci &
     - npm run e2e
     # - npm run dev
