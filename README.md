@@ -4,7 +4,7 @@
 
 A full stack web dating application for discovering genuine connections ! Meet your match and slowly reveal your partner's pictures through chatting
 
-Built with ReactJS and TailwindUI for frontend and NodeJS for backend
+Built with ReactJS and TailwindUI for frontend and Typescript for backend
 
 ### Dependencies
 
@@ -13,7 +13,7 @@ Database:
 
 Backend :
 
-- Node
+- Typescript
 - Express JS
 - Nodemon
 - CORS
@@ -22,6 +22,7 @@ Backend :
 - Socket.io
 - Jsonwebtoken
 - dotenv
+- jimp
 - Mocha
 - Chai
 - Supertest
@@ -46,10 +47,28 @@ Scripts:
 
 - Frontend : npm run dev
 
+## Testing
+Frontend:
+
+Backend:
+
+- Automatic testing is done using Mocha, Supertest, and Chai. To run the test run the ....???
+
+### Postman collection
+
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/cf4410757371a6823eb0?action=collection%2Fimport)
+
+### REST API ROUTES
+
+For a more detailed documentation see in **_[openApi]_** file
+
+[openApi]: https://code.fbi.h-da.de/stdwrahm/reveal.me/-/blob/main/Backend/reveal.me/openApi/openapi.yaml#/ "OpenApi Page"
+
+
 ## Authors
 Aris Ananta Muljono | 
 
-Bryan Hadiyanto | 
+Bryan Hadiyanto | bryan.hadiyanto@stud.h-da.de
 
 Dwiresti Puspita Rahmi |
 
