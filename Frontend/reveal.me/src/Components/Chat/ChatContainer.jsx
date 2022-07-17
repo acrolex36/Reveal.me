@@ -217,6 +217,10 @@ const ChatContainer = () => {
                   ></ChatConversations>
                 </li>
               ))
+            ) : allConversation.length === 0 ? (
+              <div className="mx-3 my-5 mb-2 ml-2 text-lg text-gray-300">
+                You Have No Conversation Yet
+              </div>
             ) : (
               <div>Fetching Conversations...</div>
             )}

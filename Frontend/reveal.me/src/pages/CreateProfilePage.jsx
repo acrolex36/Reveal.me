@@ -10,7 +10,7 @@ const ProfilePage = () => {
           <Header></Header>
         </div>
 
-        <div className="flex flex-1 flex-col">
+        <div className="flex flex-1">
           <main className="flex flex-col px-4 w-1500 ml-28">
             <ProfileFields></ProfileFields>
           </main>

@@ -6,7 +6,7 @@ import Interest from "../Interest";
 import { Languages } from "../../utils/Language";
 import { userProfile } from "../../utils/ApiActions";
 import { userDetail } from "../../utils/ApiActions";
-import { getSingleUser } from "../../utils/ApiActions";
+import { getSingleUser, deleteUser } from "../../utils/ApiActions";
 
 const ProfileFields = () => {
   const [error, setError] = useState(null);
@@ -180,6 +180,17 @@ const ProfileFields = () => {
         gender_interest: updatedChecked,
       },
     }));
+  };
+
+  const cancelRegister = async () => {
+    try {
+      const id = cookies.UserId;
+      const token = cookies.Token;
+      await deleteUser(id, token);
+      navigate("/register")
+    } catch (err) {
+      console.error(err.message);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -607,7 +618,7 @@ const ProfileFields = () => {
         </div>
         <div className="px-4 py-3 text-right sm:px-6">
           <a
-            href="/register"
+            onClick={cancelRegister}
             className="inline-flex justify-center py-2 px-4 mr-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-pink-100 hover:bg-pink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             Cancel

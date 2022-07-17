@@ -163,6 +163,18 @@ export const getSingleUser = async (id, token) => {
     return response;
 }
 
+export const deleteUser = async (id, token) => {
+    const response = await axios.delete(`http://localhost:5000/api/user/${id}`,
+        {
+            headers: {
+                "Content-Type": "application/json; charset=UTF-8",
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+    return response;
+}
+
 //Conversation
 export const createConversation = async (myUserId, swipedId, token) => {
     const response = await axios.post(

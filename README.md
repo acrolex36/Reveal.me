@@ -9,6 +9,7 @@ Built with ReactJS and TailwindUI for frontend and Typescript for backend
 ### Dependencies
 
 Database:
+
 - MongoDB
 
 Backend :
@@ -41,13 +42,15 @@ Frontend :
 - React-testing-library
 
 ## Getting Started
+
 Scripts:
 
 - Backend : npm start
-
 - Frontend : npm run dev
+- Realtime chatting: npm start
 
 ## Testing
+
 Frontend:
 
 Backend:
@@ -60,16 +63,16 @@ Backend:
 
 ### REST API ROUTES
 
-For a more detailed documentation see in **_[openApi]_** file
-
-[openApi]: https://code.fbi.h-da.de/stdwrahm/reveal.me/-/blob/main/Backend/reveal.me/openApi/openapi.yaml#/ "OpenApi Page"
-
+For a more detailed documentation see in **_[openApi][openApi]_** file
 
 ## Authors
-Aris Ananta Muljono | 
+
+Aris Ananta Muljono |
 
 Bryan Hadiyanto | bryan.hadiyanto@stud.h-da.de
 
-Dwiresti Puspita Rahmi |
+Dwiresti Puspita Rahmi | dwiresti.p.rahmi@stud.h-da.de
 
 Enrico Egen Selian | Enrico.E.Selian@stud.h-da.de
+
+[openApi]: https://code.fbi.h-da.de/stdwrahm/reveal.me/-/blob/main/Backend/reveal.me/openApi/openapi.yaml#/
