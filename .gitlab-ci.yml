@@ -5,13 +5,6 @@ stages:
 
 pages:
   stage: deploy
-  cache:
-    key:
-      files:
-        - package-lock.json
-      prefix: npm
-    paths:
-      - node_modules/
   script:
     - cd Frontend/reveal.me
     - npm install -save --legacy-peer-deps
