@@ -1,11 +1,12 @@
 <H1 align="center">
 Reveal.me
 </H1>
-<p align="center">reveal you, reveal us! </p>
+<p style="text-align: center;">reveal you, reveal us!</p>
 
 
-<p align="center">
-<img alt="logo" src="./readme_images/Logo.png" height="200" /></p>
+<p style="text-align: center;">
+<img alt="logo" src="./readme_images/Logo.png" height="200" />
+</p>
 
 <p align="center">
 A full stack web dating application for discovering genuine connections ! Get matched with strangers with the same
