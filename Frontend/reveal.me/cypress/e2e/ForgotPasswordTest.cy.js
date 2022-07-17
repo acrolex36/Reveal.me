@@ -26,7 +26,7 @@ describe('Forgot Password', () => {
             .type('frontend@test.com');
 
         cy.contains(/Back to Sign in/i).click()
-        cy.contains(/Log in to Reveal.me/i).should('be.visible')
+        cy.contains(/Sign in/i).should('be.visible')
     })
-    
+
 })

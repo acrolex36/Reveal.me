@@ -11,7 +11,7 @@ describe('Chat page', () => {
             .clear()
             .type('test123.com');
 
-        cy.contains('Sign in').click();
+        cy.get('button[type=submit]').click();
 
     })
 

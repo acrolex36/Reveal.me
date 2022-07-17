@@ -11,7 +11,7 @@ describe('Login', () => {
             .clear()
             .type('frontend@test.com');
 
-        cy.contains('Sign in').click();
+        cy.get('button[type=submit]').click();
 
         cy.getCookie('Token')
             .should('have.property', 'value', 'testToken')

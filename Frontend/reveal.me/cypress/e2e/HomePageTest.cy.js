@@ -8,7 +8,7 @@ describe('Homepage', () => {
             .clear()
             .type('frontend@test.com');
 
-        cy.contains('Sign in').click();
+        cy.get('button[type=submit]').click();
         cy.server()
 
         //Wait until data loads
