@@ -1,10 +1,5 @@
-variables:
-  IMAGE_NAME: revealme/reveal.me2022
-  IMAGE_TAG: node_project
-
 stages:
   - test
-  - build
 
 backend_tests:
   stage: test
@@ -13,16 +8,3 @@ backend_tests:
     - cd Backend/reveal.me && npm install
   script:
     - npm test
-
-build_image:
-  stage: build
-  image: docker:latest
-  services:
-    - docker:dind
-  variables:
-    DOCKER_TLS_CERTDIR: "/certs"
-  before_script: 
-    - docker login -u "revealme" -p "Indonesia"
-  script:
-    - docker build -t $IMAGE_NAME:$IMAGE_TAG .
-    - docker push $IMAGE_NAME:$IMAGE_TAG
