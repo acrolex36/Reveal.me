@@ -1,11 +1,17 @@
 import React, { useEffect, useState, useRef } from "react";
 import Chat from "./Chat";
-import axios from "axios";
 import { useCookies } from "react-cookie";
 import ChatProfile from "./ChatProfile";
 import ChatConversations from "./ChatConversations";
 import ChatBubble from "./ChatBubble";
 import { io } from "socket.io-client";
+import {
+  getAllConversation,
+  getPicture,
+  sendMessages,
+  getMessagesInConversation,
+  getSingleUser,
+} from "../../utils/ApiActions";
 
 const ChatContainer = () => {
   const [allConversation, setConversation] = useState([]);
@@ -24,18 +30,11 @@ const ChatContainer = () => {
   const [image, setImage] = useState("");
   const scrollRef = useRef(null);
 
+  //get blurred/unblurred image from backend
   const getImage = async (currentChat) => {
     try {
       if (currentChat) {
-        const response = await axios.get(
-          `http://localhost:5000/api/conversation/user/picture/${currentChat?._id}/${id}`,
-          {
-            headers: {
-              "Content-Type": "application/json; charset=UTF-8",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await getPicture(currentChat?._id, id, token);
         const data = response.data;
         setImage(data);
       }
@@ -44,6 +43,7 @@ const ChatContainer = () => {
     }
   };
 
+  //get messages to socket.io
   useEffect(() => {
     socket.current = io("ws://localhost:8900");
     socket.current.on("getMessage", (data) => {
@@ -55,39 +55,38 @@ const ChatContainer = () => {
     });
   }, []);
 
+  //set messages from socket.io
   useEffect(() => {
     getImage(currentChat);
-    arrivalMessage && image &&
+    arrivalMessage &&
+      image &&
       currentChat?.members?.includes(arrivalMessage.sender) &&
       setMessages((prev) => [...prev, arrivalMessage]);
   }, [arrivalMessage, currentChat]);
 
+  //add online user
   useEffect(() => {
     socket.current.emit("addUser", id);
   }, [id]);
 
+  //get all conversation from one user
   const getUserConversation = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:5000/api/allconversation/${id}`,
-        {
-          headers: {
-            "Content-Type": "application/json; charset=UTF-8",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const data = await response.data;
+      const response = await getAllConversation(id, token);
+      const data = response;
       setConversation(data);
     } catch (error) {
       console.log(error);
     }
   };
 
+  //send message to other user
   const sendMessage = async (e) => {
     e.preventDefault();
     let sendMessage;
     const receiverId = currentChat.members.find((member) => member !== id);
+
+    //check if sent message is text or image
     if (sendImage === "" && textArea !== "") {
       socket.current.emit("sendMessage", {
         senderId: id,
@@ -104,21 +103,17 @@ const ChatContainer = () => {
       sendMessage = sendImage;
     }
 
+    //empty input
     setTextArea("");
     setSendImage("");
+
+    //POST send image
     try {
-      const response = await axios.post(
-        `http://localhost:5000/api/message/${currentChat?._id}`,
-        {
-          userId: id,
-          message: sendMessage,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json; charset=UTF-8",
-            Authorization: `Bearer ${cookies.Token}`,
-          },
-        }
+      const response = await sendMessages(
+        currentChat?._id,
+        id,
+        token,
+        sendMessage
       );
       const newMessage = response.data;
       setMessages([...messages, newMessage]);
@@ -128,18 +123,11 @@ const ChatContainer = () => {
     }
   };
 
+  //get messages from one conversation
   const getMessages = async () => {
     try {
       if (currentChat) {
-        const res = await axios.get(
-          `http://localhost:5000/api/message/all/${currentChat?._id}`,
-          {
-            headers: {
-              "Content-Type": "application/json; charset=UTF-8",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const res = await getMessagesInConversation(currentChat?._id, token);
         const data = res.data;
         setMessages(data);
       }
@@ -148,32 +136,18 @@ const ChatContainer = () => {
     }
   };
 
+  //get current user account
   const getUserAccount = async () => {
-    const response = await axios.get(
-      `http://localhost:5000/api/singleuser/id/${id}`,
-      {
-        headers: {
-          "Content-Type": "application/json; charset=UTF-8",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await getSingleUser(id, token);
     const dataUser = response.data;
     setUserData(dataUser);
   };
 
+  //get account from match
   const getMatchAccount = async (matchId) => {
     try {
       if (matchId) {
-        const response = await axios.get(
-          `http://localhost:5000/api/singleuser/id/${matchId}`,
-          {
-            headers: {
-              "Content-Type": "application/json; charset=UTF-8",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await getSingleUser(matchId, token);
         const dataMatch = response.data;
         setAccountData(dataMatch);
       }
@@ -182,6 +156,7 @@ const ChatContainer = () => {
     }
   };
 
+  //setting image as message
   const setPicture = (e) => {
     const reader = new FileReader();
     reader.onload = () => {
@@ -192,10 +167,12 @@ const ChatContainer = () => {
     reader.readAsDataURL(e.target.files[0]);
   };
 
+  //first load all conversation from current user
   useEffect(() => {
     getUserConversation();
   }, [cookies]);
 
+  //loads when clicking one conversation
   useEffect(() => {
     const matchId = currentChat?.members?.find((m) => m !== id);
     setImage("");
@@ -208,6 +185,7 @@ const ChatContainer = () => {
     getMessages(matchId);
   }, [currentChat]);
 
+  //reloads when image is set
   useEffect(() => {
     const matchId = currentChat?.members?.find((m) => m !== id);
     getMessages(matchId);
@@ -215,6 +193,7 @@ const ChatContainer = () => {
     getUserAccount();
   }, [image, currentChat]);
 
+  //scroll down to the last message
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -227,6 +206,7 @@ const ChatContainer = () => {
             <h2 className="mx-3 my-5 mb-2 ml-2 text-lg text-gray-600">
               Messages
             </h2>
+            {/*List of Conversations */}
             {allConversation && allConversation.length > 0 ? (
               allConversation.map((convo, index) => (
                 <li key={index} onClick={() => setCurrentChat(convo)}>
@@ -238,10 +218,11 @@ const ChatContainer = () => {
                 </li>
               ))
             ) : (
-              <div>Fetching messages...</div>
+              <div>Fetching Conversations...</div>
             )}
           </ul>
         </div>
+        {/*Profile Header*/}
         {currentChat && (
           <div className="hidden lg:col-span-2 lg:block">
             <div className="w-full max-h-4/5">
@@ -249,12 +230,13 @@ const ChatContainer = () => {
                 {messages ? (
                   <Chat currentChat={currentChat} image={image}></Chat>
                 ) : (
-                  <div>Fetching your messages...</div>
+                  <div>Fetching user...</div>
                 )}
                 <div
                   id="messages"
                   className="position:static flex flex-col space-y-3 p-4 overflow-y-auto scrollbar-thumb-blue scrollbar-w-2 scrolling-touch h-[648px] max-h-[1200px]"
                 >
+                  {/*Chat Bubble*/}
                   {totalMessage &&
                     messages &&
                     accountData &&
@@ -273,7 +255,7 @@ const ChatContainer = () => {
                       </div>
                     ))}
                 </div>
-
+                {/*Input Area */}
                 <form onSubmit={sendMessage}>
                   <div className="border-t-2 border-gray-200 px-4 pt-4 mb-2 sm:mb-0">
                     <div className="relative flex">
@@ -354,6 +336,7 @@ const ChatContainer = () => {
             </div>
           </div>
         )}
+        {/*Right Side Profile*/}
         <div className="hidden lg:col-span-1 lg:block w-full">
           <div className="h-full">
             {totalMessage &&

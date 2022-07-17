@@ -8,7 +8,7 @@ import { userProfile } from "../../utils/ApiActions";
 import { userDetail } from "../../utils/ApiActions";
 import { getSingleUser } from "../../utils/ApiActions";
 
-const ProfileFields = () => {
+const ProfileDetails = () => {
   const [error, setError] = useState(null);
   const [cookies] = useCookies(null);
   const [accountData, setAccountData] = useState({
@@ -33,6 +33,7 @@ const ProfileFields = () => {
     },
   });
 
+  //get user Account
   const getAccount = async (cookies) => {
     try {
       const id = cookies.UserId;
@@ -45,6 +46,7 @@ const ProfileFields = () => {
     }
   };
 
+  //loads existing data in account
   useEffect(() => {
     if (cookies) {
       getAccount(cookies);
@@ -53,6 +55,7 @@ const ProfileFields = () => {
 
   const navigate = useNavigate();
 
+  //input profile picture
   const changePicture = (e) => {
     const reader = new FileReader();
     reader.onload = () => {
@@ -69,6 +72,7 @@ const ProfileFields = () => {
     reader.readAsDataURL(e.target.files[0]);
   };
 
+  //add languages
   const handleOnChangeLanguage = (lang, language) => {
     if (language.includes(lang)) removeLanguage(lang);
     else {
@@ -81,6 +85,7 @@ const ProfileFields = () => {
     }
   };
 
+  //remove languages
   const removeLanguage = (id) => {
     const updatedState = accountData.userDetail.languages.filter(
       (lang) => lang !== id
@@ -91,6 +96,7 @@ const ProfileFields = () => {
     }));
   };
 
+  //reset language
   const resetLanguage = () => {
     setAccountData((accountData) => ({
       ...accountData,
@@ -98,6 +104,7 @@ const ProfileFields = () => {
     }));
   };
 
+  //set DOB
   const parseDOBandCalculateAge = (eventData) => {
     const parsed = eventData.split("-");
     var date = parsed[2];
@@ -133,6 +140,7 @@ const ProfileFields = () => {
     }));
   };
 
+  //set user nationality
   const setNationality = (nat) => {
     setAccountData((accountData) => ({
       ...accountData,
@@ -140,6 +148,7 @@ const ProfileFields = () => {
     }));
   };
 
+  //set user hobby
   const handleOnChangeHobby = (hobby) => {
     const updatedChecked = [...accountData.userDetail.hobbies];
     updatedChecked.push(hobby);
@@ -149,6 +158,7 @@ const ProfileFields = () => {
     }));
   };
 
+  //uncheck user hobby
   const removeHobby = (id) => {
     const updatedState = accountData.userDetail.hobbies.filter(
       (hobby) => hobby !== id
@@ -159,6 +169,7 @@ const ProfileFields = () => {
     }));
   };
 
+  //remove gender interest
   const removeGender = (id) => {
     const updatedState = accountData.userDetail.gender_interest.filter(
       (gender) => gender !== id
@@ -169,6 +180,7 @@ const ProfileFields = () => {
       userDetail: { ...accountData.userDetail, gender_interest: updatedState },
     }));
   };
+
 
   const handleOnChangeGender = (gender) => {
     const updatedChecked = [...accountData.userDetail.gender_interest];
@@ -182,6 +194,7 @@ const ProfileFields = () => {
     }));
   };
 
+  //submit user details
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -215,12 +228,10 @@ const ProfileFields = () => {
       <form action="#" method="POST" onSubmit={handleSubmit}>
         <div className="shadow sm:rounded-md sm:overflow-hidden px-4 py-5 bg-gray-50 space-y-6 sm:p-6 max-w-5xl my-5">
           <div>
-            <h1 className="mb-8 text-2xl text-gray-900 font-mono font-bold text-2xl">
-              Create Profile
-            </h1>
             <div className="md:grid md:grid-cols-3 md:gap-6">
               <div className="md:col-span-1">
                 <div className="px-4 py-4 sm:px-0">
+                  {/*Profile Picture Field*/}
                   <h3 className="text-lg font-medium leading-6 text-gray-900">
                     Profile Picture
                   </h3>
@@ -262,6 +273,7 @@ const ProfileFields = () => {
             </div>
           </div>
 
+          {/*Account Information Field */}
           <div className="hidden sm:block" aria-hidden="true">
             <div className="py-5">
               <div className="border-t border-gray-200" />
@@ -309,6 +321,7 @@ const ProfileFields = () => {
             </div>
           </div>
 
+          {/*Personal Details*/}
           <div className="hidden sm:block" aria-hidden="true">
             <div className="py-5">
               <div className="border-t border-gray-200" />
@@ -595,6 +608,8 @@ const ProfileFields = () => {
             </div>
           </div>
         </div>
+        
+        {/*Personal Interests*/}
         <div>
           <Interest
             hobbyList={accountData.userDetail.hobbies}
@@ -607,7 +622,7 @@ const ProfileFields = () => {
         </div>
         <div className="px-4 py-3 text-right sm:px-6">
           <a
-            href="/register"
+            href="/homepage"
             className="inline-flex justify-center py-2 px-4 mr-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-pink-100 hover:bg-pink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             Cancel
@@ -616,7 +631,7 @@ const ProfileFields = () => {
             type="submit"
             className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-darker-pink hover:bg-pink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
-            Submit
+            Edit
           </button>
           <p>{error}</p>
         </div>
@@ -625,4 +640,4 @@ const ProfileFields = () => {
   );
 };
 
-export default ProfileFields;
+export default ProfileDetails;
