@@ -6,5 +6,9 @@
     "falseCredential": {
         "email": "test@test.com",
         "plainTextPassword": "test"
+    },
+    "anotherUserCredential": {
+        "email": "testing@testing.com",
+        "plainTextPassword": "test123"
     }
 }

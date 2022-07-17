@@ -8,6 +8,11 @@ import {
 } from '../testData/register.json'
 
 import {
+    correctCredential,
+    anotherUserCredential
+} from '../testData/login.json'
+
+import {
     fullBodyData
 } from '../testData/updateData.json'
 
@@ -33,8 +38,6 @@ describe('Reveal.me Conversation API Tests', () => {
             .end(function(err, res) {
                 expect(res.statusCode).to.be.equal(201);
                 expect(res.body.userId).not.to.be.null;
-                token = res.body.token;
-                userId = res.body.userId;
                 if (err) {
                     throw err;
                 }
@@ -52,13 +55,49 @@ describe('Reveal.me Conversation API Tests', () => {
             .end(function(err, res) {
                 expect(res.statusCode).to.be.equal(201);
                 expect(res.body.userId).not.to.be.null;
-                anotherUserId = res.body.userId;
                 if (err) {
                     throw err;
                 }
                 done();
             });
     });
+
+    //Login to user account
+    before(function(done) {
+        request(baseurl)
+            .post('/auth/login')
+            .send(correctCredential)
+            .set('Accept', 'application/json')
+            .set('Content-Type', 'application/json')
+            .end(function(err, res) {
+                expect(res.statusCode).to.be.equal(201);
+                expect(res.body.token).not.to.be.null;
+                token = res.body.token;
+                userId = res.body.userId;
+                if (err) {
+                    throw err;
+                }
+                done();
+            });
+    })
+
+    //login to another user account
+    before(function(done) {
+        request(baseurl)
+            .post('/auth/login')
+            .send(anotherUserCredential)
+            .set('Accept', 'application/json')
+            .set('Content-Type', 'application/json')
+            .end(function(err, res) {
+                expect(res.statusCode).to.be.equal(201);
+                expect(res.body.token).not.to.be.null;
+                anotherUserId = res.body.userId;
+                if (err) {
+                    throw err;
+                }
+                done();
+            });
+    })
 
     //Inserting user details for the second user to be used in the Api call
     before(function(done) {

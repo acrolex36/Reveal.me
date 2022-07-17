@@ -4,6 +4,7 @@ import chaiHttp from "chai-http"
 import {
     correctCredential,
     falseCredential,
+    anotherUserCredential
 } from '../testData/login.json'
 
 import {
@@ -241,6 +242,22 @@ describe('Reveal.me user API Tests', () => {
             .end(function(err, res) {
                 expect(res.statusCode).to.be.equal(201);
                 expect(res.body.userId).not.to.be.null;
+                if (err) {
+                    throw err;
+                }
+                done();
+            });
+    });
+
+    it('should successfully login to another user account', (done) => {
+        request(baseurl)
+            .post('/auth/login')
+            .send(anotherUserCredential)
+            .set('Accept', 'application/json')
+            .set('Content-Type', 'application/json')
+            .end(function(err, res) {
+                expect(res.statusCode).to.be.equal(201);
+                expect(res.body.token).not.to.be.null;
                 anotherUserId = res.body.userId;
                 if (err) {
                     throw err;
