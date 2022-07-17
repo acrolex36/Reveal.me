@@ -10,7 +10,7 @@ before_script:
   - gem install dpl
 
 staging:
-  type: deploy
+  # type: deploy
   stage: staging
   image: ruby:latest
   script:
@@ -19,7 +19,7 @@ staging:
     - staging
 
 production:
-  type: deploy
+  # type: deploy
   stage: production
   image: ruby:latest
   script:
