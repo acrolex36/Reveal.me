@@ -78,7 +78,9 @@ Frontend:
 
 - Automated testing for frontend is done using Cypress. Each page is tested automatically to cover all functionality.
 
-![image info](./readme_images/cypress.png)
+![cypress gui](./readme_images/cypress.png)\
+![cypress](./readme_images/cypressTest.PNG)
+
 
 - Network requests to servers are intercepted using Mock service worker and return predefined data
 
