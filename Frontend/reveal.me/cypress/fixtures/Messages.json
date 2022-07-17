@@ -1,0 +1,38 @@
+[
+        {
+        "_id": "1",
+        "conversationId": "convo1",
+        "sender": "test1",
+        "message": "hello!",
+        "timestamp": "2022-07-16T20:56:40.877Z",
+        "has_been_seen": false,
+        "__v": 0
+    },
+	    {
+        "_id": "2",
+        "conversationId": "convo1",
+        "sender": "test2",
+        "message": "hello again!",
+        "timestamp": "2022-07-16T20:56:40.877Z",
+        "has_been_seen": false,
+        "__v": 0
+    },
+    {
+        "_id": "3",
+        "conversationId": "convo1",
+        "sender": "test1",
+        "message": "how r u?",
+        "timestamp": "2022-07-16T20:56:40.877Z",
+        "has_been_seen": false,
+        "__v": 0
+    },
+    {
+        "_id": "4",
+        "conversationId": "convo1",
+        "sender": "test2",
+        "message": "im good!",
+        "timestamp": "2022-07-16T20:56:40.877Z",
+        "has_been_seen": false,
+        "__v": 0
+    }
+]

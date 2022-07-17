@@ -2,10 +2,14 @@ import {rest} from 'msw'
 import UserData from '../../cypress/fixtures/UserData.json'
 import FilteredUsers from '../../cypress/fixtures/FilteredUsers.json'
 import Login from '../../cypress/fixtures/Login.json'
+import Login2 from '../../cypress/fixtures/Login2.json'
 import CreateProfile from '../../cypress/fixtures/CreateProfile.json'
 import Register from '../../cypress/fixtures/Register.json'
 import Conversation from '../../cypress/fixtures/Conversation.json'
+import ConversationDetail from '../../cypress/fixtures/ConversationDetail.json'
 import Image from '../../cypress/fixtures/getImage.json'
+import Messages from '../../cypress/fixtures/Messages.json'
+import NewMessage from '../../cypress/fixtures/NewMessage.json'
 const BASE_URL = "http://localhost:5000/api"
 
 // Define handlers that catch the corresponding requests and returns the mock data.
@@ -13,6 +17,10 @@ export const handlers = [
 
     rest.post(`${BASE_URL}/auth/login`,
         (req, res, ctx) => {
+            if(req.body.email == "bryan@test.com"){
+                return res(ctx.status(201),
+                    ctx.json(Login2))
+            }
             return res(ctx.status(201),
             ctx.json(Login))
         }),
@@ -25,7 +33,7 @@ export const handlers = [
             }
             else if (req.params.id == "test1"){
                 return res(ctx.status(200),
-                    ctx.json(CreateProfile))
+                    ctx.json(ConversationDetail))
             }
             else if (req.params.id == "test2"){
                 return res(ctx.status(200),
@@ -92,9 +100,15 @@ export const handlers = [
         `${BASE_URL}/message/all/:conversationId`,
         (req, res, ctx) => {
             return res(ctx.status(200),
-                
+                ctx.json(Messages)
             )
     }),
 
+    rest.post(`${BASE_URL}/message/:conversationId`,
+    (req, res, ctx) => {
+        return res(ctx.status(201))
+        // ctx.json(NewMessage)
+    }),
+    
 
 ]

@@ -88,6 +88,7 @@ const ChatContainer = () => {
     e.preventDefault();
     let sendMessage;
     const receiverId = currentChat.members.find((member) => member !== id);
+    console.log("TOWIEIWTJE");
     if (sendImage === "" && textArea !== "") {
       socket.current.emit("sendMessage", {
         senderId: id,
@@ -333,6 +334,7 @@ const ChatContainer = () => {
                           />
                         </label>
                         <button
+                        id="sendMessage"
                           type="submit"
                           className="inline-flex items-center justify-center rounded-lg px-4 py-3 transition duration-500 ease-in-out text-white bg-blue-500 hover:bg-blue-400 focus:outline-none"
                         >
