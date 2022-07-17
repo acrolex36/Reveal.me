@@ -1,15 +1,12 @@
-import express from "express";
+import express , { Request, Response } from "express";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import cors from "cors";
+import dotenv from "dotenv";
 import postRoutes from "./routes/posts";
 
-const CONNECTION_URL =
-  "mongodb+srv://guest:test123@mydatabase.w9v8kfk.mongodb.net/RevealMe?retryWrites=true&w=majority";
-const PORT = 5000;
-
 const app = express();
-app.set("port", `${PORT}`);
+dotenv.config();
 
 app.use(bodyParser.json({ limit: "30mb" }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
@@ -17,6 +14,15 @@ app.use(cors());
 
 //middleware
 app.use("/api", postRoutes);
+
+//test connect to hosting
+app.get("/", (req: Request, res: Response) => {
+  res.send('connected to hosting');
+});
+
+//set database properties from env file
+const CONNECTION_URL = process.env.CONNECTION_URL;
+const PORT = process.env.PORT || 5000;
 
 //connect to database
 mongoose.connect(`${CONNECTION_URL}`, (err: any) => {
@@ -27,8 +33,13 @@ mongoose.connect(`${CONNECTION_URL}`, (err: any) => {
   }
 });
 
-app.listen(app.get("port"), () => {
-  console.log("Server running on http://localhost:", app.get("port"));
+app.listen(
+  PORT
+  // app.get("port")
+, () => {
+  console.log(`Server running on http://localhost:${PORT}`
+  // , app.get("port")
+  );
 });
 
 module.exports = app

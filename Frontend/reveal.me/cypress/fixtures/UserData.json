@@ -1,0 +1,37 @@
+{
+  "userDetail": {
+    "is_online": true,
+    "gender": "female",
+    "gender_interest": [
+      "male",
+      "diverse",
+      "female"
+    ],
+    "age": 18,
+    "dob_date": 28,
+    "dob_month": 2,
+    "dob_year": 2004,
+    "height": 180,
+    "nationality": "hungarian",
+    "occupation": "Tester",
+    "hobbies": [
+      "Photography"
+    ],
+    "languages": [
+      "English"
+    ],
+    "description": "Kelly want to chat with you"
+  },
+  "_id": "Frontend",
+  "first_name": "Frontend",
+  "last_name": "Tester",
+  "email": "Fronend@test.com",
+  "password": "$2b$10$etnYkHw6pVXqLuEb2jnQ6u/KdrxqL6Z5F7DuHSm0vwRkyqedslRsq",
+  "lastLogin": "2022-07-12T21:22:16.763Z",
+  "lastPasswordReset": "2022-07-05T18:42:11.762Z",
+  "oneSideMatch": [
+    "Kevin"
+  ],
+  "__v": 0,
+  "swipedLeftUsers": []
+}

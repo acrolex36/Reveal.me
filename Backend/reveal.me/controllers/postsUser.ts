@@ -5,7 +5,6 @@ import jwt from "jsonwebtoken";
 import User, { GenderTypes } from "../models/postUser";
 import Conversation from "../models/postConversation";
 
-
 const router = express.Router();
 
 const JWT_SECRET = "asdfhasdfwqber12312sa";
@@ -52,12 +51,10 @@ export const register = async (req: Request, res: Response) => {
   }
 
   if (plainTextPassword.length < 5) {
-    return res
-      .status(409)
-      .json({
-        status: "error",
-        error: "password is too short. Should atleast 6 characters",
-      });
+    return res.status(409).json({
+      status: "error",
+      error: "password is too short. Should atleast 6 characters",
+    });
   }
 
   //no matter how long the password is, encrypt length is the same
@@ -122,7 +119,12 @@ export const login = async (req: Request, res: Response) => {
           {
             _id: user._id,
           },
-          { $set: { lastLogin: Date.now(), $set: {userDetail: { is_online: true }} } }
+          {
+            $set: {
+              lastLogin: Date.now(),
+              $set: { userDetail: { is_online: true } },
+            },
+          }
         );
 
         var token = jwt.sign({ id: user._id, email: user.email }, JWT_SECRET, {
@@ -144,7 +146,6 @@ export const login = async (req: Request, res: Response) => {
 //POST - /auth/login/forgetpassword # change password with email..
 export const forgetpassword = async (req: Request, res: Response) => {
   const { email, newPlainPassword, confirmNewPlainPassword } = req.body;
-
   const user = await User.findOne({ email }).lean();
 
   try {
@@ -161,12 +162,10 @@ export const forgetpassword = async (req: Request, res: Response) => {
     }
 
     if (newPlainPassword.length < 5) {
-      return res
-        .status(409)
-        .json({
-          status: "error",
-          error: "password is too short. Should atleast 6 characters",
-        });
+      return res.status(409).json({
+        status: "error",
+        error: "password is too short. Should atleast 6 characters",
+      });
     }
 
     if (newPlainPassword !== confirmNewPlainPassword) {
@@ -191,7 +190,6 @@ export const forgetpassword = async (req: Request, res: Response) => {
       .json({ status: "error", error: "Invalid username/password" });
   }
 };
-
 
 var authSuccess: boolean;
 
@@ -322,14 +320,18 @@ export const updateMatchedUserById = async (req: Request, res: Response) => {
     const { id, matchedUserId } = req.params;
 
     try {
-      const user = await User.findById( id );
-      const matchedUser = await User.findById( matchedUserId );
+      const user = await User.findById(id);
+      const matchedUser = await User.findById(matchedUserId);
 
       const updateMatch = {
         $addToSet: { oneSideMatch: user._id },
       };
 
-      const response = await User.findByIdAndUpdate(matchedUser._id, updateMatch, { new: true });
+      const response = await User.findByIdAndUpdate(
+        matchedUser._id,
+        updateMatch,
+        { new: true }
+      );
 
       res.status(200).json(response);
     } catch (error) {
@@ -349,14 +351,16 @@ export const removeMatchedUser = async (req: Request, res: Response) => {
     const { id, matchedUserId } = req.params;
 
     try {
-      const user = await User.findById( id );
-      const matchedUser = await User.findById( matchedUserId );
+      const user = await User.findById(id);
+      const matchedUser = await User.findById(matchedUserId);
 
       const updateMatch = {
         $pull: { oneSideMatch: matchedUser._id },
       };
 
-      const response = await User.findByIdAndUpdate(user._id, updateMatch, { new: true });
+      const response = await User.findByIdAndUpdate(user._id, updateMatch, {
+        new: true,
+      });
 
       res.status(200).json(response);
     } catch (error) {
@@ -376,14 +380,16 @@ export const updateSwipedLeftUsers = async (req: Request, res: Response) => {
     const { id, matchedUserId } = req.params;
 
     try {
-      const user = await User.findById( id );
-      const matchedUser = await User.findById( matchedUserId );
+      const user = await User.findById(id);
+      const matchedUser = await User.findById(matchedUserId);
 
       const updateMatch = {
         $addToSet: { swipedLeftUsers: matchedUser._id },
       };
 
-      const response = await User.findByIdAndUpdate(user._id, updateMatch, { new: true });
+      const response = await User.findByIdAndUpdate(user._id, updateMatch, {
+        new: true,
+      });
 
       res.status(200).json(response);
     } catch (error) {
@@ -403,26 +409,25 @@ export const removeOneSwipedLeftUsers = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     try {
-      const user = await User.findById( id );
+      const user = await User.findById(id);
 
-      if(user.swipedLeftUsers.length === 0) {
-        return res
-          .status(400)
-          .json({
-            status: "error",
-            error: "There is no user",
-          });
+      if (user.swipedLeftUsers.length === 0) {
+        return res.status(400).json({
+          status: "error",
+          error: "There is no user",
+        });
       }
 
-      const size = user.swipedLeftUsers.length - 1
-      const lastUser = user.swipedLeftUsers[size]
-
+      const size = user.swipedLeftUsers.length - 1;
+      const lastUser = user.swipedLeftUsers[size];
 
       const updateSwipedLeftUser = {
-        $pull: { swipedLeftUsers: lastUser},
+        $pull: { swipedLeftUsers: lastUser },
       };
 
-      await User.findByIdAndUpdate(user._id, updateSwipedLeftUser, { new: true });
+      await User.findByIdAndUpdate(user._id, updateSwipedLeftUser, {
+        new: true,
+      });
 
       res.status(200).json(lastUser);
     } catch (error) {
@@ -474,55 +479,60 @@ export const getAllGenderedUserById = async (req: Request, res: Response) => {
     authSuccess = true;
   });
 
-  if(authSuccess){
+  if (authSuccess) {
     const { id } = req.params;
 
     try {
       const user = await User.findById(id);
 
-      const gender = user.userDetail.gender
-      const gender_interest = user.userDetail.gender_interest
-      const swipedLeftUsers = user.swipedLeftUsers
+      const gender = user.userDetail.gender;
+      const gender_interest = user.userDetail.gender_interest;
+      const swipedLeftUsers = user.swipedLeftUsers;
 
-      const other_users = await User.find({_id:{ $ne: id }})
+      const other_users = await User.find({ _id: { $ne: id } });
 
-      const userConversation = await Conversation.find({members:{$all:[
-            id
-          ]}})
+      const userConversation = await Conversation.find({
+        members: { $all: [id] },
+      });
 
-      var matchedUsers = []
+      var matchedUsers = [];
 
-      for(let temp_members of userConversation){
-        if(temp_members.members[0] !== id){
-          matchedUsers.push(temp_members.members[0].toString())
-        }  else {
-          matchedUsers.push(temp_members.members[1].toString())
+      for (let temp_members of userConversation) {
+        if (temp_members.members[0] !== id) {
+          matchedUsers.push(temp_members.members[0].toString());
+        } else {
+          matchedUsers.push(temp_members.members[1].toString());
         }
       }
 
-      //Users that has not been swiped left and matched and also not in one
-      var remainingUsers = []
+      //Users that has not been swiped left and matched and also not in one and not in OnesideMatch of other users
+      var remainingUsers = [];
 
-      for(var not_user of other_users) {
-        if((matchedUsers.includes(not_user._id.valueOf())) 
-        || (swipedLeftUsers.includes(not_user._id.valueOf())) 
-        || not_user.oneSideMatch.includes(id)){
-          continue
-        } else{
-          remainingUsers.push(not_user)
+      for (var not_user of other_users) {
+        if (
+            matchedUsers.includes(not_user._id.valueOf()) ||
+            swipedLeftUsers.includes(not_user._id.valueOf()) ||
+            not_user.oneSideMatch.includes(id)
+        ) {
+          continue;
+        } else {
+          remainingUsers.push(not_user);
         }
       }
 
-      var gendered_users = []
+      var gendered_users = [];
 
       for (var interested_gender of gender_interest) {
         for (let temp_user of remainingUsers) {
-          if(temp_user.userDetail.gender == interested_gender
-              && temp_user.userDetail.gender_interest.includes(gender)) {
-            gendered_users.push(temp_user)
+          if (
+              temp_user.userDetail.gender == interested_gender &&
+              temp_user.userDetail.gender_interest.includes(gender)
+          ) {
+            gendered_users.push(temp_user);
           }
         }
       }
+
       res.status(200).json(gendered_users);
     } catch (error) {
       res.status(404).json({ message: error });
@@ -537,69 +547,72 @@ export const getAllFilteredUserById = async (req: Request, res: Response) => {
     authSuccess = true;
   });
 
-  if(authSuccess){
+  if (authSuccess) {
     const { id } = req.params;
 
     try {
       const user = await User.findById(id);
 
-      const gender = user.userDetail.gender
-      const gender_interest = user.userDetail.gender_interest
-      const interest = user.userDetail.hobbies
-      const swipedLeftUsers = user.swipedLeftUsers
+      const gender = user.userDetail.gender;
+      const gender_interest = user.userDetail.gender_interest;
+      const interest = user.userDetail.hobbies;
+      const swipedLeftUsers = user.swipedLeftUsers;
 
-      const other_users = await User.find({_id:{ $ne: id }})
-      
-      const userConversation = await Conversation.find({members:{$all:[
-        id
-      ]}})
-      
-      var matchedUsers = []
+      const other_users = await User.find({ _id: { $ne: id } });
 
-      for(let temp_members of userConversation){
-        if(temp_members.members[0] !== id){
-          matchedUsers.push(temp_members.members[0].toString())
-        }  else {
-          matchedUsers.push(temp_members.members[1].toString())
+      const userConversation = await Conversation.find({
+        members: { $all: [id] },
+      });
+
+      var matchedUsers = [];
+
+      for (let temp_members of userConversation) {
+        if (temp_members.members[0] !== id) {
+          matchedUsers.push(temp_members.members[0].toString());
+        } else {
+          matchedUsers.push(temp_members.members[1].toString());
         }
       }
 
       //Users that has not been swiped left and matched and also not in one and not in OnesideMatch of other users
-      var remainingUsers = []
+      var remainingUsers = [];
 
-      for(var not_user of other_users) {
-        if((matchedUsers.includes(not_user._id.valueOf())) 
-        || (swipedLeftUsers.includes(not_user._id.valueOf())) 
-        || not_user.oneSideMatch.includes(id)
-        ){
-          continue
-        } else{
-          remainingUsers.push(not_user)
+      for (var not_user of other_users) {
+        if (
+          matchedUsers.includes(not_user._id.valueOf()) ||
+          swipedLeftUsers.includes(not_user._id.valueOf()) ||
+          not_user.oneSideMatch.includes(id)
+        ) {
+          continue;
+        } else {
+          remainingUsers.push(not_user);
         }
       }
 
-      var gendered_users = []
+      var gendered_users = [];
 
       for (var interested_gender of gender_interest) {
         for (let temp_user of remainingUsers) {
-          if(temp_user.userDetail.gender == interested_gender
-            && temp_user.userDetail.gender_interest.includes(gender)) {
-            gendered_users.push(temp_user)
+          if (
+            temp_user.userDetail.gender == interested_gender &&
+            temp_user.userDetail.gender_interest.includes(gender)
+          ) {
+            gendered_users.push(temp_user);
           }
         }
       }
 
-      var returnedUsers = []
+      var returnedUsers = [];
 
-      for(let filter of gendered_users){
-        for(let user_interest of interest){
-            if(filter.userDetail.hobbies.includes(user_interest)){
-              returnedUsers.push(filter)
-              break
-            }
+      for (let filter of gendered_users) {
+        for (let user_interest of interest) {
+          if (filter.userDetail.hobbies.includes(user_interest)) {
+            returnedUsers.push(filter);
+            break;
+          }
         }
       }
-      
+
       res.status(200).json(returnedUsers);
     } catch (error) {
       res.status(404).json({ message: error });

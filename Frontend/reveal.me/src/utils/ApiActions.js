@@ -1,6 +1,102 @@
 import axios from "axios";
 
+const BASE_URL = "http://localhost:5000/api"
+
+//Auth
+
+export const registerUser = async (userData) => {
+    const response = await axios
+        .post(`http://localhost:5000/api/auth/register`, userData)
+    return response;
+}
+
+export const loginUser = async (userData) => {
+    const response = await axios
+        .post(`http://localhost:5000/api/auth/login`, userData)
+    return response;
+}
+
+export const forgotPassword = async (userData) => {
+    const response = await axios
+        .post(`http://localhost:5000/api/auth/login/forgetpassword`, userData)
+    return response;
+}
+
+//Create User
+
+export const userProfile = async (userData, token) => {
+    const response = await axios
+        .put(
+            `http://localhost:5000/api/user/profile/head/${userData.email}`,
+            {
+                first_name: userData.first_name,
+                last_name: userData.last_name,
+            },
+            {
+                headers: {
+                    "Content-Type": "application/json; charset=UTF-8",
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        )
+    return response;
+}
+
+export const userDetail = async (userData, token) => {
+    const response = await axios
+        .put(
+            `http://localhost:5000/api/user/profile/body/${userData.email}`,
+            userData.userDetail,
+            {
+                headers: {
+                    "Content-Type": "application/json; charset=UTF-8",
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        )
+    return response;
+}
+
 //User
+export const getUserData = async (myUserId, token) => {
+    const response = await axios.get(
+        `${BASE_URL}/singleuser/id/${myUserId}`,
+        {
+            headers: {
+                "Content-Type": "application/json; charset=UTF-8",
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+    // setUserData((userData) => [...userData, response.data]);
+    return response.data;
+};
+
+export const getFilteredUsers = async (myUserId, token) => {
+    const response = await axios.get(
+        `http://localhost:5000/api/filtereduser/id/${myUserId}`,
+        {
+            headers: {
+                "Content-Type": "application/json; charset=UTF-8",
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+    return response.data;
+};
+
+export const getGenderedUser = async (myUserId, token) => {
+    const response = await axios.get(
+        `http://localhost:5000/api/gendereduser/id/${myUserId}`,
+        {
+            headers: {
+                "Content-Type": "application/json; charset=UTF-8",
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+    return response.data;
+};
 
 export const deleteOneMatch = async (myUserId, swipedId, token) => {
     const response = await axios.put(
@@ -61,7 +157,7 @@ export const removeMatchedUser = async (myUserId, swipedId, token) => {
 
 export const removeRejectedUser = async (myUserId, swipedId, token) => {
     const response = await axios.put(
-        `http://localhost:5000/api/user/profile/swipedLeft/id/${myUserId}/${swipedId}`,
+        `${BASE_URL}/user/profile/swipedLeft/id/${myUserId}/${swipedId}`,
         {},
         {
             headers: {
@@ -95,6 +191,31 @@ export const undoRejectUser = async (myUserId, token) => {
     }
 }
 
+export const getSingleUser = async (id, token) => {
+    const response = await axios.get(
+        `http://localhost:5000/api/singleuser/id/${id}`,
+        {
+            headers: {
+                "Content-Type": "application/json; charset=UTF-8",
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+    return response;
+}
+
+export const deleteUser = async (id, token) => {
+    const response = await axios.delete(`http://localhost:5000/api/user/${id}`,
+        {
+            headers: {
+                "Content-Type": "application/json; charset=UTF-8",
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+    return response;
+}
+
 //Conversation
 export const createConversation = async (myUserId, swipedId, token) => {
     const response = await axios.post(
@@ -108,7 +229,7 @@ export const createConversation = async (myUserId, swipedId, token) => {
         }
     );
     if (response.status === 201) {
-        console.log("conversation made made")
+        console.log("conversation made ")
     } else {
         console.log("error making convo");
     }
@@ -149,6 +270,52 @@ export const deleteConversation = async (conversationId, token) => {
     } else {
         console.log("error delete created conversation");
     }
+}
+
+export const getPicture = async (conversationId, userId, token) => {
+    const response = await axios.get(
+        `http://localhost:5000/api/conversation/user/picture/${conversationId}/${userId}`,
+        {
+            headers: {
+                "Content-Type": "application/json; charset=UTF-8",
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+
+    return response;
+}
+
+export const sendMessages = async (conversationId, id, token, message) => {
+    const response = await axios.post(
+        `http://localhost:5000/api/message/${conversationId}`,
+        {
+            userId: id,
+            message: message,
+        },
+        {
+            headers: {
+                "Content-Type": "application/json; charset=UTF-8",
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+
+    return response;
+}
+
+export const getMessagesInConversation = async (conversationId, token) => {
+    const response = await axios.get(
+        `http://localhost:5000/api/message/all/${conversationId}`,
+        {
+            headers: {
+                "Content-Type": "application/json; charset=UTF-8",
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+
+    return response;
 }
 
 

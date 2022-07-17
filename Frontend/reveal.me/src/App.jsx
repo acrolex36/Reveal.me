@@ -7,6 +7,9 @@ import CreateProfilePage from "./pages/CreateProfilePage";
 import ChatPage from "./pages/ChatPage";
 import LandingPage from "./pages/LandingPage";
 import './index.css'
+import ProfilePage from "./pages/ProfilePage";
+import ExplorePage from "./pages/ExplorePage";
+
 const App = () => {
   return (
     <BrowserRouter>
@@ -14,12 +17,15 @@ const App = () => {
         <Route path="/" element={<LandingPage />}></Route>
         <Route path="/homepage" element={<Homepage />}></Route>
         <Route path="/login" element={<LoginPage />}></Route>
-        <Route
+          <Route path="/explore" element={<ExplorePage />}></Route>
+
+          <Route
           path="/login/forgot_password"
           element={<ForgotPasswordPage />}
         ></Route>
         <Route path="/register" element={<RegisterPage />}></Route>
         <Route path="/create_profile" element={<CreateProfilePage />}></Route>
+        <Route path="/profile_page" element={<ProfilePage />}></Route>
         <Route path="/messages" element={<ChatPage />}></Route>
       </Routes>
       <div className="App">

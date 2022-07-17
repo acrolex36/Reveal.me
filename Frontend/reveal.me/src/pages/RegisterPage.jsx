@@ -1,12 +1,9 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import LogoRegister from "../images/register.png";
 import { useCookies } from "react-cookie";
-
-// export function saveTokenInLocalStorage(token) {
-//   localStorage.setItem("Token", JSON.stringify(token));
-// }
+import { registerUser } from "../utils/ApiActions";
+import Logo from "../images/Logo.png";
 
 const RegisterPage = () => {
   const [first_name, setfirstname] = useState(null);
@@ -15,7 +12,7 @@ const RegisterPage = () => {
   const [plainTextPassword, setPassword] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState(null);
   const [error, setError] = useState(null);
-  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
+  const [cookies, setCookie] = useCookies(["user"]);
 
   let navigate = useNavigate();
 
@@ -23,25 +20,28 @@ const RegisterPage = () => {
     e.preventDefault();
 
     try {
+      //checking if password and confirm password matched
       if (plainTextPassword !== confirmPassword) {
         setError("Passwords need to match!");
         return;
       }
-      const response = await axios
-        .post(`http://localhost:5000/api/auth/register`, {
-          first_name,
-          last_name,
-          email,
-          plainTextPassword,
-          confirmPassword,
-        })
+
+      //Data to create user
+      let userData = {
+        first_name,
+        last_name,
+        email,
+        plainTextPassword,
+        confirmPassword,
+      };
+      const response = await registerUser(userData)
         .then(function (response) {
           if (response.status == 201) {
-            // saveTokenInLocalStorage(response.data.token)
-
+            //setting cookies for further use in app
             setCookie("UserId", response.data.userId);
             setCookie("Token", response.data.token);
 
+            //directed to create_profile page to create detail user
             navigate("/create_profile");
           }
         })
@@ -50,15 +50,15 @@ const RegisterPage = () => {
           if (res.response.status == 400) {
             setError("invalid email or password");
           }
+          //email has to be unique
           if (res.response.status == 405) {
             setError("Email already used");
           }
+          //min pass should be 6 characters
           if (res.response.status == 409) {
             setError("Password too short min 6 char");
           }
         });
-
-      // window.location.reload()
     } catch (error) {
       console.log(error);
     }
@@ -71,7 +71,10 @@ const RegisterPage = () => {
           <div className="w-2/5">
             {/*Sign up Logo */}
             <div className="p-12">
-              <p>reveal.me</p>
+              <img className="w-24 my-3 mr-0" src={Logo} alt="Logo" />
+              <p className="mt-6 text-2xl text-gray-900 font-mono font-bold text-2xl">
+                Reveal.me
+              </p>
               <p>reveal you, reveal us!</p>
             </div>
             <img src={LogoRegister} alt="" className="w-50" />
@@ -79,13 +82,19 @@ const RegisterPage = () => {
           <div className="w-3/5 mx-5 p-14 mb-5">
             {/*Sign up Field */}
             <h2 className="mt-6 text-2xl text-gray-900">
-              Sign up to Reveal.me
+              Sign up to{""}
+              <a
+                className="my-auto btn btn-ghost normal-case font-mono text-2xl"
+                href="/"
+              >
+                Reveal.me
+              </a>
             </h2>
             <p className="mt-2 text-sm text-gray-600">
               Already have an account?{" "}
               <a
                 href="http://localhost:3000/login"
-                className="font-medium text-darker-pink hover:text-indigo-500"
+                className="font-medium text-darker-pink hover:text-pink-100"
               >
                 Login
               </a>
@@ -101,7 +110,7 @@ const RegisterPage = () => {
                 <div>
                   <label htmlFor="fName">First Name</label>
                   <input
-                    id="first-name"
+                    id="fName"
                     name="fName"
                     type="fName"
                     autoComplete="fName"
@@ -115,7 +124,7 @@ const RegisterPage = () => {
                 <div>
                   <label htmlFor="lName">Last Name</label>
                   <input
-                    id="last-name"
+                    id="lName"
                     name="lName"
                     type="lName"
                     autoComplete="lName"
@@ -129,7 +138,7 @@ const RegisterPage = () => {
                 <div>
                   <label htmlFor="email">Email</label>
                   <input
-                    id="email-address1"
+                    id="email"
                     name="email"
                     type="email"
                     autoComplete="email"
@@ -146,7 +155,7 @@ const RegisterPage = () => {
                     id="password"
                     name="password"
                     type="password"
-                    autoComplete="current-password"
+                    autoComplete="password"
                     required
                     className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                     onChange={(e) => setPassword(e.target.value)}
@@ -157,7 +166,7 @@ const RegisterPage = () => {
                 <div>
                   <label htmlFor="confirmPassword">Confirm Password</label>
                   <input
-                    id="confirm-password"
+                    id="confirmPassword"
                     name="confirmPassword"
                     type="password"
                     autoComplete="current-password"

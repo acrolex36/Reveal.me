@@ -26,14 +26,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:5000/api/auth/register",
-							"protocol": "http",
+							"raw": "{{server}}/auth/register",
 							"host": [
-								"localhost"
+								"{{server}}"
 							],
-							"port": "5000",
 							"path": [
-								"api",
 								"auth",
 								"register"
 							]
@@ -59,14 +56,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:5000/api/auth/login",
-							"protocol": "http",
+							"raw": "{{server}}/auth/login",
 							"host": [
-								"localhost"
+								"{{server}}"
 							],
-							"port": "5000",
 							"path": [
-								"api",
 								"auth",
 								"login"
 							]
@@ -92,14 +86,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:5000/api/auth/login/forgetpassword",
-							"protocol": "http",
+							"raw": "{{server}}/auth/login/forgetpassword",
 							"host": [
-								"localhost"
+								"{{server}}"
 							],
-							"port": "5000",
 							"path": [
-								"api",
 								"auth",
 								"login",
 								"forgetpassword"
@@ -138,14 +129,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:5000/api/user/profile/head/Edwards@test.com",
-							"protocol": "http",
+							"raw": "{{server}}/user/profile/head/Edwards@test.com",
 							"host": [
-								"localhost"
+								"{{server}}"
 							],
-							"port": "5000",
 							"path": [
-								"api",
 								"user",
 								"profile",
 								"head",
@@ -180,14 +168,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:5000/api/user/profile/body/Edwards@test.com",
-							"protocol": "http",
+							"raw": "{{server}}/user/profile/body/Edwards@test.com",
 							"host": [
-								"localhost"
+								"{{server}}"
 							],
-							"port": "5000",
 							"path": [
-								"api",
 								"user",
 								"profile",
 								"body",
@@ -213,14 +198,11 @@
 						"method": "PUT",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:5000/api/user/profile/id/62b6fccd182ddbe9be312d62/62bc1e11196a9570503a8386",
-							"protocol": "http",
+							"raw": "{{server}}/user/profile/id/62b6fccd182ddbe9be312d62/62bc1e11196a9570503a8386",
 							"host": [
-								"localhost"
+								"{{server}}"
 							],
-							"port": "5000",
 							"path": [
-								"api",
 								"user",
 								"profile",
 								"id",
@@ -247,14 +229,11 @@
 						"method": "PUT",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:5000/api/user/profile/remove/id/62b6fccd182ddbe9be312d62/62bc1e11196a9570503a8386",
-							"protocol": "http",
+							"raw": "{{server}}/user/profile/remove/id/62b6fccd182ddbe9be312d62/62bc1e11196a9570503a8386",
 							"host": [
-								"localhost"
+								"{{server}}"
 							],
-							"port": "5000",
 							"path": [
-								"api",
 								"user",
 								"profile",
 								"remove",
@@ -282,14 +261,11 @@
 						"method": "PUT",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:5000/api/user/profile/swipedleft/id/62b6ac4eea60df4c07bcd6d1/62b6fccd182ddbe9be312d62",
-							"protocol": "http",
+							"raw": "{{server}}/user/profile/swipedleft/id/62b6ac4eea60df4c07bcd6d1/62b6fccd182ddbe9be312d62",
 							"host": [
-								"localhost"
+								"{{server}}"
 							],
-							"port": "5000",
 							"path": [
-								"api",
 								"user",
 								"profile",
 								"swipedleft",
@@ -317,14 +293,11 @@
 						"method": "PUT",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:5000/api/user/profile/swipedleft/remove/id/62b6ac4eea60df4c07bcd6d1",
-							"protocol": "http",
+							"raw": "{{server}}/user/profile/swipedleft/remove/id/62b6ac4eea60df4c07bcd6d1",
 							"host": [
-								"localhost"
+								"{{server}}"
 							],
-							"port": "5000",
 							"path": [
-								"api",
 								"user",
 								"profile",
 								"swipedleft",
@@ -344,7 +317,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYmM1OTNkMDczYjcwNGU5NzJjNDE5MSIsImVtYWlsIjoiRWR3YXJkc0B0ZXN0LmNvbSIsImlhdCI6MTY1NzM3Mzg3MSwiZXhwIjoxNjU3NDYwMjcxfQ.1CZaTgwOv7tCeR61JaRVgwaeFp6uEnuWgRRZvNvuPBk",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYmM1OTNkMDczYjcwNGU5NzJjNDE5MSIsImVtYWlsIjoiRWR3YXJkc0B0ZXN0LmNvbSIsImlhdCI6MTY1NzgzMzY5MiwiZXhwIjoxNjU3OTIwMDkyfQ.K1zcthb8lKeUsOkFUQdWL_1HebtM8SrdV6nEkSZyUhE",
 									"type": "string"
 								}
 							]
@@ -352,14 +325,11 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:5000/api/alluser",
-							"protocol": "http",
+							"raw": "{{server}}/alluser",
 							"host": [
-								"localhost"
+								"{{server}}"
 							],
-							"port": "5000",
 							"path": [
-								"api",
 								"alluser"
 							]
 						}
@@ -382,15 +352,11 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:5000/api/test/singleuser/id/62b79fedfcf9a51b2a4c29da",
-							"protocol": "http",
+							"raw": "{{server}}/singleuser/id/62b79fedfcf9a51b2a4c29da",
 							"host": [
-								"localhost"
+								"{{server}}"
 							],
-							"port": "5000",
 							"path": [
-								"api",
-								"test",
 								"singleuser",
 								"id",
 								"62b79fedfcf9a51b2a4c29da"
@@ -415,15 +381,41 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:5000/api/filtereduser/id/62b71dd99c70f88d9fc03836",
-							"protocol": "http",
+							"raw": "{{server}}/filtereduser/id/62b71dd99c70f88d9fc03836",
 							"host": [
-								"localhost"
+								"{{server}}"
 							],
-							"port": "5000",
 							"path": [
-								"api",
 								"filtereduser",
+								"id",
+								"62b71dd99c70f88d9fc03836"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllGenderedUserById",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYmM1OTNkMDczYjcwNGU5NzJjNDE5MSIsImVtYWlsIjoiRWR3YXJkc0B0ZXN0LmNvbSIsImlhdCI6MTY1Nzk4MTkxMywiZXhwIjoxNjU4MDY4MzEzfQ.VJ8S77pQix2rKzBX9Z3Br8268CDSJSzO7uOXY5y-HuI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/gendereduser/id/62b71dd99c70f88d9fc03836",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"gendereduser",
 								"id",
 								"62b71dd99c70f88d9fc03836"
 							]
@@ -447,14 +439,11 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:5000/api/user/62c497b286361a071cb90a04",
-							"protocol": "http",
+							"raw": "{{server}}/user/62c497b286361a071cb90a04",
 							"host": [
-								"localhost"
+								"{{server}}"
 							],
-							"port": "5000",
 							"path": [
-								"api",
 								"user",
 								"62c497b286361a071cb90a04"
 							]
@@ -489,14 +478,11 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:5000/api/conversation/message/62b6ac4eea60df4c07bcd6d1/62b6fccd182ddbe9be312d62",
-							"protocol": "http",
+							"raw": "{{server}}/conversation/message/62b6ac4eea60df4c07bcd6d1/62b6fccd182ddbe9be312d62",
 							"host": [
-								"localhost"
+								"{{server}}"
 							],
-							"port": "5000",
 							"path": [
-								"api",
 								"conversation",
 								"message",
 								"62b6ac4eea60df4c07bcd6d1",
@@ -522,14 +508,11 @@
 						"method": "PUT",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:5000/api/conversation/isblurred/62c2cccbe1284411e886aa9e",
-							"protocol": "http",
+							"raw": "{{server}}/conversation/isblurred/62c2cccbe1284411e886aa9e",
 							"host": [
-								"localhost"
+								"{{server}}"
 							],
-							"port": "5000",
 							"path": [
-								"api",
 								"conversation",
 								"isblurred",
 								"62c2cccbe1284411e886aa9e"
@@ -546,7 +529,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYmM1OTNkMDczYjcwNGU5NzJjNDE5MSIsImVtYWlsIjoiRWR3YXJkc0B0ZXN0LmNvbSIsImlhdCI6MTY1NzU1NzY2MiwiZXhwIjoxNjU3NjQ0MDYyfQ.b1KgDKOVf4qS6K6WnGGhfC1Ib-SMXsRQDnWzYzm8wUU",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYmM1OTNkMDczYjcwNGU5NzJjNDE5MSIsImVtYWlsIjoiRWR3YXJkc0B0ZXN0LmNvbSIsImlhdCI6MTY1Nzk4MTkxMywiZXhwIjoxNjU4MDY4MzEzfQ.VJ8S77pQix2rKzBX9Z3Br8268CDSJSzO7uOXY5y-HuI",
 									"type": "string"
 								}
 							]
@@ -554,14 +537,11 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:5000/api/allconversation",
-							"protocol": "http",
+							"raw": "{{server}}/allconversation",
 							"host": [
-								"localhost"
+								"{{server}}"
 							],
-							"port": "5000",
 							"path": [
-								"api",
 								"allconversation"
 							]
 						}
@@ -569,14 +549,14 @@
 					"response": []
 				},
 				{
-					"name": "getOneConversationById",
+					"name": "getAllConversationFromOneUser",
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYmM1OTNkMDczYjcwNGU5NzJjNDE5MSIsImVtYWlsIjoiRWR3YXJkc0B0ZXN0LmNvbSIsImlhdCI6MTY1NzQ1MTQwMywiZXhwIjoxNjU3NTM3ODAzfQ.HFDuH4LjhmPXziXJdT2exU6Iqxy8pmnW_slJXxbvG8U",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYmM1OTNkMDczYjcwNGU5NzJjNDE5MSIsImVtYWlsIjoiRWR3YXJkc0B0ZXN0LmNvbSIsImlhdCI6MTY1NzgzMzY5MiwiZXhwIjoxNjU3OTIwMDkyfQ.K1zcthb8lKeUsOkFUQdWL_1HebtM8SrdV6nEkSZyUhE",
 									"type": "string"
 								}
 							]
@@ -590,16 +570,13 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:5000/api/allconversation/62b6ac4eea60df4c07bcd6d1",
-							"protocol": "http",
+							"raw": "{{server}}/allconversation/62c2cccbe1284411e886aa9e",
 							"host": [
-								"localhost"
+								"{{server}}"
 							],
-							"port": "5000",
 							"path": [
-								"api",
 								"allconversation",
-								"62b6ac4eea60df4c07bcd6d1"
+								"62c2cccbe1284411e886aa9e"
 							]
 						}
 					},
@@ -613,7 +590,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYmM1OTNkMDczYjcwNGU5NzJjNDE5MSIsImVtYWlsIjoiRWR3YXJkc0B0ZXN0LmNvbSIsImlhdCI6MTY1NzQ1MTQwMywiZXhwIjoxNjU3NTM3ODAzfQ.HFDuH4LjhmPXziXJdT2exU6Iqxy8pmnW_slJXxbvG8U",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYmM1OTNkMDczYjcwNGU5NzJjNDE5MSIsImVtYWlsIjoiRWR3YXJkc0B0ZXN0LmNvbSIsImlhdCI6MTY1Nzk4MTkxMywiZXhwIjoxNjU4MDY4MzEzfQ.VJ8S77pQix2rKzBX9Z3Br8268CDSJSzO7uOXY5y-HuI",
 									"type": "string"
 								}
 							]
@@ -621,17 +598,45 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:5000/api/message/total/62c2cccbe1284411e886aa9e",
-							"protocol": "http",
+							"raw": "{{server}}/message/total/62d29a6f90147195a8f1d322",
 							"host": [
-								"localhost"
+								"{{server}}"
 							],
-							"port": "5000",
 							"path": [
-								"api",
 								"message",
 								"total",
-								"62c2cccbe1284411e886aa9e"
+								"62d29a6f90147195a8f1d322"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getPicture",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYmM1OTNkMDczYjcwNGU5NzJjNDE5MSIsImVtYWlsIjoiRWR3YXJkc0B0ZXN0LmNvbSIsImlhdCI6MTY1Nzk4MTkxMywiZXhwIjoxNjU4MDY4MzEzfQ.VJ8S77pQix2rKzBX9Z3Br8268CDSJSzO7uOXY5y-HuI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/conversation/user/picture/62d29a6f90147195a8f1d322/62b6fccd182ddbe9be312d62",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"conversation",
+								"user",
+								"picture",
+								"62d29a6f90147195a8f1d322",
+								"62b6fccd182ddbe9be312d62"
 							]
 						}
 					},
@@ -653,14 +658,11 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:5000/api/conversation/remove/62c2cccbe1284411e886aa9e",
-							"protocol": "http",
+							"raw": "{{server}}/conversation/remove/62c2cccbe1284411e886aa9e",
 							"host": [
-								"localhost"
+								"{{server}}"
 							],
-							"port": "5000",
 							"path": [
-								"api",
 								"conversation",
 								"remove",
 								"62c2cccbe1284411e886aa9e"
@@ -700,14 +702,11 @@
 							"raw": "{\r\n    \"userId\": \"62b6ac4eea60df4c07bcd6d1\",\r\n    \"message\": \"test123\"\r\n}"
 						},
 						"url": {
-							"raw": "http://localhost:5000/api/message/62cabaaf571a6980c93510c2",
-							"protocol": "http",
+							"raw": "{{server}}/message/62cabaaf571a6980c93510c2",
 							"host": [
-								"localhost"
+								"{{server}}"
 							],
-							"port": "5000",
 							"path": [
-								"api",
 								"message",
 								"62cabaaf571a6980c93510c2"
 							]
@@ -737,14 +736,11 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:5000/api/message/all/62c2cccbe1284411e886aa9e",
-							"protocol": "http",
+							"raw": "{{server}}/message/all/62c2cccbe1284411e886aa9e",
 							"host": [
-								"localhost"
+								"{{server}}"
 							],
-							"port": "5000",
 							"path": [
-								"api",
 								"message",
 								"all",
 								"62c2cccbe1284411e886aa9e"
@@ -754,6 +750,12 @@
 					"response": []
 				}
 			]
+		}
+	],
+	"variable": [
+		{
+			"key": "server",
+			"value": "http://localhost:5000/api"
 		}
 	]
 }
