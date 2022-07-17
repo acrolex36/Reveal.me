@@ -1,10 +1,17 @@
-# Reveal.Me
+<H1 align="center">
+Reveal.me
+</H1>
+<p style="text-align: center;">reveal you, reveal us!</p>
 
-## Description
 
-A full stack web dating application for discovering genuine connections ! Meet your match and slowly reveal your partner's pictures through chatting
+<p style="text-align: center;">
+<img alt="logo" src="./readme_images/Logo.png" height="200" />
+</p>
 
-Built with ReactJS and TailwindUI for frontend and Typescript for backend
+<p align="center">
+A full stack web dating application for discovering genuine connections ! Get matched with strangers with the same
+interest and build your connection through chatting which will slowly reveal the picture of your new date!
+</p>
 
 ### Dependencies
 
@@ -38,33 +45,63 @@ Frontend :
 - TailwindUI
 - DaisyUI
 - Socket.io
-- Vitest
-- React-testing-library
+- Cypress
 
 ## Getting Started
 
+### Setup scripts
+
 Scripts:
 
-- Backend : npm start
-- Frontend : npm run dev
-- Realtime chatting: npm start
+- Backend : start_backend.sh
+- Frontend : start_frontend.sh
+- Realtime chatting: start_realtime_chat.sh
+
+- Backend test : backend_test.sh
+- Frontend test: frontend_test.sh
+- Frontend test with Cypress GUI: frontend_test_gui.sh
+
+### Starting the application
+
+- To start reveal.me, simply run the start_backend.sh and start_frontend.sh scripts
+- Optionally, realtime chatting can be started with start_realtime.sh
+
+- To run the automatic tests:
+- Run the respective test scripts for frontend and backend. - **(Make sure that both start scripts are running first!)**
+- A postman collection can be used for testing the individual api calls
+
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/cf4410757371a6823eb0?action=collection%2Fimport)
 
 ## Testing
 
 Frontend:
 
+- Automated testing for frontend is done using Cypress. Each page is tested automatically to cover all functionality.
+
+![image info](./readme_images/cypress.png)
+
+- Network requests to servers are intercepted using Mock service worker and return predefined data
+
 Backend:
 
-- Automatic testing is done using Mocha, Supertest, and Chai. To run the test run the ....???
+- Automatic testing is done using Mocha, Supertest, and Chai.
 
-### Postman collection
+## Functionality
 
-[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/cf4410757371a6823eb0?action=collection%2Fimport)
-
-### REST API ROUTES
-
-For a more detailed documentation see in **_[openApi][openApi]_** file
-
+![Landing page](./readme_images/Landing page.png)
+![Register age](./readme_images/Register page.png)
+![Login page](./readme_images/LoginPage.png)
+![Login page](./readme_images/Forget Password Page.png)
+![Create profile](./readme_images/Create Profile.png)
+![Create profile](./readme_images/Create Profile 2.png)
+![Homepage](./readme_images/Homepage.png)
+- In this page the user can swipe potential matches.
+- The matching algorithm uses the shared interest to match users.
+  ![Message](./readme_images/Message Page.png)
+- In this page the user can message with all of their matches. After a certain amount of chats from both users, the
+  profile picture of the chat partner will be unblurred
+  ![Explore](./readme_images/Explore Users.png)
+- In this page the user can find other users by hobbies and match with them
 ## Authors
 
 Aris Ananta Muljono |
