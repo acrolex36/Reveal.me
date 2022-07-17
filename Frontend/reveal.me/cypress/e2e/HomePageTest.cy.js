@@ -1,4 +1,4 @@
-describe('Homepage test', () => {
+describe('Homepage', () => {
     beforeEach(() => {
         cy.visit('http://localhost:3000/login')
         cy.findByLabelText(/Email address/i)
@@ -9,11 +9,13 @@ describe('Homepage test', () => {
             .type('frontend@test.com');
 
         cy.contains('Sign in').click();
+        cy.server()
+
         //Wait until data loads
         cy.contains('David, 26').should('be.visible')
     })
 
-    it('should call rejectUser when swiping left', () => {
+    it('Should call rejectUser when swiping left', () => {
         cy.route('PUT', '/api/user/profile/swipedLeft/id/*/*').as('rejectUser')
         cy.get('#swipeLeftButton').click()
         cy.wait('@rejectUser').should((xhr) => {
@@ -21,7 +23,7 @@ describe('Homepage test', () => {
         })
     })
 
-    it('should call removeOneSwipedUser goBack button is pressed after left swipe', () => {
+    it('Should call removeOneSwipedUser goBack button is pressed after left swipe', () => {
         cy.route('PUT', '/api/user/profile/swipedleft/remove/id/*').as('removeOneSwipedUser')
         cy.contains('David, 26').should('be.visible');
         cy.get('#swipeLeftButton').click()
@@ -33,12 +35,7 @@ describe('Homepage test', () => {
     })
 
     it('Should call updateMatchUserById when swiping right with a user that havent swiped back', () => {
-        cy.server()
         cy.route('PUT', '/api/user/profile/id/*/*').as('updateMatchUserById')
-        // cy.intercept({
-        //     method: "PUT",
-        //     pathname: '/api/user/profile/id/*/*',
-        // }).as("updateMatchUserById");
 
         cy.contains('David, 26').should('be.visible');
         cy.get('#swipeRightButton').click()
@@ -47,7 +44,6 @@ describe('Homepage test', () => {
         })
     })
     it('Should make conversation and call removeMatchedUser after right swipe with a user that already swiped back', () => {
-        cy.server()
         cy.route("POST", "/api/conversation/message/*/*").as("createConversation")
         cy.route("PUT", "/api/user/profile/remove/id/*/*").as("deleteOneMatch")
 
@@ -67,7 +63,6 @@ describe('Homepage test', () => {
     })
 
     it('Should call delete conversation and deleteonematch when pressing goback after a match ', () => {
-        cy.server();
         cy.route('GET', '/api/allconversation/:userId').as('getConversation')
         cy.route('PUT', '/api/conversation/remove/*').as('deleteConversation')
         cy.route("PUT", "/api/user/profile/remove/id/*/*").as("deleteOneMatch")

@@ -1,6 +1,7 @@
 import {rest} from 'msw'
 import UserData from '../../cypress/fixtures/UserData.json'
 import FilteredUsers from '../../cypress/fixtures/FilteredUsers.json'
+import GenderedUsers from '../../cypress/fixtures/GenderedUsers.json'
 import Login from '../../cypress/fixtures/Login.json'
 import Login2 from '../../cypress/fixtures/Login2.json'
 import CreateProfile from '../../cypress/fixtures/CreateProfile.json'
@@ -12,6 +13,7 @@ import Messages from '../../cypress/fixtures/Messages.json'
 import NewMessage from '../../cypress/fixtures/NewMessage.json'
 import NewMessageImage from '../../cypress/fixtures/NewMessageImage.json'
 import ConversationSwipe from "../../cypress/fixtures/ConversationSwipe.json"
+
 const BASE_URL = "http://localhost:5000/api"
 
 // Define handlers that catch the corresponding requests and returns the mock data.
@@ -20,11 +22,10 @@ export const handlers = [
     //login
     rest.post(`${BASE_URL}/auth/login`,
         (req, res, ctx) => {
-            if(req.body.email === "bryan@test.com"){
+            if (req.body.email === "bryan@test.com") {
                 return res(ctx.status(201),
                     ctx.json(Login2))
-            }
-            else{
+            } else {
                 return res(ctx.status(201),
                     ctx.json(Login))
             }
@@ -33,23 +34,19 @@ export const handlers = [
     //get user by id
     rest.get(`${BASE_URL}/singleuser/id/:id`,
         (req, res, ctx) => {
-            if (req.params.id === "test"){
+            if (req.params.id === "test") {
                 return res(ctx.status(200),
                     ctx.json(UserData))
-            }
-            else if (req.params.id === "test1"){
+            } else if (req.params.id === "test1") {
                 return res(ctx.status(200),
                     ctx.json(ConversationDetail))
-            }
-            else if (req.params.id === "test2"){
+            } else if (req.params.id === "test2") {
                 return res(ctx.status(200),
                     ctx.json(CreateProfile))
-            }
-            else if (req.params.id === "test3") {
+            } else if (req.params.id === "test3") {
                 return res(ctx.status(200),
                     ctx.json(Register))
-            }
-            else if (req.params.id === "Frontend") {
+            } else if (req.params.id === "Frontend") {
                 return res(ctx.status(200),
                     ctx.json(UserData))
             }
@@ -60,6 +57,12 @@ export const handlers = [
         (req, res, ctx) => {
             return res(ctx.status(200),
                 ctx.json(FilteredUsers))
+        }),
+
+    rest.get(`${BASE_URL}/gendereduser/id/:id`,
+        (req, res, ctx) => {
+            return res(ctx.status(200),
+                ctx.json(GenderedUsers))
         }),
 
     //Update swipedLeftUsers when user swiped left
@@ -82,29 +85,28 @@ export const handlers = [
             )
         }),
 
-        //Update swipedLeftUsers when undo Button pressed
-        rest.put(`${BASE_URL}/user/profile/swipedleft/remove/id/:id`,
-            (req, res, ctx) => {
-                return res(ctx.status(200),
-                    ctx.json(FilteredUsers[0]))
-            }),
+    //Update swipedLeftUsers when undo Button pressed
+    rest.put(`${BASE_URL}/user/profile/swipedleft/remove/id/:id`,
+        (req, res, ctx) => {
+            return res(ctx.status(200),
+                ctx.json(FilteredUsers[0]))
+        }),
 
-        // update oneSideMatch when swiped right By using Id
-        rest.put(`${BASE_URL}/user/profile/id/:id/:swipedid`,
-            (req, res, ctx) => {
-                return res(ctx.status(200),
-                    ctx.json(FilteredUsers[0]))
-            }),
+    // update oneSideMatch when swiped right By using Id
+    rest.put(`${BASE_URL}/user/profile/id/:id/:swipedid`,
+        (req, res, ctx) => {
+            return res(ctx.status(200),
+                ctx.json(FilteredUsers[0]))
+        }),
 
     // Get all conversation of a user
     rest.get(`${BASE_URL}/allconversation/:userId`,
         (req, res, ctx) => {
-            if(req.params.userId === "test1"){
+            if (req.params.userId === "test1") {
                 return res(ctx.status(200),
                     ctx.json(Conversation)
                 )
-            }
-            else {
+            } else {
                 return res(ctx.status(200),
                     ctx.json(ConversationSwipe));
             }
@@ -163,22 +165,21 @@ export const handlers = [
             return res(ctx.status(200),
                 ctx.json(Messages)
             )
-    }),
+        }),
 
     //create message for a conversation
     rest.post(`${BASE_URL}/message/:conversationId`,
-    (req, res, ctx) => {
-        if(req.body.message?.length <200){
-            return res(ctx.status(201),
-            ctx.json(NewMessage)
-            )
-        }
-        else{
-            return res(ctx.status(201),
-                ctx.json(NewMessageImage)
-            )
-        }
-    }),
+        (req, res, ctx) => {
+            if (req.body.message?.length < 200) {
+                return res(ctx.status(201),
+                    ctx.json(NewMessage)
+                )
+            } else {
+                return res(ctx.status(201),
+                    ctx.json(NewMessageImage)
+                )
+            }
+        }),
 
 
 ]
