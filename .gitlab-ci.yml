@@ -12,12 +12,13 @@ frontend_tests:
   # image: ruby:latest
   script:
     # - dpl --provider=heroku --app=$HEROKU_APP_STAGING --api-key=$HEROKU_API_KEY
-    - npm run cypress:headless
+    # - npm run cypress:headless
+    - npm run dev
 
-backend_tests:
-  before_script:
-    - cd Backend/reveal.me && npm install
-  stage: test
-  script:
-    - npm test
+# backend_tests:
+#   before_script:
+#     - cd Backend/reveal.me && npm install
+#   stage: test
+#   script:
+#     - npm test
  
