@@ -1,4 +1,8 @@
 image: node:16.5.0
+
+stages:
+  -deploy
+
 pages:
   stage: deploy
   cache:
@@ -10,7 +14,7 @@ pages:
       - node_modules/
   script:
     - cd Frontend/reveal.me
-    - npm install
+    - npm install -save --legacy-peer-deps
     - npm run build
     - cp -a dist/. public/
   artifacts:
