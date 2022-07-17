@@ -70,6 +70,7 @@ function TinderContainer() {
     const outOfFrame = async (dir, name, idx, swipedId) => {
         setLastSwipedUsers(lastSwipedUsers => [...lastSwipedUsers, swipedId]);
         setLastSwipeDirection(lastSwipeDirection => [...lastSwipeDirection, dir]);
+        console.log(userData.at(0));
         if (dir === "right") {
             if (userData.at(0).oneSideMatch.includes(swipedId)) {
                 alert("IT'S A MATCH!");

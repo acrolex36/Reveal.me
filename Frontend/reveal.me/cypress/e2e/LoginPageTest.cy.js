@@ -16,7 +16,7 @@ describe('Login', () => {
         cy.getCookie('Token')
             .should('have.property', 'value', 'testToken')
         cy.getCookie('UserId')
-            .should('have.property', 'value', 'test')
+            .should('have.property', 'value', 'Frontend')
 
     })
 

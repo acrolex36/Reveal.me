@@ -33,25 +33,25 @@ export const handlers = [
     //get user by id
     rest.get(`${BASE_URL}/singleuser/id/:id`,
         (req, res, ctx) => {
-            if (req.params.id == "test"){
+            if (req.params.id === "test"){
                 return res(ctx.status(200),
                     ctx.json(UserData))
             }
-            else if (req.params.id == "test1"){
+            else if (req.params.id === "test1"){
                 return res(ctx.status(200),
                     ctx.json(ConversationDetail))
             }
-            else if (req.params.id == "test2"){
+            else if (req.params.id === "test2"){
                 return res(ctx.status(200),
                     ctx.json(CreateProfile))
             }
-            else if (req.params.id == "test3") {
+            else if (req.params.id === "test3") {
                 return res(ctx.status(200),
                     ctx.json(Register))
             }
-            else if (req.params.id == "Frontend") {
+            else if (req.params.id === "Frontend") {
                 return res(ctx.status(200),
-                    ctx.json(Register))
+                    ctx.json(UserData))
             }
 
         }),
@@ -99,7 +99,7 @@ export const handlers = [
     // Get all conversation of a user
     rest.get(`${BASE_URL}/allconversation/:userId`,
         (req, res, ctx) => {
-            if(req.params.userId == "test1"){
+            if(req.params.userId === "test1"){
                 return res(ctx.status(200),
                     ctx.json(Conversation)
                 )

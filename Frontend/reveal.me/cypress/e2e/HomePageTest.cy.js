@@ -9,7 +9,6 @@ describe('Homepage test', () => {
             .type('frontend@test.com');
 
         cy.contains('Sign in').click();
-        cy.server()
         //Wait until data loads
         cy.contains('David, 26').should('be.visible')
     })
@@ -34,11 +33,12 @@ describe('Homepage test', () => {
     })
 
     it('Should call updateMatchUserById when swiping right with a user that havent swiped back', () => {
+        cy.server()
         cy.route('PUT', '/api/user/profile/id/*/*').as('updateMatchUserById')
-        cy.intercept({
-            method: "PUT",
-            pathname: '/api/user/profile/id/*/*',
-        }).as("updateMatchUserById");
+        // cy.intercept({
+        //     method: "PUT",
+        //     pathname: '/api/user/profile/id/*/*',
+        // }).as("updateMatchUserById");
 
         cy.contains('David, 26').should('be.visible');
         cy.get('#swipeRightButton').click()
@@ -47,6 +47,7 @@ describe('Homepage test', () => {
         })
     })
     it('Should make conversation and call removeMatchedUser after right swipe with a user that already swiped back', () => {
+        cy.server()
         cy.route("POST", "/api/conversation/message/*/*").as("createConversation")
         cy.route("PUT", "/api/user/profile/remove/id/*/*").as("deleteOneMatch")
 
@@ -65,7 +66,8 @@ describe('Homepage test', () => {
         });
     })
 
-    it('Should delete conversation and deleteonematch when pressing goback after a match ', () => {
+    it('Should call delete conversation and deleteonematch when pressing goback after a match ', () => {
+        cy.server();
         cy.route('GET', '/api/allconversation/:userId').as('getConversation')
         cy.route('PUT', '/api/conversation/remove/*').as('deleteConversation')
         cy.route("PUT", "/api/user/profile/remove/id/*/*").as("deleteOneMatch")
@@ -73,6 +75,10 @@ describe('Homepage test', () => {
         cy.get('#swipeRightButton').click()
         cy.get('#swipeRightButton').click()
         cy.get('#goBackButton').click()
+
+        cy.wait('@deleteOneMatch').should((xhr) => {
+            expect(xhr.status, 'deleteOneMatch').to.equal(200)
+        });
     })
 
 });
