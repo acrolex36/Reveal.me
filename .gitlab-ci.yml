@@ -8,12 +8,15 @@ frontend_tests:
   stage: stagingFrontend
   before_script:
     - cd Frontend/reveal.me
-    - npm install --legacy-peer-deps
+    # - npm install --legacy-peer-deps
   # image: ruby:latest
   script:
     # - dpl --provider=heroku --app=$HEROKU_APP_STAGING --api-key=$HEROKU_API_KEY
     # - npm run cypress:headless
-    - npm run dev
+    - npm ci
+    - npm run start:ci &
+    - npm run e2e
+    # - npm run dev
 
 # backend_tests:
 #   before_script:
