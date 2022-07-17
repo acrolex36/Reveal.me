@@ -12,7 +12,6 @@ dist
 dist-ssr
 *.local
 *.txt
-*.png
 *.jpg
 
 # Editor directories and files
