@@ -89,7 +89,7 @@ Backend:
 
 ![Landing page](./readme_images/Landing page.png)
 ![Register age](./readme_images/Register page.png)
-![Login page](./readme_images/Login Page.png)
+![Login page](./readme_images/LoginPage.png)
 ![Login page](./readme_images/Forget Password Page.png)
 ![Create profile](./readme_images/Create Profile.png)
 ![Create profile](./readme_images/Create Profile 2.png)
