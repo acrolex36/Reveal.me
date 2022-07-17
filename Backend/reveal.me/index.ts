@@ -35,10 +35,8 @@ mongoose.connect(`${CONNECTION_URL}`, (err: any) => {
 
 app.listen(
   PORT
-  // app.get("port")
 , () => {
   console.log(`Server running on http://localhost:${PORT}`
-  // , app.get("port")
   );
 });
 

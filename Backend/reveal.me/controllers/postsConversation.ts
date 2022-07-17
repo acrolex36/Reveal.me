@@ -142,7 +142,7 @@ export const getTotalMessages = async (req: Request, res: Response) => {
   }
 };
 
-//get - /conversation/user/picture/:conversationId/:userId # retrieve picture
+//GET - /conversation/user/picture/:conversationId/:userId # retrieve picture
 export const getPicture = async (req: Request, res: Response) => {
   checkToken(req, res, () => {
     authSuccess = true;
