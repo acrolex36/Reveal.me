@@ -19,10 +19,8 @@ build_image:
   image: docker:latest
   services:
     - docker:dind
-  variables:
-    DOCKER_TLS_CERTDIR: "/certs"
   before_script: 
     - docker login -u "revealme" -p "Indonesia"
   script:
-    - systemctl docker build -t revealme/reveal.me2022:node_project .
-    - systemctl docker push revealme/reveal.me2022:node_project
+    - docker build -t revealme/reveal.me2022:node_project .
+    - docker push revealme/reveal.me2022:node_project
