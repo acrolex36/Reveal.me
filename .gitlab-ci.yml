@@ -2,7 +2,7 @@ stages:          # List of stages for jobs, and their order of execution
   - test
 
 test:
-  image: cypress/browsers:chrome69
+  image: cypress/browsers:node12.14.1-chrome85-ff81
   stage: test
   script:
     - cd Frontend/reveal.me"
