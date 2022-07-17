@@ -22,6 +22,7 @@ Backend :
 - Socket.io
 - Jsonwebtoken
 - dotenv
+- jimp
 - Mocha
 - Chai
 - Supertest
