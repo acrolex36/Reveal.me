@@ -13,6 +13,8 @@ describe('Login', () => {
 
         cy.get('button[type=submit]').click();
 
+        cy.wait(1000)
+
         cy.getCookie('Token')
             .should('have.property', 'value', 'testToken')
         cy.getCookie('UserId')

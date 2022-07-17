@@ -21,6 +21,8 @@ describe('Register', () => {
             .type('test123');
         cy.contains('Create an Account').click();
         
+        cy.wait(1000)
+
         //should receive UserId and Token and directed to create profile page
         cy.getCookie('UserId')
             .should('have.property', 'value', 'test3')
