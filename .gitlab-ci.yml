@@ -11,6 +11,7 @@ stages:
 staging:
   stage: staging
   before_script:
+    - cd Backend/reveal.me
     - apt-get update -qy
     - apt-get install -y ruby-dev
     - gem install dpl
