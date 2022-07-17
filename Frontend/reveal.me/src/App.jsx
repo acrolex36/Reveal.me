@@ -7,6 +7,8 @@ import CreateProfilePage from "./pages/CreateProfilePage";
 import ChatPage from "./pages/ChatPage";
 import LandingPage from "./pages/LandingPage";
 import './index.css'
+import ExplorePage from "./pages/ExplorePage";
+
 const App = () => {
   return (
     <BrowserRouter>
@@ -14,7 +16,9 @@ const App = () => {
         <Route path="/" element={<LandingPage />}></Route>
         <Route path="/homepage" element={<Homepage />}></Route>
         <Route path="/login" element={<LoginPage />}></Route>
-        <Route
+          <Route path="/explore" element={<ExplorePage />}></Route>
+
+          <Route
           path="/login/forgot_password"
           element={<ForgotPasswordPage />}
         ></Route>
