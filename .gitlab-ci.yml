@@ -1,15 +1,14 @@
+stages:
+  - test
+  - staging
+  - production
+
 backend_tests:
   image: node:18.6-buster-slim
   before_script:
     - cd Backend/reveal.me && npm install
 
-  stages:
-    - test
-    - staging
-    - production
-
   test:
-    type: deploy
     script:
       - npm test
 
