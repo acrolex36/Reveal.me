@@ -12,7 +12,7 @@ hosting_backend:
     - apt-get update -qy
     - apt-get install -y ruby-dev
     - gem install dpl
-    # - npm install
+    - npm install
   image: ruby:latest
   script:
     - dpl --provider=heroku --app=$HEROKU_APP_STAGING --api-key=$HEROKU_API_KEY
