@@ -6,7 +6,8 @@ const ChatProfile = (props) => {
   return (
     <div className="card w-full bg-base-100 border h-full">
       <figure>
-        <img
+        <img 
+          id="cardImage"
           src={
             accountData?.userDetail?.profile_picture === ""
               ? "https://api.lorem.space/image/face?w=150&h=150"
@@ -17,9 +18,9 @@ const ChatProfile = (props) => {
         />
       </figure>
       <div className="card-body">
-        <h1 className="card-title text-3xl">{`${accountData.first_name} ${accountData.last_name}, ${accountData.userDetail.age}`}</h1>
-        <h2 className="mb-[30px] text-xl">{`${accountData.userDetail.occupation}`}</h2>
-        <p>{`${accountData.userDetail.description}`}</p>
+        <h1 id="rightDetail" className="card-title text-3xl">{`${accountData.first_name} ${accountData.last_name}, ${accountData.userDetail.age}`}</h1>
+        <h2 id="rightOccupation" className="mb-[30px] text-xl">{`${accountData.userDetail.occupation}`}</h2>
+        <p id="rightDescription" >{`${accountData.userDetail.description}`}</p>
       </div>
     </div>
   );

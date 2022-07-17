@@ -4,6 +4,7 @@ describe('Register', () => {
     })
 
     it('Sucessfully register and direct to create profile page ', () => {
+        //register
         cy.findByLabelText(/First Name/i)
             .clear()
             .type('frontend');
@@ -53,6 +54,7 @@ describe('Create Profile', () => {
         cy.get('[type="date"]')
             .type('2000-10-10')
          
+        //input description
         cy.findByLabelText(/Description/i)
             .type('im a fun girl who loves to code!')
         

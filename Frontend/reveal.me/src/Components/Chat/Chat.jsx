@@ -38,7 +38,7 @@ const Chat = (props) => {
         <div className="flex sm:items-center justify-between pb-2 border-b-2 border-gray-200">
           <div className="relative flex items-center space-x-4">
             <div className="relative">
-              <img
+              <img id="topImage"
                 src={image}
                 alt=""
                 className={`w-10 sm:w-10 h-10 sm:h-10 rounded-full`}
@@ -46,9 +46,9 @@ const Chat = (props) => {
             </div>
             <div className="flex flex-col leading-tight">
               <div className="text-lg mt-1 flex items-center">
-                <span className="text-gray-700 mr-3">{`${accountData.first_name} ${accountData.last_name}`}</span>
+                <span id="topName" className="text-gray-700 mr-3">{`${accountData.first_name} ${accountData.last_name}`}</span>
               </div>
-              <span className="text-md text-gray-600">{`${accountData.userDetail.occupation}`}</span>
+              <span id="topDetail" className="text-md text-gray-600">{`${accountData.userDetail.occupation}`}</span>
             </div>
           </div>
         </div>

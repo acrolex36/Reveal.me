@@ -5,6 +5,7 @@ describe('Register', () => {
     })
 
     it('Sucessfully register and direct to create profile page ', () => {
+        //input fields
         cy.findByLabelText(/First Name/i)
             .clear()
             .type('frontend');
@@ -20,6 +21,7 @@ describe('Register', () => {
             .type('test123');
         cy.contains('Create an Account').click();
         
+        //should receive UserId and Token and directed to create profile page
         cy.getCookie('UserId')
             .should('have.property', 'value', 'test1')
         cy.getCookie('Token')

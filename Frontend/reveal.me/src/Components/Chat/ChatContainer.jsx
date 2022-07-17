@@ -88,7 +88,6 @@ const ChatContainer = () => {
     e.preventDefault();
     let sendMessage;
     const receiverId = currentChat.members.find((member) => member !== id);
-    console.log("TOWIEIWTJE");
     if (sendImage === "" && textArea !== "") {
       socket.current.emit("sendMessage", {
         senderId: id,
@@ -225,7 +224,7 @@ const ChatContainer = () => {
       <div className="border rounded-xl lg:grid lg:grid-cols-4 w-full h-4/5">
         <div className="border-r border-gray-300 lg:col-span-1 lg:block">
           <ul className="overflow-auto h-[32rem]">
-            <h2 className="mx-3 my-5 mb-2 ml-2 text-lg text-gray-600">
+            <h2 id="titlePage" className="mx-3 my-5 mb-2 ml-2 text-lg text-gray-600">
               Messages
             </h2>
             {allConversation && allConversation.length > 0 ? (
@@ -276,7 +275,7 @@ const ChatContainer = () => {
                 </div>
 
                 <form onSubmit={sendMessage}>
-                  <div className="border-t-2 border-gray-200 px-4 pt-4 mb-2 sm:mb-0">
+                  <div id="inputArea" className="border-t-2 border-gray-200 px-4 pt-4 mb-2 sm:mb-0">
                     <div className="relative flex">
                       {sendImage === "" ? (
                         <input

@@ -4,16 +4,16 @@ describe('Logout', () => {
         cy.visit('http://localhost:3000/login')
         cy.findByLabelText(/Email address/i)
             .clear()
-            .type('frontendEmail@test.com');
+            .type('frontend@test.com');
         cy.findByLabelText(/Password/i)
             .clear()
-            .type('test123');
+            .type('frontend@test.com');
 
         cy.contains('Sign in').click();
 
     })
 
-    it('Sucessfully logs out and emptie cookies ', () => {
+    it('Sucessfully logs out and empties cookies ', () => {
         cy.get('#logout').click();
 
         cy.getCookie('Token').should('have.property', 'value', '')

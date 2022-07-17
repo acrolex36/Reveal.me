@@ -16,16 +16,20 @@ const BASE_URL = "http://localhost:5000/api"
 // Define handlers that catch the corresponding requests and returns the mock data.
 export const handlers = [
 
+    //login
     rest.post(`${BASE_URL}/auth/login`,
         (req, res, ctx) => {
-            if(req.body.email == "bryan@test.com"){
+            if(req.body.email === "bryan@test.com"){
                 return res(ctx.status(201),
                     ctx.json(Login2))
             }
-            return res(ctx.status(201),
-            ctx.json(Login))
+            else{
+                return res(ctx.status(201),
+                    ctx.json(Login))
+            }
         }),
 
+    //get user by id
     rest.get(`${BASE_URL}/singleuser/id/:id`,
         (req, res, ctx) => {
             if (req.params.id == "test"){
@@ -55,6 +59,7 @@ export const handlers = [
                 ctx.json(FilteredUsers))
         }),
 
+    //register
     rest.post(`${BASE_URL}/auth/register`,
         (req, res, ctx) => {
             return res(ctx.status(201),
@@ -67,6 +72,7 @@ export const handlers = [
             )
         }),
 
+    //create user
     rest.put(
         `${BASE_URL}/user/profile/head/:email`,
         (req, res, ctx) => {
@@ -74,6 +80,7 @@ export const handlers = [
             )
         }),
     
+    //create user with details
     rest.put(
         `${BASE_URL}/user/profile/body/:email`,
         (req, res, ctx) => {
@@ -81,6 +88,7 @@ export const handlers = [
             )
         }),
 
+    //get all conversation with userid
     rest.get(
         `${BASE_URL}/allconversation/:id`,
         (req, res, ctx) => {
@@ -89,6 +97,7 @@ export const handlers = [
             )
     }),
 
+    //get other person's picture from a conversation with userid
     rest.get(
         `${BASE_URL}/conversation/user/picture/:conversationId/:id`,
         (req, res, ctx) => {
@@ -97,6 +106,7 @@ export const handlers = [
             )
         }),
     
+    //get all messages from conversation
     rest.get(
         `${BASE_URL}/message/all/:conversationId`,
         (req, res, ctx) => {
@@ -105,16 +115,17 @@ export const handlers = [
             )
     }),
 
+    //create message for a conversation
     rest.post(`${BASE_URL}/message/:conversationId`,
     (req, res, ctx) => {
-        if(req.body.message.length <200){
+        if(req.body.message?.length <200){
             return res(ctx.status(201),
             ctx.json(NewMessage)
             )
         }
         else{
             return res(ctx.status(201),
-                ctx.json(newMessageImage)
+                ctx.json(NewMessageImage)
             )
         }
     }),

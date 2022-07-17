@@ -19,7 +19,7 @@ const ChatBubble = ({ msg, userData, image }) => {
                 msg.sender === id ? "order-1 item-end" : "order-2 item-start"
               }`}
             >
-              <div>
+              <div id="messageBubble">
                 {msg.message.length < 200 ? (
                   <span id={msg._id}
                     className={` 
@@ -32,7 +32,7 @@ const ChatBubble = ({ msg, userData, image }) => {
                     {msg.message}
                   </span>
                 ) : (
-                  <img
+                  <img id={`imageMessage${msg._id}`}
                     src={msg.message}
                     className={` 
                         ${
@@ -44,7 +44,7 @@ const ChatBubble = ({ msg, userData, image }) => {
                 )}
               </div>
             </div>
-            <img
+            <img id={msg._id}
               src={`${
                 msg.sender === id
                   ? userData?.userDetail?.profile_picture
