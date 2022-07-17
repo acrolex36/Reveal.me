@@ -64,7 +64,7 @@ Scripts:
 - To visit the website, enter this url: http://localhost:3000 and  will direct you to the landing page, to login or register a user
 - To run the automatic tests:
 - Run the test script for frontend - **(Make sure that start script is running first!)**
-- Run the test script for backend **(Don't run the start script and test script for backend simultaneously)**
+- Run the test script for backend **(The start script and test script for backend can not be run simultaneously)**
 - A postman collection can be used for testing the individual api calls
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/cf4410757371a6823eb0?action=collection%2Fimport)
@@ -88,10 +88,10 @@ Backend:
 ## Functionality
 - Landing Page
 ![Landing page](./readme_images/Landing page.png)
-    - in this page the user can select whether to Sign in or create a new account
+    - In this page the user can select whether to Sign in or create a new account
 - Register Page
 ![Register age](./readme_images/Register page.png)
-    - user can create a new account here
+    - User can create a new account here
 - Login Page
 ![Login page](./readme_images/LoginPage.png)
 - Forgot Password Page
@@ -124,29 +124,30 @@ Base URL for API : http://localhost:5000
 ![UML Diagram](./readme_images/UML Diagram.png)
 
 
-stored into 3 collection:
+The database consists of 3 collections:
 
-#### user collection
+#### User collection
 Information of user are stored in this collection.
 
-userDetail contain information for user Profile and matching (gender interest and hobbies)
+userDetail document contains the information for the user profile and matching (gender interest and hobbies)
 
 ![User](./readme_images/Collection user part 1.png)
 
 ![User](./readme_images/Collection user part 2.png)
 
-#### conversation collection
-Information of 2 match users are stored in this collection
+#### Conversation collection
+Information of matched users are stored in this collection
 
 ![Conversation](./readme_images/Collection conversation.png)
 
 #### message collection
-Information of each member chats in a conversation are stored in this collection
+Information of each member's chats in a conversation are stored in this collection
 
 ![Message](./readme_images/Collection message.png)
 
 ## Gitlab CI/CD Pipeline
-We have integrated our websites with Gitlab CI/CD Pipelines, which are set inside the .gitlab-ci.yml. By using that the Backend test will always be triggered everytime commit is initiated.
+We have integrated our websites with Gitlab CI/CD Pipelines, which are configured inside the .gitlab-ci.yml. 
+Now Backend tests will always be triggered everytime commit is initiated.
 
 ## Authors
 
