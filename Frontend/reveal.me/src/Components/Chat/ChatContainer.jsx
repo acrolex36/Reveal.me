@@ -25,7 +25,6 @@ const ChatContainer = () => {
   const token = cookies.Token;
   const socket = useRef();
   const [userData, setUserData] = useState([]);
-  const [totalMessage, setTotalMessage] = useState([]);
   const [sendImage, setSendImage] = useState("");
   const [image, setImage] = useState("");
   const scrollRef = useRef(null);
@@ -241,19 +240,15 @@ const ChatContainer = () => {
                   className="position:static flex flex-col space-y-3 p-4 overflow-y-auto scrollbar-thumb-blue scrollbar-w-2 scrolling-touch h-[648px] max-h-[1200px]"
                 >
                   {/*Chat Bubble*/}
-                  {totalMessage &&
+                  {
                     messages &&
-                    accountData &&
                     userData &&
-                    accountData?.userDetail &&
                     userData?.userDetail &&
                     messages.map((m, index) => (
                       <div key={index} ref={scrollRef}>
                         <ChatBubble
                           msg={m}
                           userData={userData}
-                          accountData={accountData}
-                          totalMessage={totalMessage}
                           image={image}
                         ></ChatBubble>
                       </div>

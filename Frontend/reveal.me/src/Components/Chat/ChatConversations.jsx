@@ -40,7 +40,7 @@ const ChatConversations = (props) => {
 
   return (
     <div>
-      {image && user && user?.userDetail ? (
+      {user && user?.userDetail ? (
         <div
           key={user._id}
           className="flex items-center px-3 py-2 my-3 text-sm transition duration-150 ease-in-out border-b border-gray-300 cursor-pointer hover:bg-gray-100 focus:outline-none"
@@ -57,7 +57,7 @@ const ChatConversations = (props) => {
           </div>
         </div>
       ) : (
-        <div>fetching...</div>
+        <div>Fetching...</div>
       )}
     </div>
   );
