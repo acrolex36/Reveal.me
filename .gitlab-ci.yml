@@ -5,7 +5,7 @@ stages:
   - staging
   # - stagingFrontend
 
-start_Backend:
+hosting_backend:
   stage: staging
   before_script:
     - cd Backend/reveal.me
@@ -28,10 +28,10 @@ start_Backend:
 #     # - dpl --provider=heroku --app=$HEROKU_APP_STAGING --api-key=$HEROKU_API_KEY
 #     - npm run dev
 
-backend_tests:
-  before_script:
-    - cd Backend/reveal.me && npm install
-  stage: test
-  script:
-    - npm test
+# backend_tests:
+#   before_script:
+#     - cd Backend/reveal.me && npm install
+#   stage: test
+#   script:
+#     - npm test
  
