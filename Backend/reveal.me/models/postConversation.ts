@@ -11,11 +11,7 @@ const conversationSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",
     },
-  ],
-  isBlurred: {
-    type: Boolean,
-    default: true,
-  }
+  ]
 });
 
 var Conversation = mongoose.model("conversation", conversationSchema);
