@@ -1,11 +1,20 @@
-stages:          # List of stages for jobs, and their order of execution
-  - test
-
-test:
-  image: cypress/browsers:node12.14.1-chrome85-ff81
-  stage: test
+image: node:16.5.0
+pages:
+  stage: deploy
+  cache:
+    key:
+      files:
+        - package-lock.json
+      prefix: npm
+    paths:
+      - node_modules/
   script:
-    - cd Frontend/reveal.me"
-    - npm ci
-    - npm run dev
-    - npm run cypress:headless
+    - cd Frontend/reveal.me
+    - npm install
+    - npm run build
+    - cp -a dist/. public/
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
