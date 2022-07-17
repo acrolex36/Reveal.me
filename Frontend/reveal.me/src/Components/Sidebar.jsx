@@ -40,6 +40,8 @@ const Sidebar = () => {
   const logout = () => {
     setCookie("UserId", "");
     setCookie("Token", "");
+    setCookie("pmaUser-1", "");
+    setCookie("pma_lang", "");
     window.location.href = "/login";
   };
 
@@ -99,6 +101,7 @@ const Sidebar = () => {
           </li>
           <li>
             <a
+              id="messages"
               href="/messages"
               className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
             >
@@ -122,6 +125,7 @@ const Sidebar = () => {
           </li>
           <li>
             <a
+              id="exploreusers"
               href="/explore"
               className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
             >
@@ -146,7 +150,7 @@ const Sidebar = () => {
           </li>
         
           <li>
-            <a
+            <a id="logout"
               onClick={logout}
               className="flex items-center py-2 pl-3 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
             >

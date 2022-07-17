@@ -203,13 +203,13 @@ const ChatContainer = () => {
       <div className="border rounded-xl lg:grid lg:grid-cols-4 w-full h-4/5">
         <div className="border-r border-gray-300 lg:col-span-1 lg:block">
           <ul className="overflow-auto h-[32rem]">
-            <h2 className="mx-3 my-5 mb-2 ml-2 text-lg text-gray-600">
+            <h2 id="titlePage" className="mx-3 my-5 mb-2 ml-2 text-lg text-gray-600">
               Messages
             </h2>
             {/*List of Conversations */}
             {allConversation && allConversation.length > 0 ? (
               allConversation.map((convo, index) => (
-                <li key={index} onClick={() => setCurrentChat(convo)}>
+                <li id='convoList' key={index} onClick={() => setCurrentChat(convo)}>
                   <ChatConversations
                     conversation={convo}
                     currentUser={id}
@@ -261,7 +261,7 @@ const ChatContainer = () => {
                 </div>
                 {/*Input Area */}
                 <form onSubmit={sendMessage}>
-                  <div className="border-t-2 border-gray-200 px-4 pt-4 mb-2 sm:mb-0">
+                  <div id="inputArea" className="border-t-2 border-gray-200 px-4 pt-4 mb-2 sm:mb-0">
                     <div className="relative flex">
                       {sendImage === "" ? (
                         <input
@@ -278,7 +278,7 @@ const ChatContainer = () => {
                           onClick={(e) => setSendImage("")}
                         ></img>
                       )}
-                      <div className="absolute right-0 items-center inset-y-0 hidden sm:flex">
+                      <div id="sendImage" className="absolute right-0 items-center inset-y-0 hidden sm:flex">
                         <label>
                           <span
                             className="inline-flex items-center justify-center rounded-full h-10 w-10 transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:outline-none"
@@ -319,6 +319,7 @@ const ChatContainer = () => {
                           />
                         </label>
                         <button
+                        id="sendMessage"
                           type="submit"
                           className="inline-flex items-center justify-center rounded-lg px-4 py-3 transition duration-500 ease-in-out text-white bg-blue-500 hover:bg-blue-400 focus:outline-none"
                         >
@@ -343,7 +344,7 @@ const ChatContainer = () => {
         {/*Right Side Profile*/}
         <div className="hidden lg:col-span-1 lg:block w-full">
           <div className="h-full">
-            {totalMessage &&
+            {
               currentChat &&
               accountData &&
               accountData.userDetail && (

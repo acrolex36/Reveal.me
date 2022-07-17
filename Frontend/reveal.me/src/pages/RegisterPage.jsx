@@ -110,7 +110,7 @@ const RegisterPage = () => {
                 <div>
                   <label htmlFor="fName">First Name</label>
                   <input
-                    id="first-name"
+                    id="fName"
                     name="fName"
                     type="fName"
                     autoComplete="fName"
@@ -124,7 +124,7 @@ const RegisterPage = () => {
                 <div>
                   <label htmlFor="lName">Last Name</label>
                   <input
-                    id="last-name"
+                    id="lName"
                     name="lName"
                     type="lName"
                     autoComplete="lName"
@@ -155,7 +155,7 @@ const RegisterPage = () => {
                     id="password"
                     name="password"
                     type="password"
-                    autoComplete="current-password"
+                    autoComplete="password"
                     required
                     className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                     onChange={(e) => setPassword(e.target.value)}

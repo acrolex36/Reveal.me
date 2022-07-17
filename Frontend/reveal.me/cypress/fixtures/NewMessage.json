@@ -1,0 +1,9 @@
+{
+    "conversationId": "convo1",
+    "sender": "test1",
+    "message": "let's hangout sometime!",
+    "timestamp": "2022-07-17T00:21:49.347Z",
+    "has_been_seen": false,
+    "_id": "5",
+    "__v": 0
+}
