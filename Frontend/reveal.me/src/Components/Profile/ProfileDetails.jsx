@@ -11,6 +11,7 @@ import { getSingleUser } from "../../utils/ApiActions";
 const ProfileDetails = () => {
   const [error, setError] = useState(null);
   const [cookies] = useCookies(null);
+  const [dob, setDOB] = useState("")
   const [accountData, setAccountData] = useState({
     email: "",
     password: "",
@@ -103,6 +104,14 @@ const ProfileDetails = () => {
       userDetail: { ...accountData.userDetail, languages: [] },
     }));
   };
+
+  const setDateBirth = () => {
+    let date = accountData.dob_date
+    let month = accountData.dob_month
+    let year = accountData.dob_year
+    let dob = year + "-" + month + "-" + date
+    setDOB(dob);
+  }
 
   //set DOB
   const parseDOBandCalculateAge = (eventData) => {
