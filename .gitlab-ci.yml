@@ -1,0 +1,11 @@
+stages:          # List of stages for jobs, and their order of execution
+  - test
+
+test:
+  image: cypress/browsers:node12.14.1-chrome85-ff81
+  stage: test
+  script:
+    - cd Frontend/reveal.me"
+    - npm ci
+    - npm run dev
+    - npm run cypress:headless
