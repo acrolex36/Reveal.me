@@ -181,5 +181,11 @@ export const handlers = [
             }
         }),
 
+    //reset password with new password
+    rest.post(`${BASE_URL}/auth/login/forgetpassword`,
+        (req, res, ctx) => {            
+                return res(ctx.status(201))
+        }),    
+
 
 ]
