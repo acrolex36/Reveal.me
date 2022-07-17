@@ -1,12 +1,17 @@
 import {useEffect, useState,} from "react";
 import {useCookies} from "react-cookie";
-import axios from "axios";
 import {Hobbies} from "../utils/Hobby";
 import Sidebar from "../Components/Sidebar";
 import Header from "../Components/Header";
 import ProfileCard from "../Components/Profile/ProfileCard";
 import ProfileModal from "../Components/Profile/ProfileModal";
-import {createConversation, removeMatchedUser, updateSwipedUser} from "../utils/ApiActions";
+import {
+    createConversation,
+    getGenderedUser,
+    getUserData,
+    removeMatchedUser,
+    updateSwipedUser
+} from "../utils/ApiActions";
 
 const ExplorePage = () => {
     const [genderedUsers, setGenderedUsers] = useState([]);
@@ -16,36 +21,15 @@ const ExplorePage = () => {
     const token = cookies.Token;
     const myUserId = cookies.UserId;
 
-    useEffect(() => {
-        const getUserData = async () => {
-            const response = await axios.get(
-                `http://localhost:5000/api/singleuser/id/${myUserId}`,
-                {
-                    headers: {
-                        "Content-Type": "application/json; charset=UTF-8",
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-            setUserData((userData) => [...userData, response.data]);
-        };
+    const fetchData = async () => {
+        const user = await getUserData(myUserId, token);
+        setUserData((userData) => [...userData, user]);
+        const list = await getGenderedUser(myUserId, token);
+        setGenderedUsers((genderedUsers) => [...genderedUsers, ...list]);
+    }
 
-        const getGenderedUsers = async () => {
-            const response = await axios.get(
-                `http://localhost:5000/api/gendereduser/id/${myUserId}`,
-                {
-                    headers: {
-                        "Content-Type": "application/json; charset=UTF-8",
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-            setGenderedUsers((genderedUsers) => [...genderedUsers, ...response.data]);
-        };
-        if (cookies) {
-            getGenderedUsers();
-            getUserData();
-        }
+    useEffect(() => {
+        fetchData();
     }, []);
 
     const handleMatch = async (matchedId) => {

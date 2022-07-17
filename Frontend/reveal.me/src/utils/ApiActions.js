@@ -85,6 +85,19 @@ export const getFilteredUsers = async (myUserId, token) => {
     return response.data;
 };
 
+export const getGenderedUser = async (myUserId, token) => {
+    const response = await axios.get(
+        `http://localhost:5000/api/gendereduser/id/${myUserId}`,
+        {
+            headers: {
+                "Content-Type": "application/json; charset=UTF-8",
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+    return response.data;
+};
+
 export const deleteOneMatch = async (myUserId, swipedId, token) => {
     const response = await axios.put(
         `http://localhost:5000/api/user/profile/remove/id/${myUserId}/${swipedId}`,
