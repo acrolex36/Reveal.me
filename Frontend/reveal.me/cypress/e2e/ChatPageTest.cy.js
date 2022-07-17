@@ -1,6 +1,8 @@
+import {worker} from "../../src/mocks/worker";
 
 describe('Chat page', () => {
     beforeEach(() => {
+        worker.start();
         cy.viewport(1279, 874)
         //login
         cy.visit('http://localhost:3000/login')

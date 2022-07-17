@@ -1,6 +1,8 @@
+import {worker} from "../../src/mocks/worker";
 
 describe('Landing page', () => {
     beforeEach(() => {
+        worker.start();
         cy.visit('http://localhost:3000/')
     })
 

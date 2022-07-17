@@ -1,5 +1,9 @@
+import {worker} from "../../src/mocks/worker";
+
 describe('Login', () => {
+
     beforeEach(() => {
+        worker.start();
         cy.visit('http://localhost:3000/login')
     })
 

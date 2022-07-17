@@ -1,5 +1,8 @@
+import {worker} from "../../src/mocks/worker";
+
 describe('Forgot Password', () => {
     beforeEach(() => {
+        worker.start();
         cy.visit('http://localhost:3000/login')
     })
 

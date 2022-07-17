@@ -1,5 +1,8 @@
+import {worker} from "../../src/mocks/worker";
+
 describe('Homepage', () => {
     beforeEach(() => {
+        worker.start();
         cy.visit('http://localhost:3000/login')
         cy.findByLabelText(/Email address/i)
             .clear()
