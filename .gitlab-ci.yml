@@ -10,7 +10,6 @@ before_script:
   - gem install dpl
 
 staging:
-  # type: deploy
   stage: staging
   image: ruby:latest
   script:
@@ -19,14 +18,12 @@ staging:
     - staging
 
 production:
-  # type: deploy
   stage: production
   image: ruby:latest
   script:
     - dpl --provider=heroku --app=$HEROKU_APP_PRODUCTION --api-key=$HEROKU_API_KEY
   only:
     - master
-
 
 backend_tests:
   image: node:18.6-buster-slim

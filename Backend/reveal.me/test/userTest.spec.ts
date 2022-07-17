@@ -356,20 +356,21 @@ describe('Reveal.me API Tests', () => {
             })
     });
 
-    it("should successfully create a conversation when both swipe right", (done) => {
-        request(baseurl)
-            .put(`/conversation/isblurred/${conversationId}`)
-            .set("Authorization", "Bearer " + token)
-            .end(function(err,res) {
-                expect(res.statusCode).to.be.equal(200);
-                expect(res.body.isBlurred).to.be.equal(false)
-                conversationId = res.body._id
-                if (err) {
-                    throw err;
-                }
-                done();
-            })
-    });
+    //deleted not used anymore
+    // it("should successfully create a conversation when both swipe right", (done) => {
+    //     request(baseurl)
+    //         .put(`/conversation/isblurred/${conversationId}`)
+    //         .set("Authorization", "Bearer " + token)
+    //         .end(function(err,res) {
+    //             expect(res.statusCode).to.be.equal(200);
+    //             expect(res.body.isBlurred).to.be.equal(false)
+    //             conversationId = res.body._id
+    //             if (err) {
+    //                 throw err;
+    //             }
+    //             done();
+    //         })
+    // });
 
     it("should successfully getting all conversation", (done) => {
         request(baseurl)

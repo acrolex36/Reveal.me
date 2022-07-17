@@ -186,24 +186,18 @@ export const getPicture = async (req: Request, res: Response) => {
         if (total_user_1 < 15 || total_user_2 < 15) {
           //level 2 unblur
           result.blur(50);
-          // .write('50%Blur.png')
         }
       } else if (total_user_1 >= 5 && total_user_2 >= 5) {
         if (total_user_1 < 10 || total_user_2 < 10) {
           //level 1 unblur
           result.blur(80);
-          // .write('80%Blur.png')
         }
       } else {
         // max level blur
         result.blur(100);
-        // .write('FullBlur.png')
       }
 
       var newImage = result.getBase64Async(result.getMIME());
-
-      //print Result to txt file as test
-      // fs.writeFileSync("document.txt", await newImage);
 
       res.status(200).json(await newImage);
     } catch (error) {
