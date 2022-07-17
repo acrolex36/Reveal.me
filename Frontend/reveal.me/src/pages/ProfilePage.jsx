@@ -1,6 +1,6 @@
 import React from "react";
 import Header from "../Components/Header";
-import ProfileFields from "../Components/Profile/ProfileFields";
+import ProfileDetails from "../Components/Profile/ProfileDetails";
 import Sidebar from "../Components/Sidebar";
 const ProfilePage = () => {
   return (
@@ -10,9 +10,12 @@ const ProfilePage = () => {
           <Header></Header>
         </div>
 
-        <div className="flex flex-1 flex-col">
-          <main className="flex flex-col px-4 w-1500 ml-28">
-            <ProfileFields></ProfileFields>
+        <div className="flex flex-1">
+          <aside className="hidden sm:block">
+            <Sidebar></Sidebar>
+          </aside>
+          <main className="flex flex-col px-4 w-1500">
+            <ProfileDetails></ProfileDetails>
           </main>
         </div>
       </div>

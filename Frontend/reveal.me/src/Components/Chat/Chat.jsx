@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Cookies, useCookies } from "react-cookie";
-import { useParams } from "react-router-dom";
-import axios from "axios";
+import { getSingleUser } from "../../utils/ApiActions";
 const Chat = (props) => {
   const { currentChat, image } = props;
   const [cookies] = useCookies(null);
@@ -11,15 +10,7 @@ const Chat = (props) => {
 
   const getMatchAccount = async (matchId) => {
     try {
-      const response = await axios.get(
-        `http://localhost:5000/api/singleuser/id/${matchId}`,
-        {
-          headers: {
-            "Content-Type": "application/json; charset=UTF-8",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await getSingleUser(matchId, token);
       const dataMatch = response.data;
       setAccountData(dataMatch);
     } catch (err) {
@@ -29,6 +20,7 @@ const Chat = (props) => {
 
   useEffect(() => {
     const matchId = currentChat?.members?.find((m) => m !== id);
+    //get match profile for header chat
     getMatchAccount(matchId);
   }, [props]);
 
@@ -53,7 +45,9 @@ const Chat = (props) => {
           </div>
         </div>
       ) : (
-        <div>Setting up...</div>
+        <div className="flex sm:items-center justify-between pb-2 border-b-2 border-gray-200">
+          Setting Up Header...
+        </div>
       )}
     </>
   );

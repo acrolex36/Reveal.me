@@ -7,6 +7,7 @@ import CreateProfilePage from "./pages/CreateProfilePage";
 import ChatPage from "./pages/ChatPage";
 import LandingPage from "./pages/LandingPage";
 import './index.css'
+import ProfilePage from "./pages/ProfilePage";
 import ExplorePage from "./pages/ExplorePage";
 
 const App = () => {
@@ -24,6 +25,7 @@ const App = () => {
         ></Route>
         <Route path="/register" element={<RegisterPage />}></Route>
         <Route path="/create_profile" element={<CreateProfilePage />}></Route>
+        <Route path="/profile_page" element={<ProfilePage />}></Route>
         <Route path="/messages" element={<ChatPage />}></Route>
       </Routes>
       <div className="App">

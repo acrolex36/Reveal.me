@@ -1,6 +1,6 @@
 export const Languages = [
     {
-        value:"Afrikaans",
+        value: "Afrikaans",
         label: "Afrikaans"
     },
     {
