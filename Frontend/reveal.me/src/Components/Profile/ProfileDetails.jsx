@@ -1,15 +1,17 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 import Nationality from "./Nationality";
-import Interest from "./Interest";
-import { Languages } from "../utils/Language";
-import axios from "axios";
-import { Cookies, useCookies } from "react-cookie";
+import Interest from "../Interest";
+import { Languages } from "../../utils/Language";
+import { userProfile } from "../../utils/ApiActions";
+import { userDetail } from "../../utils/ApiActions";
+import { getSingleUser } from "../../utils/ApiActions";
 
-const ProfileFields = () => {
+const ProfileDetails = () => {
   const [error, setError] = useState(null);
-  const [cookies, setCookie, removeCookie] = useCookies(null);
+  const [cookies] = useCookies(null);
+  const [DOB, setDOB] = useState("")
   const [accountData, setAccountData] = useState({
     email: "",
     password: "",
@@ -32,29 +34,22 @@ const ProfileFields = () => {
     },
   });
 
+  //get user Account
   const getAccount = async (cookies) => {
     try {
-      // const email = cookies.Email;
       const id = cookies.UserId;
       const token = cookies.Token;
-      const response = await axios.get(
-        `http://localhost:5000/api/test/singleuser/id/${id}`,
-        {
-          headers: {
-            "Content-Type": "application/json; charset=UTF-8",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await getSingleUser(id, token);
       console.log(response);
       setAccountData(response.data);
+      setDateBirth(response.data);
     } catch (err) {
       console.error(err.message);
     }
   };
 
+  //loads existing data in account
   useEffect(() => {
-    // console.log("i fire once");
     if (cookies) {
       getAccount(cookies);
     }
@@ -62,11 +57,7 @@ const ProfileFields = () => {
 
   const navigate = useNavigate();
 
-  // const routeChange = (newPath) => {
-  //   let path = newPath;
-  //   navigate(path);
-  // };
-
+  //input profile picture
   const changePicture = (e) => {
     const reader = new FileReader();
     reader.onload = () => {
@@ -83,6 +74,7 @@ const ProfileFields = () => {
     reader.readAsDataURL(e.target.files[0]);
   };
 
+  //add languages
   const handleOnChangeLanguage = (lang, language) => {
     if (language.includes(lang)) removeLanguage(lang);
     else {
@@ -92,10 +84,10 @@ const ProfileFields = () => {
         ...accountData,
         userDetail: { ...accountData.userDetail, languages: updatedChecked },
       }));
-      // console.log(updatedChecked);
     }
   };
 
+  //remove languages
   const removeLanguage = (id) => {
     const updatedState = accountData.userDetail.languages.filter(
       (lang) => lang !== id
@@ -104,9 +96,9 @@ const ProfileFields = () => {
       ...accountData,
       userDetail: { ...accountData.userDetail, languages: updatedState },
     }));
-    // console.log(updatedState);
   };
 
+  //reset language
   const resetLanguage = () => {
     setAccountData((accountData) => ({
       ...accountData,
@@ -114,76 +106,21 @@ const ProfileFields = () => {
     }));
   };
 
-  const setNationality = (nat) => {
-    setAccountData((accountData) => ({
-      ...accountData,
-      userDetail: { ...accountData.userDetail, nationality: nat },
-    }));
-  };
+  const setDateBirth = () => {
+   if (accountData.userDetail.dob_date != null) {
+     if (accountData.userDetail.dob_date.toString().length >= 1) {
+       var newDate = `0${accountData.userDetail.dob_month}`;
+     }
+     if (accountData.userDetail.dob_month.toString().length >= 1) {
+       var newMonth = `0${accountData.userDetail.dob_month}`;
+     }
 
-  const handleOnChangeHobby = (hobby) => {
-    const updatedChecked = [...accountData.userDetail.hobbies];
-    updatedChecked.push(hobby);
-    setAccountData((accountData) => ({
-      ...accountData,
-      userDetail: { ...accountData.userDetail, hobbies: updatedChecked },
-    }));
-    // console.log(updatedChecked);
-  };
-
-  const removeHobby = (id) => {
-    const updatedState = accountData.userDetail.hobbies.filter(
-      (hobby) => hobby !== id
-    );
-    setAccountData((accountData) => ({
-      ...accountData,
-      userDetail: { ...accountData.userDetail, hobbies: updatedState },
-    }));
-    // console.log(updatedState)
-  };
-
-  const removeGender = (id) => {
-    const updatedState = accountData.userDetail.gender_interest.filter(
-      (gender) => gender !== id
-    );
-
-    setAccountData((accountData) => ({
-      ...accountData,
-      userDetail: { ...accountData.userDetail, gender_interest: updatedState },
-    }));
-    // console.log(updatedState)
-  };
-
-  const handleOnChangeGender = (gender) => {
-    const updatedChecked = [...accountData.userDetail.gender_interest];
-    updatedChecked.push(gender);
-    setAccountData((accountData) => ({
-      ...accountData,
-      userDetail: {
-        ...accountData.userDetail,
-        gender_interest: updatedChecked,
-      },
-    }));
-    // console.log(updatedChecked);
-  };
-
-  function setDate() {
-    if (accountData.userDetail.dob_date != null) {
-      if (accountData.userDetail.dob_date.toString().length >= 1) {
-        var newDate = `0${accountData.userDetail.dob_month}`;
-      }
-      if (accountData.userDetail.dob_month.toString().length >= 1) {
-        var newMonth = `0${accountData.userDetail.dob_month}`;
-      }
-
-      var date = `${accountData.userDetail.dob_year}-${newMonth}-${newDate}`;
-      return date;
-    }
-    if (accountData.userDetail.dob_date == (null || undefined)) {
-      useState("");
-    }
+     var date = `${accountData.userDetail.dob_year}-${newMonth}-${newDate}`;
+     return date;
+   }
   }
 
+  //set DOB
   const parseDOBandCalculateAge = (eventData) => {
     const parsed = eventData.split("-");
     var date = parsed[2];
@@ -219,64 +156,98 @@ const ProfileFields = () => {
     }));
   };
 
+  //set user nationality
+  const setNationality = (nat) => {
+    setAccountData((accountData) => ({
+      ...accountData,
+      userDetail: { ...accountData.userDetail, nationality: nat },
+    }));
+  };
+
+  //set user hobby
+  const handleOnChangeHobby = (hobby) => {
+    const updatedChecked = [...accountData.userDetail.hobbies];
+    updatedChecked.push(hobby);
+    setAccountData((accountData) => ({
+      ...accountData,
+      userDetail: { ...accountData.userDetail, hobbies: updatedChecked },
+    }));
+  };
+
+  //uncheck user hobby
+  const removeHobby = (id) => {
+    const updatedState = accountData.userDetail.hobbies.filter(
+      (hobby) => hobby !== id
+    );
+    setAccountData((accountData) => ({
+      ...accountData,
+      userDetail: { ...accountData.userDetail, hobbies: updatedState },
+    }));
+  };
+
+  //remove gender interest
+  const removeGender = (id) => {
+    const updatedState = accountData.userDetail.gender_interest.filter(
+      (gender) => gender !== id
+    );
+
+    setAccountData((accountData) => ({
+      ...accountData,
+      userDetail: { ...accountData.userDetail, gender_interest: updatedState },
+    }));
+  };
+
+
+  const handleOnChangeGender = (gender) => {
+    const updatedChecked = [...accountData.userDetail.gender_interest];
+    updatedChecked.push(gender);
+    setAccountData((accountData) => ({
+      ...accountData,
+      userDetail: {
+        ...accountData.userDetail,
+        gender_interest: updatedChecked,
+      },
+    }));
+  };
+
+  //submit user details
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      console.log(accountData);
-      console.log(accountData.userDetail.languages);
-      // console.log(accountData.userDetail.height);
+      await userProfile(accountData, cookies.Token).catch(function (res) {
+        if (res.response.status === 404) {
+          navigate("/create_profile");
+          setError("failed to update Profile, please try again");
+        }
+      });
 
-      // await axios
-      // .put(`http://localhost:5000/api/user/profile/head/${accountData.email}`, {
-      //   first_name: accountData.first_name,
-      //   last_name: accountData.last_name
-      // }, {
-      //   headers: {
-      //     "Content-Type": "application/json; charset=UTF-8",
-      //     Authorization: `Bearer ${cookies.Token}`,
-      //   },
-      // })
-      // .catch(function(res){
-      //   if(res.response.status == 404){
-      //     navigate ('/create_profile');
-      //     setError('failed to update Profile, please try again');
-      //   }
-      // });
-
-      // await axios
-      // .put(`http://localhost:5000/api/user/profile/body/${accountData.email}`, accountData.userDetail, {
-      //   headers: {
-      //     "Content-Type": "application/json; charset=UTF-8",
-      //     Authorization: `Bearer ${cookies.Token}`,
-      //   },
-      // })
-      // .then(function(response){
-      //   if(response.status == 201){
-      //     navigate ('/');
-      //   }
-      // })
-      // .catch(function(res){
-      //   if(res.response.status == 404){
-      //     navigate ('/create_profile');
-      //     setError('failed to update Profile, please try again');
-      //   }
-      // });
-
-      // window.location.reload()
+      await userDetail(accountData, cookies.Token)
+        .then(function (response) {
+          if (response.status === 200) {
+            navigate("/homepage");
+          }
+        })
+        .catch(function (res) {
+          if (res.response.status === 404) {
+            navigate("/create_profile");
+            setError("failed to update Profile, please try again");
+          }
+        });
     } catch (error) {
       console.log(error);
     }
   };
 
   return (
-    <div>
+    <div className="flex flex-col justify-center">
       <form action="#" method="POST" onSubmit={handleSubmit}>
-        <div className="shadow sm:rounded-md sm:overflow-hidden px-4 py-5 bg-gray-50 space-y-6 sm:p-6 my-5">
+        <div className="shadow sm:rounded-md sm:overflow-hidden px-4 py-5 bg-gray-50 space-y-6 sm:p-6 max-w-5xl my-5">
           <div>
             <div className="md:grid md:grid-cols-3 md:gap-6">
               <div className="md:col-span-1">
                 <div className="px-4 py-4 sm:px-0">
+                  {/*Profile Picture Field*/}
                   <h3 className="text-lg font-medium leading-6 text-gray-900">
                     Profile Picture
                   </h3>
@@ -290,7 +261,10 @@ const ProfileFields = () => {
                 <div className="py-3 center mx-auto">
                   <div className="bg-white px-4 py-5 rounded-lg shadow-lg text-center w-fit">
                     <div className="mb-4 w-48">
-                      <img src={accountData.userDetail.profile_picture} />
+                      <img
+                        src={accountData.userDetail.profile_picture}
+                        alt="profile picture"
+                      />
                     </div>
                     <label className="cursor-pointer mt-6">
                       <span
@@ -315,6 +289,7 @@ const ProfileFields = () => {
             </div>
           </div>
 
+          {/*Account Information Field */}
           <div className="hidden sm:block" aria-hidden="true">
             <div className="py-5">
               <div className="border-t border-gray-200" />
@@ -351,49 +326,7 @@ const ProfileFields = () => {
                             id="email-address"
                             autoComplete="email"
                             className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block xl:w-96 w-full shadow-sm sm:text-sm border border-pink-100 rounded-md"
-                            value={accountData.email}
-                            onChange={(e) =>
-                              setAccountData({
-                                ...accountData,
-                                email: e.target.value,
-                              })
-                            }
-                          />
-                        </div>
-
-                        <div className="col-span-6">
-                          <label
-                            htmlFor="password"
-                            className="block text-sm font-medium text-darker-pink"
-                          >
-                            Password
-                          </label>
-                          <input
-                            type="password"
-                            name="password"
-                            id="password"
-                            autoComplete="password"
-                            className="mt-1 focus:outline-none bg-gray-100 focus:ring focus:ring-darker-pink block w-full xl:w-96 shadow-sm sm:text-sm border border-pink-100 rounded-md"
-                            disabled="true"
-                            value={accountData.password}
-                          />
-                        </div>
-
-                        <div className="col-span-6">
-                          <label
-                            htmlFor="confirm-password"
-                            className="block text-sm font-medium text-darker-pink"
-                          >
-                            Confirm Password
-                          </label>
-                          <input
-                            type="password"
-                            name="confirm-password"
-                            id="confirm-password"
-                            autoComplete="confirm-password"
-                            className="mt-1 focus:outline-none bg-gray-100 focus:ring focus:ring-darker-pink block w-full xl:w-96 shadow-sm sm:text-sm border border-pink-100 rounded-md"
-                            disabled="true"
-                            value={accountData.password}
+                            defaultValue={accountData.email}
                           />
                         </div>
                       </div>
@@ -404,6 +337,7 @@ const ProfileFields = () => {
             </div>
           </div>
 
+          {/*Personal Details*/}
           <div className="hidden sm:block" aria-hidden="true">
             <div className="py-5">
               <div className="border-t border-gray-200" />
@@ -435,10 +369,9 @@ const ProfileFields = () => {
                         </label>
                         <input
                           type="text"
-                          name="first_name"
-                          id="first_name"
-                          autoComplete="first_name"
-                          label="first_name"
+                          name="first-name"
+                          id="first-name"
+                          autoComplete="given-name"
                           className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block w-full shadow-sm sm:text-sm border border-pink-100 rounded-md"
                           value={accountData.first_name}
                           onChange={(e) =>
@@ -550,7 +483,10 @@ const ProfileFields = () => {
                         >
                           Language
                         </label>
-                        <label htmlFor="my-modal" class="btn bg-darker-pink">
+                        <label
+                          htmlFor="my-modal"
+                          className="btn bg-darker-pink"
+                        >
                           Select Language
                         </label>
                         <input
@@ -574,9 +510,11 @@ const ProfileFields = () => {
                                       type="checkbox"
                                       className=" checkbox form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-pink-0 checked:bg-pink-100 checked:border-darker-pink focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                                       value={value}
-                                      id={{value}}
+                                      id={value}
                                       name={value}
-                                      checked={accountData.userDetail.languages.includes(value)}
+                                      checked={accountData.userDetail.languages.includes(
+                                        value
+                                      )}
                                       onChange={() =>
                                         handleOnChangeLanguage(value, Languages)
                                       }
@@ -585,14 +523,14 @@ const ProfileFields = () => {
                                       {label}
                                     </label>
                                   </div>
-);
+                                );
                               })}
                             </div>
                             <div className="flex flex-row justify-end">
                               <div className="modal-action">
                                 <label
                                   htmlFor="my-modal"
-                                  class="btn inline-flex justify-center py-2 px-4 mr-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-darker-pink bg-gray-100 hover:bg-pink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                  className="btn inline-flex justify-center py-2 px-4 mr-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-darker-pink bg-gray-100 hover:bg-pink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                   onClick={resetLanguage}
                                 >
                                   Close
@@ -640,14 +578,14 @@ const ProfileFields = () => {
 
                       <div className="col-span-6 sm:col-span-6 lg:col-span-2">
                         <label
-                          htmlFor=""
+                          htmlFor="date-of-birth"
                           className="block text-sm font-medium text-darker-pink"
                         >
                           Date of Birth
                         </label>
                         <input
                           type="date"
-                          value={setDate()}
+                          value={setDateBirth()}
                           onChange={(e) =>
                             parseDOBandCalculateAge(e.target.value)
                           }
@@ -680,20 +618,6 @@ const ProfileFields = () => {
                           }
                         />
                       </div>
-                      <div className="col-span-6 sm:col-span-6 lg:col-span-2">
-                        <label
-                          htmlFor="location"
-                          className="block text-sm font-medium text-darker-pink"
-                        >
-                          Location
-                        </label>
-                        <button
-                          type="button"
-                          className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-pink-100 hover:bg-darker-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        >
-                          Set Location
-                        </button>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -702,6 +626,7 @@ const ProfileFields = () => {
           </div>
         </div>
 
+        {/*Personal Interests*/}
         <div>
           <Interest
             hobbyList={accountData.userDetail.hobbies}
@@ -712,19 +637,18 @@ const ProfileFields = () => {
             removeGender={removeGender}
           ></Interest>
         </div>
-
         <div className="px-4 py-3 text-right sm:px-6">
-          <button
+          <a
+            href="/homepage"
             className="inline-flex justify-center py-2 px-4 mr-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-pink-100 hover:bg-pink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            onClick={() => routeChange("/register")}
           >
             Cancel
-          </button>
+          </a>
           <button
             type="submit"
             className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-darker-pink hover:bg-pink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
-            Submit
+            Edit
           </button>
           <p>{error}</p>
         </div>
@@ -733,5 +657,4 @@ const ProfileFields = () => {
   );
 };
 
-export default ProfileFields;
-
+export default ProfileDetails;

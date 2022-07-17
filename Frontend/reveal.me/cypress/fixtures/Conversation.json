@@ -1,0 +1,12 @@
+[
+    {
+        "_id": "convo1",
+        "time": "2022-07-16T20:52:49.203Z",
+        "members": [
+            "test1",
+            "test2"
+        ],
+        "isBlurred": true,
+        "__v": 0
+    }
+]

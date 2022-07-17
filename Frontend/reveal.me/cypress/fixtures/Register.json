@@ -1,0 +1,21 @@
+{
+    "email": "frontendEmail@test.com",
+    "password": "test123",
+    "first_name": "frontend",
+    "last_name": "test",
+    "userDetail": {
+      "gender": "",
+      "dob_date": "",
+      "dob_month": "",
+      "dob_year": "",
+      "age": "",
+      "profile_picture": "",
+      "occupation": "",
+    "gender_interest": [],
+      "height": "",
+      "hobbies": [],
+      "languages": [],
+      "nationality": "",
+      "description": ""
+    }
+}

@@ -1,11 +1,12 @@
-import React, { useState, useEffect  } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {useCookies } from "react-cookie";
+import { useCookies } from "react-cookie";
 import Nationality from "./Nationality";
 import Interest from "../Interest";
 import { Languages } from "../../utils/Language";
-import axios from "axios";
-
+import { userProfile } from "../../utils/ApiActions";
+import { userDetail } from "../../utils/ApiActions";
+import { getSingleUser, deleteUser } from "../../utils/ApiActions";
 
 const ProfileFields = () => {
   const [error, setError] = useState(null);
@@ -34,18 +35,9 @@ const ProfileFields = () => {
 
   const getAccount = async (cookies) => {
     try {
-      // const email = cookies.Email;
       const id = cookies.UserId;
       const token = cookies.Token;
-      const response = await axios.get(
-        `http://localhost:5000/api/singleuser/id/${id}`,
-        {
-          headers: {
-            "Content-Type": "application/json; charset=UTF-8",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await getSingleUser(id, token);
       console.log(response);
       setAccountData(response.data);
     } catch (err) {
@@ -54,18 +46,12 @@ const ProfileFields = () => {
   };
 
   useEffect(() => {
-    // console.log("i fire once");
     if (cookies) {
       getAccount(cookies);
     }
   }, [cookies]);
 
   const navigate = useNavigate();
-
-  // const routeChange = (newPath) => {
-  //   let path = newPath;
-  //   navigate(path);
-  // };
 
   const changePicture = (e) => {
     const reader = new FileReader();
@@ -92,7 +78,6 @@ const ProfileFields = () => {
         ...accountData,
         userDetail: { ...accountData.userDetail, languages: updatedChecked },
       }));
-      // console.log(updatedChecked);
     }
   };
 
@@ -104,7 +89,6 @@ const ProfileFields = () => {
       ...accountData,
       userDetail: { ...accountData.userDetail, languages: updatedState },
     }));
-    // console.log(updatedState);
   };
 
   const resetLanguage = () => {
@@ -163,7 +147,6 @@ const ProfileFields = () => {
       ...accountData,
       userDetail: { ...accountData.userDetail, hobbies: updatedChecked },
     }));
-    // console.log(updatedChecked);
   };
 
   const removeHobby = (id) => {
@@ -174,7 +157,6 @@ const ProfileFields = () => {
       ...accountData,
       userDetail: { ...accountData.userDetail, hobbies: updatedState },
     }));
-    // console.log(updatedState)
   };
 
   const removeGender = (id) => {
@@ -186,7 +168,6 @@ const ProfileFields = () => {
       ...accountData,
       userDetail: { ...accountData.userDetail, gender_interest: updatedState },
     }));
-    // console.log(updatedState)
   };
 
   const handleOnChangeGender = (gender) => {
@@ -199,45 +180,31 @@ const ProfileFields = () => {
         gender_interest: updatedChecked,
       },
     }));
-    // console.log(updatedChecked);
+  };
+
+  const cancelRegister = async () => {
+    try {
+      const id = cookies.UserId;
+      const token = cookies.Token;
+      await deleteUser(id, token);
+      navigate("/register")
+    } catch (err) {
+      console.error(err.message);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      await axios
-        .put(
-          `http://localhost:5000/api/user/profile/head/${accountData.email}`,
-          {
-            first_name: accountData.first_name,
-            last_name: accountData.last_name,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json; charset=UTF-8",
-              Authorization: `Bearer ${cookies.Token}`,
-            },
-          }
-        )
-        .catch(function (res) {
-          if (res.response.status === 404) {
-            navigate("/create_profile");
-            setError("failed to update Profile, please try again");
-          }
-        });
+      await userProfile(accountData, cookies.Token).catch(function (res) {
+        if (res.response.status === 404) {
+          navigate("/create_profile");
+          setError("failed to update Profile, please try again");
+        }
+      });
 
-      await axios
-        .put(
-          `http://localhost:5000/api/user/profile/body/${accountData.email}`,
-          accountData.userDetail,
-          {
-            headers: {
-              "Content-Type": "application/json; charset=UTF-8",
-              Authorization: `Bearer ${cookies.Token}`,
-            },
-          }
-        )
+      await userDetail(accountData, cookies.Token)
         .then(function (response) {
           if (response.status === 200) {
             navigate("/homepage");
@@ -249,8 +216,6 @@ const ProfileFields = () => {
             setError("failed to update Profile, please try again");
           }
         });
-
-      // window.location.reload()
     } catch (error) {
       console.log(error);
     }
@@ -261,6 +226,9 @@ const ProfileFields = () => {
       <form action="#" method="POST" onSubmit={handleSubmit}>
         <div className="shadow sm:rounded-md sm:overflow-hidden px-4 py-5 bg-gray-50 space-y-6 sm:p-6 max-w-5xl my-5">
           <div>
+            <h1 className="mb-8 text-2xl text-gray-900 font-mono font-bold text-2xl">
+              Create Profile
+            </h1>
             <div className="md:grid md:grid-cols-3 md:gap-6">
               <div className="md:col-span-1">
                 <div className="px-4 py-4 sm:px-0">
@@ -341,46 +309,7 @@ const ProfileFields = () => {
                             id="email-address"
                             autoComplete="email"
                             className="mt-1 focus:outline-none focus:ring focus:ring-darker-pink block xl:w-96 w-full shadow-sm sm:text-sm border border-pink-100 rounded-md"
-                            // value={accountData.email}
                             defaultValue={accountData.email}
-                          />
-                        </div>
-
-                        <div className="col-span-6">
-                          <label
-                            htmlFor="password"
-                            className="block text-sm font-medium text-darker-pink"
-                          >
-                            Password
-                          </label>
-                          <input
-                            type="password"
-                            name="password"
-                            id="password"
-                            autoComplete="password"
-                            className="mt-1 focus:outline-none bg-gray-100 focus:ring focus:ring-darker-pink block w-full xl:w-96 shadow-sm sm:text-sm border border-pink-100 rounded-md"
-                            disabled={true}
-                            // value={accountData.password}
-                            defaultValue={accountData.password}
-                          />
-                        </div>
-
-                        <div className="col-span-6">
-                          <label
-                            htmlFor="confirm-password"
-                            className="block text-sm font-medium text-darker-pink"
-                          >
-                            Confirm Password
-                          </label>
-                          <input
-                            type="password"
-                            name="confirm-password"
-                            id="confirm-password"
-                            autoComplete="confirm-password"
-                            className="mt-1 focus:outline-none bg-gray-100 focus:ring focus:ring-darker-pink block w-full xl:w-96 shadow-sm sm:text-sm border border-pink-100 rounded-md"
-                            disabled={true}
-                            // value={accountData.password}
-                            defaultValue={accountData.password}
                           />
                         </div>
                       </div>
@@ -536,7 +465,10 @@ const ProfileFields = () => {
                         >
                           Language
                         </label>
-                        <label htmlFor="my-modal" className="btn bg-darker-pink">
+                        <label
+                          htmlFor="my-modal"
+                          className="btn bg-darker-pink"
+                        >
                           Select Language
                         </label>
                         <input
@@ -667,20 +599,6 @@ const ProfileFields = () => {
                           }
                         />
                       </div>
-                      <div className="col-span-6 sm:col-span-6 lg:col-span-2">
-                        <label
-                          htmlFor="location"
-                          className="block text-sm font-medium text-darker-pink"
-                        >
-                          Location
-                        </label>
-                        <button
-                          type="button"
-                          className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-pink-100 hover:bg-darker-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        >
-                          Set Location
-                        </button>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -699,12 +617,12 @@ const ProfileFields = () => {
           ></Interest>
         </div>
         <div className="px-4 py-3 text-right sm:px-6">
-          <button
+          <a
+            onClick={cancelRegister}
             className="inline-flex justify-center py-2 px-4 mr-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-pink-100 hover:bg-pink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            onClick={() => routeChange("/register")}
           >
             Cancel
-          </button>
+          </a>
           <button
             type="submit"
             className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-darker-pink hover:bg-pink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"

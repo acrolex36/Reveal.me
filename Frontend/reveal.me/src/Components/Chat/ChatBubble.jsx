@@ -3,7 +3,6 @@ import { useCookies } from "react-cookie";
 const ChatBubble = ({ msg, userData, image }) => {
   const [cookies] = useCookies(null);
   const id = cookies.UserId;
-  const token = cookies.token;
 
   return (
     <div>
@@ -19,9 +18,9 @@ const ChatBubble = ({ msg, userData, image }) => {
                 msg.sender === id ? "order-1 item-end" : "order-2 item-start"
               }`}
             >
-              <div>
+              <div id="messageBubble">
                 {msg.message.length < 200 ? (
-                  <span
+                  <span id={msg._id}
                     className={` 
                         ${
                           msg.sender === id
@@ -32,7 +31,7 @@ const ChatBubble = ({ msg, userData, image }) => {
                     {msg.message}
                   </span>
                 ) : (
-                  <img
+                  <img id={`imageMessage${msg._id}`}
                     src={msg.message}
                     className={` 
                         ${
@@ -44,7 +43,7 @@ const ChatBubble = ({ msg, userData, image }) => {
                 )}
               </div>
             </div>
-            <img
+            <img id={msg._id}
               src={`${
                 msg.sender === id
                   ? userData?.userDetail?.profile_picture

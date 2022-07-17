@@ -6,7 +6,7 @@ export const Hobbies = [
         hobby: "Dancing"
     },
     {
-        hobby:"Watch TV Shows and Movies"
+        hobby: "Watch TV Shows and Movies"
     },
     {
         hobby: "Collecting Antiques"

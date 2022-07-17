@@ -1,0 +1,77 @@
+[
+  {
+    "userDetail": {
+      "is_online": true,
+      "gender": "diverse",
+      "gender_interest": [
+        "male",
+        "female",
+        "diverse"
+      ],
+      "age": 20,
+      "dob_date": 1,
+      "dob_month": 1,
+      "dob_year": 2002,
+      "height": 170,
+      "nationality": "indonesian",
+      "occupation": "Fontend tester in Hochschule Darmstadt",
+      "hobbies": [
+        "Photography"
+      ],
+      "languages": [
+        "Indonesian",
+        "German"
+      ],
+      "description": "Haven't matched with anyone yet"
+    },
+    "_id": "Kevin",
+    "first_name": "Kevin",
+    "last_name": "tester",
+    "email": "Kevin@test.com",
+    "password": "$2b$10$BjkvppX.TU.GSpAhRYh1jejmgdN5zzy0or8lRIKI7y6aEiygd8dRK",
+    "lastLogin": "2022-07-14T19:44:11.039Z",
+    "lastPasswordReset": "2022-06-28T16:28:28.134Z",
+    "oneSideMatch": [
+      "Frontend"
+    ],
+    "__v": 0,
+    "swipedLeftUsers": [
+    ]
+  },
+  {
+    "userDetail": {
+      "is_online": true,
+      "gender": "diverse",
+      "gender_interest": [
+        "male",
+        "female",
+        "diverse"
+      ],
+      "age": 26,
+      "dob_date": 22,
+      "dob_month": 6,
+      "dob_year": 2022,
+      "height": 156,
+      "nationality": "albanian",
+      "occupation": "Studying at TU Darmstadt",
+      "hobbies": [
+        "Photography"
+      ],
+      "languages": [
+        "Dutch"
+      ],
+      "description": "Already swiped with Frontend tester"
+    },
+    "swipedLeftUsers": [],
+    "_id": "David",
+    "first_name": "David",
+    "last_name": "Davido",
+    "email": "david@test.com",
+    "password": "$2b$10$kljij6jwV8cF.GaMFmlqeeCCsJSNNgeVD0rNygDlcgEUKiKN9UuAO",
+    "lastLogin": "2022-06-29T13:52:23.503Z",
+    "lastPasswordReset": "2022-06-29T13:20:09.537Z",
+    "oneSideMatch": [
+    ],
+    "__v": 0
+  }
+]
