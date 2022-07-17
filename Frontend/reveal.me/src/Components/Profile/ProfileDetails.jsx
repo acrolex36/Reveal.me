@@ -107,25 +107,17 @@ const ProfileDetails = () => {
   };
 
   const setDateBirth = () => {
-    let date =" "
-    let month =""
-    if(accountData.userDetail){
-if (accountData.userDetail.dob_date.length < 2) {
-  date = "0" + accountData.userDetail.dob_date;
-  console.log(accountData.userDetail.dob_date);
-} else {
-  date = accountData.userDetail.dob_date;
-}
-if (accountData.userDetail.dob_month.length < 2) {
-  month = "0" + accountData.userDetail.dob_month;
-} else month = accountData.userDetail.dob_month;
+   if (accountData.userDetail.dob_date != null) {
+     if (accountData.userDetail.dob_date.toString().length >= 1) {
+       var newDate = `0${accountData.userDetail.dob_month}`;
+     }
+     if (accountData.userDetail.dob_month.toString().length >= 1) {
+       var newMonth = `0${accountData.userDetail.dob_month}`;
+     }
 
-let year = accountData.userDetail.dob_year;
-let dob = year + "-" + month + "-" + date;
-setDOB(dob);
-console.log(DOB);
-    }
-    
+     var date = `${accountData.userDetail.dob_year}-${newMonth}-${newDate}`;
+     return date;
+   }
   }
 
   //set DOB
@@ -593,7 +585,7 @@ console.log(DOB);
                         </label>
                         <input
                           type="date"
-                          value={setDateBirth}
+                          value={setDateBirth()}
                           onChange={(e) =>
                             parseDOBandCalculateAge(e.target.value)
                           }
