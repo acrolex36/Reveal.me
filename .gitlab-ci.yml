@@ -2,20 +2,26 @@ stages:
   - test
   - staging
 
-before_script:
-  - cd Backend/reveal.me && npm install
-  - apt-get update -qy
-  - apt-get install -y ruby-dev
-  - gem install dpl
+# before_script:
+#   - cd Backend/reveal.me && npm install
+#   - apt-get update -qy
+#   - apt-get install -y ruby-dev
+#   - gem install dpl
 
 staging:
   stage: staging
+  before_script:
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
   image: ruby:latest
   script:
     - dpl --provider=heroku --app=$HEROKU_APP_STAGING --api-key=$HEROKU_API_KEY
 
 backend_tests:
   image: node:18.6-buster-slim
+  before_script:
+    - cd Backend/reveal.me && npm install
   stage: test
   script:
     - npm test
