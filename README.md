@@ -102,6 +102,12 @@ Backend:
   profile picture of the chat partner will be unblurred
   ![Explore](./readme_images/Explore Users.png)
 - In this page the user can find other users by hobbies and match with them
+
+## REST API ROUTES
+
+For a more detailed documentation see in **_openApiSpec.yml_** file
+Base URL for API : http://localhost:5000
+
 ## Authors
 
 Aris Ananta Muljono |
