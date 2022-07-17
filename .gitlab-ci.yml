@@ -1,7 +1,6 @@
 stages:
   - test
   - staging
-  - production
 
 before_script:
   - cd Backend/reveal.me && npm install
@@ -14,16 +13,6 @@ staging:
   image: ruby:latest
   script:
     - dpl --provider=heroku --app=$HEROKU_APP_STAGING --api-key=$HEROKU_API_KEY
-  only:
-    - staging
-
-production:
-  stage: production
-  image: ruby:latest
-  script:
-    - dpl --provider=heroku --app=$HEROKU_APP_PRODUCTION --api-key=$HEROKU_API_KEY
-  only:
-    - master
 
 backend_tests:
   image: node:18.6-buster-slim
