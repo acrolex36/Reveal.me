@@ -1,33 +1,40 @@
 import request  from 'supertest';
 import chai from "chai"
-const expect = require('chai').expect;
-const server = require("../index.ts")
-const chaiHttp = require("chai-http");
+import chaiHttp from "chai-http"
+import {
+    correctCredential,
+    falseCredential,
+} from '../testData/login.json'
 
+import {
+    successfulRegister,
+    failRegister,
+    anotherUser
+} from '../testData/register.json'
+
+import {
+    correctConfirmPassword,
+    falseConfirmPassword,
+    passwordTooShort
+} from '../testData/forgetPassword.json'
+
+import {
+    fullHeaderData,
+    fullBodyData
+} from '../testData/updateData.json'
+
+const server = require("../index.ts")
+const expect = require('chai').expect;
 chai.use(chaiHttp)
 
-const correctCredential = require('../testData/login.json').correctCredential;
-const falseCredential = require('../testData/login.json').falseCredential;
-const successfulRegister = require('../testData/register.json').successfulRegister;
-const failRegister = require('../testData/register.json').failRegister;
-const correctConfirmPassword = require('../testData/forgetPassword.json').correctConfirmPassword;
-const falseConfirmPassword = require('../testData/forgetPassword.json').falseConfirmPassword;
-const passwordTooShort = require('../testData/forgetPassword.json').passwordTooShort;
-const fullHeaderData = require('../testData/updateData.json').fullHeaderData;
-const missingHeaderData = require('../testData/updateData.json').missingHeaderData;
-const fullBodyData = require('../testData/updateData.json').fullBodyData;
-const missingBodyData = require('../testData/updateData.json').missingBodyData;
-const anotherUser = require('../testData/register.json').anotherUser;
-
-
-describe('Reveal.me API Tests', () => {
+describe('Reveal.me user API Tests', () => {
     const baseurl = 'http://localhost:5000/api'
     var userId :any
     var anotherUserId : any
     var token : any
-    var conversationId : any
     var email = correctCredential.email
 
+    //Deleting first user
     after(function(done) {
         request(baseurl)
             .delete("/user/" + userId)
@@ -40,6 +47,20 @@ describe('Reveal.me API Tests', () => {
                 done();
             })
     })
+
+    //Deleting second User
+    after(function(done) {
+        request(baseurl)
+            .delete("/user/" + anotherUserId)
+            .set(({ "Authorization": `Bearer ${token}` }))
+            .end(function(err,res) {
+                expect(res.statusCode).to.be.equal(201);
+                if (err) {
+                    throw err;
+                }
+                done();
+            })
+    });
 
     it('should successfully create a user', (done) => {
         request(baseurl)
@@ -337,138 +358,6 @@ describe('Reveal.me API Tests', () => {
                 }
                 done();
             });
-    });
-
-    ///////////////////////////////////// Message and conversation //////////////////////////////
-
-    it("should successfully create a conversation when both swipe right", (done) => {
-        request(baseurl)
-            .post(`/conversation/message/${userId}/${anotherUserId}`)
-            .set("Authorization", "Bearer " + token)
-            .end(function(err,res) {
-                expect(res.statusCode).to.be.equal(201);
-                expect(res.body.members).to.have.members([userId, anotherUserId])
-                conversationId = res.body._id
-                if (err) {
-                    throw err;
-                }
-                done();
-            })
-    });
-
-    //deleted not used anymore
-    // it("should successfully create a conversation when both swipe right", (done) => {
-    //     request(baseurl)
-    //         .put(`/conversation/isblurred/${conversationId}`)
-    //         .set("Authorization", "Bearer " + token)
-    //         .end(function(err,res) {
-    //             expect(res.statusCode).to.be.equal(200);
-    //             expect(res.body.isBlurred).to.be.equal(false)
-    //             conversationId = res.body._id
-    //             if (err) {
-    //                 throw err;
-    //             }
-    //             done();
-    //         })
-    // });
-
-    it("should successfully getting all conversation", (done) => {
-        request(baseurl)
-            .get(`/allconversation`)
-            .set("Authorization", "Bearer " + token)
-            .end(function(err,res) {
-                expect(res.statusCode).to.be.equal(200);
-                if (err) {
-                    throw err;
-                }
-                done();
-            })
-    });
-
-    it("should successfully getting all conversation from one user", (done) => {
-        request(baseurl)
-            .get(`/allconversation/${userId}`)
-            .set("Authorization", "Bearer " + token)
-            .end(function(err,res) {
-                expect(res.statusCode).to.be.equal(200);
-                if (err) {
-                    throw err;
-                }
-                done();
-            })
-    });
-
-    it("should successfully create a message", (done) => {
-        let message = { userId: userId, message: "testing"}
-
-        request(baseurl)
-            .post(`/message/${conversationId}`)
-            .send(message)
-            .set("Authorization", "Bearer " + token)
-            .set('Accept', 'application/json')
-            .set('Content-Type', 'application/json')
-            .end(function(err,res) {
-                expect(res.statusCode).to.be.equal(201);
-                expect(res.body.sender).to.be.equal(userId);
-                expect(res.body.message).to.be.equal(message.message)
-                if (err) {
-                    throw err;
-                }
-                done();
-            })
-    });
-
-    it("should successfully getting the total of all messages from a conversation", (done) => {
-        request(baseurl)
-            .get(`/message/total/${conversationId}`)
-            .set("Authorization", "Bearer " + token)
-            .end(function(err,res) {
-                expect(res.statusCode).to.be.equal(200);
-                expect(res.body).to.have.members([1,0])
-                if (err) {
-                    throw err;
-                }
-                done();
-            })
-    });
-
-    it("should successfully getting all messages from a conversation", (done) => {
-        request(baseurl)
-            .get(`/message/all/${conversationId}`)
-            .set("Authorization", "Bearer " + token)
-            .end(function(err,res) {
-                expect(res.statusCode).to.be.equal(200);
-                if (err) {
-                    throw err;
-                }
-                done();
-            })
-    });
-
-    it("should successfully delete conversation and messages", (done) => {
-        request(baseurl)
-            .delete(`/conversation/remove/${conversationId}`)
-            .set("Authorization", "Bearer " + token)
-            .end(function(err,res) {
-                expect(res.statusCode).to.be.equal(200);
-                if (err) {
-                    throw err;
-                }
-                done();
-            })
-    });
-
-    it("should successfully delete user", (done) => {
-        request(baseurl)
-            .delete("/user/" + anotherUserId)
-            .set("Authorization", "Bearer " + token)
-            .end(function(err,res) {
-                expect(res.statusCode).to.be.equal(201);
-                if (err) {
-                    throw err;
-                }
-                done();
-            })
     });
 });
 
