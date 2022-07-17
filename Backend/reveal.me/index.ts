@@ -1,4 +1,4 @@
-import express from "express";
+import express , { Request, Response } from "express";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import cors from "cors";
@@ -14,6 +14,11 @@ app.use(cors());
 
 //middleware
 app.use("/api", postRoutes);
+
+//test connect to hosting
+app.get("/", (req: Request, res: Response) => {
+  res.send('connected to hosting');
+});
 
 //set database properties from env file
 const CONNECTION_URL = process.env.CONNECTION_URL;
