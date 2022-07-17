@@ -70,6 +70,9 @@ describe('Create Profile', () => {
         //set cookies
         cy.setCookie('UserId', 'test2')
         cy.setCookie('Token', 'testToken2')
+
+        cy.contains(/Reveal.me/i)
+        
     });
     
 });

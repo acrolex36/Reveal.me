@@ -23,9 +23,9 @@ describe('Register', () => {
         
         //should receive UserId and Token and directed to create profile page
         cy.getCookie('UserId')
-            .should('have.property', 'value', 'test1')
+            .should('have.property', 'value', 'test3')
         cy.getCookie('Token')
-            .should('have.property', 'value', 'testToken1')
+            .should('have.property', 'value', 'testToken3')
 
     })
 })

@@ -11,6 +11,7 @@ import Image from '../../cypress/fixtures/getImage.json'
 import Messages from '../../cypress/fixtures/Messages.json'
 import NewMessage from '../../cypress/fixtures/NewMessage.json'
 import NewMessageImage from '../../cypress/fixtures/NewMessageImage.json'
+import ConversationSwipe from "../../cypress/fixtures/ConversationSwipe.json"
 const BASE_URL = "http://localhost:5000/api"
 
 // Define handlers that catch the corresponding requests and returns the mock data.
@@ -44,7 +45,15 @@ export const handlers = [
                 return res(ctx.status(200),
                     ctx.json(CreateProfile))
             }
-            
+            else if (req.params.id == "test3") {
+                return res(ctx.status(200),
+                    ctx.json(Register))
+            }
+            else if (req.params.id == "Frontend") {
+                return res(ctx.status(200),
+                    ctx.json(Register))
+            }
+
         }),
 
     rest.get(`${BASE_URL}/filtereduser/id/:id`,
@@ -53,10 +62,11 @@ export const handlers = [
                 ctx.json(FilteredUsers))
         }),
 
+    //Update swipedLeftUsers when user swiped left
     rest.put(`${BASE_URL}/user/profile/swipedleft/id/:id/:swipedid`,
         (req, res, ctx) => {
             return res(ctx.status(200),
-                ctx.json(FilteredUsers))
+                ctx.json(FilteredUsers[0]))
         }),
 
     //register
@@ -65,11 +75,60 @@ export const handlers = [
             return res(ctx.status(201),
                 ctx.json(
                     {
-                        "userId": "test1",
-                        "token": "testToken1"
+                        "userId": "test3",
+                        "token": "testToken3"
                     }
                 )
             )
+        }),
+
+        //Update swipedLeftUsers when undo Button pressed
+        rest.put(`${BASE_URL}/user/profile/swipedleft/remove/id/:id`,
+            (req, res, ctx) => {
+                return res(ctx.status(200),
+                    ctx.json(FilteredUsers[0]))
+            }),
+
+        // update oneSideMatch when swiped right By using Id
+        rest.put(`${BASE_URL}/user/profile/id/:id/:swipedid`,
+            (req, res, ctx) => {
+                return res(ctx.status(200),
+                    ctx.json(FilteredUsers[0]))
+            }),
+
+    // Get all conversation of a user
+    rest.get(`${BASE_URL}/allconversation/:userId`,
+        (req, res, ctx) => {
+            if(req.params.userId == "test1"){
+                return res(ctx.status(200),
+                    ctx.json(Conversation)
+                )
+            }
+            else {
+                return res(ctx.status(200),
+                    ctx.json(ConversationSwipe));
+            }
+        }),
+
+    // Delete a conversation
+    rest.delete(`${BASE_URL}/conversation/remove/:conversationId`,
+        (req, res, ctx) => {
+            return res(ctx.status(200));
+            //return deleted conversation
+        }),
+
+    //remove user from OneSideMatch when both of them matched
+    rest.put(`${BASE_URL}/user/profile/remove/id/:id/:matchedUserId`,
+        (req, res, ctx) => {
+            return res(ctx.status(200),
+                ctx.json(FilteredUsers[1]))
+        }),
+
+    //Create conversation
+    rest.post(`${BASE_URL}/conversation/message/:userId1/:userId2`,
+        (req, res, ctx) => {
+            return res(ctx.status(200),
+                ctx.json(ConversationSwipe[0]))
         }),
 
     //create user
@@ -79,7 +138,7 @@ export const handlers = [
             return res(ctx.status(200)
             )
         }),
-    
+
     //create user with details
     rest.put(
         `${BASE_URL}/user/profile/body/:email`,
@@ -87,15 +146,6 @@ export const handlers = [
             return res(ctx.status(200)
             )
         }),
-
-    //get all conversation with userid
-    rest.get(
-        `${BASE_URL}/allconversation/:id`,
-        (req, res, ctx) => {
-            return res(ctx.status(200),
-                ctx.json(Conversation)
-            )
-    }),
 
     //get other person's picture from a conversation with userid
     rest.get(
@@ -105,7 +155,7 @@ export const handlers = [
                 ctx.json(Image)
             )
         }),
-    
+
     //get all messages from conversation
     rest.get(
         `${BASE_URL}/message/all/:conversationId`,
@@ -129,6 +179,6 @@ export const handlers = [
             )
         }
     }),
-    
+
 
 ]
