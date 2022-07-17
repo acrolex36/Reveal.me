@@ -1,7 +1,5 @@
-<H1 align="center">
-Reveal.me
-</H1>
-<p style="text-align: center;">reveal you, reveal us!</p>
+# Reveal.me
+reveal you, reveal us!
 
 <p style="text-align: center;">
 <img alt="logo" src="./readme_images/Logo.png" height="200" />
@@ -106,7 +104,7 @@ Backend:
 
 ## REST API ROUTES
 
-For a more detailed documentation see in **_openApiSpec.yml_** file
+For a more detailed documentation see in [](./Backend/reveal.me/openapi/openapi.yaml)
 Base URL for API : http://localhost:5000
 
 ## Authors
