@@ -91,7 +91,7 @@ Backend:
 ![Landing page](./readme_images/Landing page.png)
 ![Register age](./readme_images/Register page.png)
 ![Login page](./readme_images/LoginPage.png)
-![Login page](./readme_images/Forget Password Page.png)
+![Forget password page](./readme_images/Forget Password page.png)
 ![Create profile](./readme_images/Create Profile.png)
 ![Create profile](./readme_images/Create Profile 2.png)
 ![Homepage](./readme_images/Homepage.png)
