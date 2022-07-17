@@ -56,6 +56,7 @@ const ExplorePage = () => {
         } else {
             await updateSwipedUser(myUserId, matchedId, token);
         }
+        document.getElementById(`matchButton${matchedId}`).disabled = 'true';
     }
 
     const hobbyFilterHandler = e => {
