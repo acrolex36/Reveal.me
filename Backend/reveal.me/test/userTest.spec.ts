@@ -359,6 +359,19 @@ describe('Reveal.me user API Tests', () => {
                 done();
             });
     });
+
+    it("should successfully getting genderedUser", (done) => {
+        request(baseurl)
+            .get(`/gendereduser/id/${userId}`)
+            .set("Authorization", "Bearer " + token)
+            .end(function(err, res) {
+                expect(res.statusCode).to.be.equal(200);
+                if (err) {
+                    throw err;
+                }
+                done();
+            });
+    });
 });
 
 
