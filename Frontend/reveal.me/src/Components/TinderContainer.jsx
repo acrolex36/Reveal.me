@@ -99,7 +99,7 @@ function TinderContainer() {
                 return;
             }
         }
-        //else delete onematch
+        //else delete onematch om swipeduser
         await deleteOneMatch(myUserId, swipedId, token);
     }
 
@@ -174,11 +174,11 @@ function TinderContainer() {
             <div
                 className="absolute top-128 left-148 w-1/2 flex flex-row justify-evenly ">
                 <button
-                    data-testid="swipeLeftButton"
+                    id="swipeLeftButton"
                     className="sm:py-24 sm:px-6 lg:max-w-5xl "
                     onClick={() => swipe("left")}
                 >
-                    <div className="w-full aspect-w-1 aspect-h-1  overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
+                    <div className="w-full aspect-w-1 aspect-h-1 xl:aspect-w-7 xl:aspect-h-8">
                         <img
                             className="scale-50 hover:scale-75 ease-in duration-150"
                             src={reject_button}
@@ -187,10 +187,11 @@ function TinderContainer() {
                     </div>
                 </button>
                 <button
+                    id="goBackButton"
                     className="sm:py-24 sm:px-6 lg:max-w-5xl "
                     onClick={() => goBack()}
                 >
-                    <div className="w-full aspect-w-1 aspect-h-1  overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
+                    <div className="w-full aspect-w-1 aspect-h-1 xl:aspect-w-7 xl:aspect-h-8">
                         <img
                             className="scale-50 hover:scale-75 ease-in duration-150"
                             src={back_button}
@@ -199,10 +200,11 @@ function TinderContainer() {
                     </div>
                 </button>
                 <button
+                    id="swipeRightButton"
                     className="sm:py-24 sm:px-6 lg:max-w-5xl "
                     onClick={() => swipe("right")}
                 >
-                    <div className="w-full aspect-w-1 aspect-h-1 overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
+                    <div className="w-full aspect-w-1 aspect-h-1 xl:aspect-w-7 xl:aspect-h-8">
                         <img
                             className="scale-50 hover:scale-75 ease-in duration-75"
                             src={love_button}

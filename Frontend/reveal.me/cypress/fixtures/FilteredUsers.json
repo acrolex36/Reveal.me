@@ -16,43 +16,26 @@
       "nationality": "indonesian",
       "occupation": "Fontend tester in Hochschule Darmstadt",
       "hobbies": [
-        "Sport",
-        "Cooking",
-        "Painting",
-        "Reading",
-        "Playing Music Instrument",
-        "Drawing",
-        "Playing Video Games",
-        "Photography",
-        "Watch TV Shows and Movies",
-        "Dancing",
-        "Pottery",
-        "Collecting Antiques",
-        "Travelling"
+        "Photography"
       ],
       "languages": [
         "Indonesian",
         "German"
       ],
-      "description": "Testing frontend all day"
+      "description": "Haven't matched with anyone yet"
     },
-    "_id": "62bb2cc4c69f0f8b91284671",
-    "first_name": "Frontend",
+    "_id": "Kevin",
+    "first_name": "Kevin",
     "last_name": "tester",
-    "email": "frontend@test.com",
+    "email": "Kevin@test.com",
     "password": "$2b$10$BjkvppX.TU.GSpAhRYh1jejmgdN5zzy0or8lRIKI7y6aEiygd8dRK",
     "lastLogin": "2022-07-14T19:44:11.039Z",
     "lastPasswordReset": "2022-06-28T16:28:28.134Z",
     "oneSideMatch": [
-      "62bb2cc4c69f0f8b91284671",
-      "62bc5366073b704e972c4180"
+      "Frontend"
     ],
     "__v": 0,
     "swipedLeftUsers": [
-      "62bc62568c3bdbb268b66873",
-      "62bc1e11196a9570503a8386",
-      "62bc585b8c3bdbb268b667f3",
-      "62ccbbd670525956155947e1"
     ]
   },
   {
@@ -64,7 +47,7 @@
         "female",
         "diverse"
       ],
-      "age": 0,
+      "age": 26,
       "dob_date": 22,
       "dob_month": 6,
       "dob_year": 2022,
@@ -72,21 +55,15 @@
       "nationality": "albanian",
       "occupation": "Studying at TU Darmstadt",
       "hobbies": [
-        "Reading",
-        "Dancing",
-        "Watch TV Shows and Movies",
-        "Collecting Antiques",
-        "Pottery",
-        "Cooking",
         "Photography"
       ],
       "languages": [
         "Dutch"
       ],
-      "description": "Heyo, just a student looking to find new connections"
+      "description": "Already swiped with Frontend tester"
     },
     "swipedLeftUsers": [],
-    "_id": "62bc552fc9e91bd9bfeadf9a",
+    "_id": "David",
     "first_name": "David",
     "last_name": "Davido",
     "email": "david@test.com",
@@ -94,57 +71,7 @@
     "lastLogin": "2022-06-29T13:52:23.503Z",
     "lastPasswordReset": "2022-06-29T13:20:09.537Z",
     "oneSideMatch": [
-      "62bc5577073b704e972c4186",
-      "62ccbbd670525956155947e1"
     ],
     "__v": 0
-  },
-  {
-    "userDetail": {
-      "is_online": true,
-      "gender": "diverse",
-      "gender_interest": [
-        "male",
-        "female",
-        "diverse"
-      ],
-      "age": 20,
-      "dob_date": 1,
-      "dob_month": 1,
-      "dob_year": 2001,
-      "height": 170,
-      "nationality": "indonesian",
-      "occupation": "Barista girl",
-      "hobbies": [
-        "Sport",
-        "Cooking",
-        "Painting"
-      ],
-      "languages": [
-        "English",
-        "German"
-      ],
-      "description": "Baristaing all day"
-    },
-    "_id": "62bc585b8c3bdbb268b667f3",
-    "first_name": "Jen",
-    "last_name": "Ny",
-    "email": "Jen@test.com",
-    "password": "$2b$10$zLss9bpKJdorOvzfGpZy8uQ7ZS8JWL2Aqxm6I5HkDfbSK3tUG4cYC",
-    "lastLogin": "2022-07-12T00:11:31.852Z",
-    "lastPasswordReset": "2022-06-29T13:44:44.461Z",
-    "oneSideMatch": [
-      "62bc62568c3bdbb268b66873",
-      "62bb2cc4c69f0f8b91284671"
-    ],
-    "__v": 0,
-    "swipedLeftUsers": [
-      "62bc552fc9e91bd9bfeadf9a",
-      "62bb2cc4c69f0f8b91284671",
-      "62baf1da81e05afaa8e7c344",
-      "62bc5366073b704e972c4180",
-      "62bc62568c3bdbb268b66873",
-      "62bc1e11196a9570503a8386"
-    ]
   }
 ]
