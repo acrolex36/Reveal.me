@@ -104,8 +104,30 @@ Backend:
 
 ## REST API ROUTES
 
-For a more detailed documentation see in [](./Backend/reveal.me/openapi/openapi.yaml)
+For a more detailed documentation see in **_[openApi]_** file
+
 Base URL for API : http://localhost:5000
+
+[openApi]: https://code.fbi.h-da.de/stdwrahm/reveal.me/-/blob/main/Backend/reveal.me/openApi/openapi.yaml#/
+
+### Database
+
+stored into 3 collection:
+
+#### user collection
+Information of user are stored in this collection.
+
+userDetail contain information for user Profile and matching (gender interest and hobbies)
+![User](./readme_images/Collection user part 1.png)
+![User](./readme_images/Collection user part 2.png)
+
+#### conversation collection
+Information of 2 match users are stored in this collection
+![Explore](./readme_images/Collection conversation.png)
+
+#### message collection
+Information of each member chats in a conversation are stored in this collection
+![Explore](./readme_images/Collection message.png)
 
 ## Authors
 
@@ -117,4 +139,3 @@ Dwiresti Puspita Rahmi | dwiresti.p.rahmi@stud.h-da.de
 
 Enrico Egen Selian | Enrico.E.Selian@stud.h-da.de
 
-[openApi]: https://code.fbi.h-da.de/stdwrahm/reveal.me/-/blob/main/Backend/reveal.me/openApi/openapi.yaml#/
