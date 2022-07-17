@@ -92,11 +92,15 @@ function TinderContainer() {
 
     const undoSwipeRight = async (myUserId, swipedId) => {
         let allConversation = await getAllConversation(myUserId, token);
+
         // if a new conversation is made, then delete
-        for (const conversation of allConversation) {
-            if (conversation.members.includes(swipedId)) {
-                await deleteConversation(conversation._id, token);
-                return;
+        if (allConversation.length !== 0) {
+            console.log("allconversation " + allConversation.length)
+            for (const conversation of allConversation) {
+                if (conversation.members.includes(swipedId)) {
+                    await deleteConversation(conversation._id, token);
+                    return;
+                }
             }
         }
         //else delete onematch om swipeduser
@@ -137,6 +141,7 @@ function TinderContainer() {
     useEffect(() => {
         const handleKey = (e) => {
             if (e.keyCode === 37) {
+                console.log("left");
                 () => swipe("left");
             } else if (e.keyCode === 39) {
                 () => swipe("right");

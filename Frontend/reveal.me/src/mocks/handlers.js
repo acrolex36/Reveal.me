@@ -2,6 +2,7 @@ import {rest} from 'msw'
 import UserData from '../../cypress/fixtures/UserData.json'
 import FilteredUsers from '../../cypress/fixtures/FilteredUsers.json'
 import Login from '../../cypress/fixtures/Login.json'
+import ConversationSwipe from "../../cypress/fixtures/ConversationSwipe.json"
 const BASE_URL = "http://localhost:5000/api"
 
 // Define handlers that catch the corresponding requests and returns the mock data.
@@ -58,6 +59,35 @@ export const handlers = [
             return res(ctx.status(200),
                 ctx.json(FilteredUsers[0]))
         }),
+
+    // Get all conversation of a user
+    rest.get(`${BASE_URL}/allconversation/:userId`,
+        (req, res, ctx) => {
+            return res(ctx.status(200),
+                ctx.json(ConversationSwipe));
+        }),
+
+    // Delete a conversation
+    rest.delete(`${BASE_URL}/conversation/remove/:conversationId`,
+        (req, res, ctx) => {
+            return res(ctx.status(200));
+            //return deleted conversation
+        }),
+
+    //remove user from OneSideMatch when both of them matched
+    rest.put(`${BASE_URL}/user/profile/remove/id/:id/:matchedUserId`,
+        (req, res, ctx) => {
+            return res(ctx.status(200),
+                ctx.json(FilteredUsers[1]))
+        }),
+
+    //Create conversation
+    rest.post(`${BASE_URL}/conversation/message/:userId1/:userId2`,
+        (req, res, ctx) => {
+            return res(ctx.status(200),
+                ctx.json(ConversationSwipe[0]))
+        }),
+
 
 
 

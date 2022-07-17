@@ -136,7 +136,7 @@ export const createConversation = async (myUserId, swipedId, token) => {
         }
     );
     if (response.status === 201) {
-        console.log("conversation made made")
+        console.log("conversation made ")
     } else {
         console.log("error making convo");
     }
