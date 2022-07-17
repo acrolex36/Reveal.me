@@ -1,5 +1,11 @@
-const request = require('supertest');
+import request  from 'supertest';
+import chai from "chai"
 const expect = require('chai').expect;
+const server = require("../index.ts")
+const chaiHttp = require("chai-http");
+
+chai.use(chaiHttp)
+
 const correctCredential = require('../testData/login.json').correctCredential;
 const falseCredential = require('../testData/login.json').falseCredential;
 const successfulRegister = require('../testData/register.json').successfulRegister;
@@ -16,10 +22,10 @@ const anotherUser = require('../testData/register.json').anotherUser;
 
 describe('Reveal.me API Tests', () => {
     const baseurl = 'http://localhost:5000/api'
-    var userId
-    var anotherUserId
-    var token
-    var conversationId
+    var userId :any
+    var anotherUserId : any
+    var token : any
+    var conversationId : any
     var email = correctCredential.email
 
     after(function(done) {
@@ -350,20 +356,21 @@ describe('Reveal.me API Tests', () => {
             })
     });
 
-    it("should successfully create a conversation when both swipe right", (done) => {
-        request(baseurl)
-            .put(`/conversation/isblurred/${conversationId}`)
-            .set("Authorization", "Bearer " + token)
-            .end(function(err,res) {
-                expect(res.statusCode).to.be.equal(200);
-                expect(res.body.isBlurred).to.be.equal(false)
-                conversationId = res.body._id
-                if (err) {
-                    throw err;
-                }
-                done();
-            })
-    });
+    //deleted not used anymore
+    // it("should successfully create a conversation when both swipe right", (done) => {
+    //     request(baseurl)
+    //         .put(`/conversation/isblurred/${conversationId}`)
+    //         .set("Authorization", "Bearer " + token)
+    //         .end(function(err,res) {
+    //             expect(res.statusCode).to.be.equal(200);
+    //             expect(res.body.isBlurred).to.be.equal(false)
+    //             conversationId = res.body._id
+    //             if (err) {
+    //                 throw err;
+    //             }
+    //             done();
+    //         })
+    // });
 
     it("should successfully getting all conversation", (done) => {
         request(baseurl)
@@ -443,7 +450,7 @@ describe('Reveal.me API Tests', () => {
             .delete(`/conversation/remove/${conversationId}`)
             .set("Authorization", "Bearer " + token)
             .end(function(err,res) {
-                expect(res.statusCode).to.be.equal(201);
+                expect(res.statusCode).to.be.equal(200);
                 if (err) {
                     throw err;
                 }

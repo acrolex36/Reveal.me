@@ -1,9 +1,6 @@
 import express, { Request, Response } from "express";
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import Jimp from "jimp";
-
-import fs from "fs"
 
 import User from "../models/postUser";
 import Conversation from "../models/postConversation";
@@ -69,27 +66,16 @@ export const createConversation = async (req: Request, res: Response) => {
   }
 };
 
-//PUT - /conversation/isblurred/:conversationId # update isBlurred when the target total message reached
-export const updateIsBlurred = async (req: Request, res: Response) => {
+//GET - /allconversation # find all conversation
+export const getAllConversation = async (req: Request, res: Response) => {
   checkToken(req, res, () => {
     authSuccess = true;
   });
 
   if (authSuccess) {
-    const { conversationId } = req.params;
-
     try {
-      const update = {
-        isBlurred: false,
-      };
-
-      const response = await Conversation.findByIdAndUpdate(
-        conversationId,
-        update,
-        { new: true }
-      );
-
-      res.status(200).json(response);
+      const allConversation = await Conversation.find();
+      res.status(200).json(allConversation);
     } catch (error) {
       res.status(404).json({ message: error });
     }
@@ -156,7 +142,7 @@ export const getTotalMessages = async (req: Request, res: Response) => {
   }
 };
 
-//get - /conversation/isblurred/:conversationId/:userId # retrieve picture
+//get - /conversation/user/picture/:conversationId/:userId # retrieve picture
 export const getPicture = async (req: Request, res: Response) => {
   checkToken(req, res, () => {
     authSuccess = true;
@@ -194,61 +180,31 @@ export const getPicture = async (req: Request, res: Response) => {
       var result = await Jimp.read(imageData);
 
       if (total_user_1 >= 15 && total_user_2 >= 15) {
-          //original
-          // console.log("third")
-          // result.write('original.png')
-      } 
-      else if (total_user_1 >= 10 && total_user_2 >= 10) {
+        //original
+        // result.write('original.png')
+      } else if (total_user_1 >= 10 && total_user_2 >= 10) {
         if (total_user_1 < 15 || total_user_2 < 15) {
           //level 2 unblur
-          // console.log("second")
-          result.blur(50)
-          // .write('50%Blur.png')
+          result.blur(50);
         }
-      }
-      else if (total_user_1 >= 5 && total_user_2 >= 5) {
+      } else if (total_user_1 >= 5 && total_user_2 >= 5) {
         if (total_user_1 < 10 || total_user_2 < 10) {
-            //level 1 unblur
-          // console.log("first")
-          result.blur(80)
-          // .write('80%Blur.png')
+          //level 1 unblur
+          result.blur(80);
         }
-      }
-      else{
+      } else {
         // max level blur
-        // console.log("last")
-        result.blur(100)
-        // .write('FullBlur.png')
+        result.blur(100);
       }
 
       var newImage = result.getBase64Async(result.getMIME());
 
-      // fs.writeFileSync("document.txt", await newImage);
-      
       res.status(200).json(await newImage);
     } catch (error) {
       res.status(404).json({ message: error });
     }
   }
 };
-
-//GET - /allconversation # find all conversation
-export const getAllConversation = async (req: Request, res: Response) => {
-  checkToken(req, res, () => {
-    authSuccess = true;
-  });
-
-  if (authSuccess) {
-    try {
-      const allConversation = await Conversation.find();
-      res.status(200).json(allConversation);
-    } catch (error) {
-      res.status(404).json({ message: error });
-    }
-    authSuccess = false;
-  }
-};
-
 
 //DELETE - /conversation/remove/:conversationId # delete all conversation with its messages
 export const deleteConversation = async (req: Request, res: Response) => {

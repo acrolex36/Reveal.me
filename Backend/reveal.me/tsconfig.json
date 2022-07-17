@@ -101,5 +101,5 @@
   },
   "include": [
     "./**/*.ts"
-, "test/userTest.spec.js"]
+, "test/userTest.spec.ts"]
 }
