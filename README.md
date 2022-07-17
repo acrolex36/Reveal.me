@@ -63,7 +63,8 @@ Scripts:
 - Optionally, realtime chatting can be started with start_realtime.sh
 - To visit the website, enter this url: http://localhost:3000 and  will direct you to the landing page, to login or register a user
 - To run the automatic tests:
-- Run the respective test scripts for frontend and backend. - **(Make sure that both start scripts are running first!)**
+- Run the test script for frontend - **(Make sure that start script is running first!)**
+- Run the test script for backend **(Don't run the start script and test script for backend simultaneously)**
 - A postman collection can be used for testing the individual api calls
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/cf4410757371a6823eb0?action=collection%2Fimport)
@@ -120,26 +121,36 @@ Base URL for API : http://localhost:5000
 
 ### Database
 
+![UML Diagram](./readme_images/UML Diagram.png)
+
+
 stored into 3 collection:
 
 #### user collection
 Information of user are stored in this collection.
 
 userDetail contain information for user Profile and matching (gender interest and hobbies)
+
 ![User](./readme_images/Collection user part 1.png)
+
 ![User](./readme_images/Collection user part 2.png)
 
 #### conversation collection
 Information of 2 match users are stored in this collection
-![Explore](./readme_images/Collection conversation.png)
+
+![Conversation](./readme_images/Collection conversation.png)
 
 #### message collection
 Information of each member chats in a conversation are stored in this collection
-![Explore](./readme_images/Collection message.png)
+
+![Message](./readme_images/Collection message.png)
+
+## Gitlab CI/CD Pipeline
+We have integrated our websites with Gitlab CI/CD Pipelines, which are set inside the .gitlab-ci.yml. By using that the Backend test will always be triggered everytime commit is initiated.
 
 ## Authors
 
-Aris Ananta Muljono |
+Aris Ananta Muljono | aris.a.muljono@stud.h-da.de
 
 Bryan Hadiyanto | bryan.hadiyanto@stud.h-da.de
 
